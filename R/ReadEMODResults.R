@@ -62,3 +62,31 @@ read.simulation.results <- function(results_path,
 }
 
 
+read.ingest.sheet <- function(ingest_filename, sheet) {
+  raw_data <- read_excel(ingest_filename, sheet)
+  first_row <- last(which(raw_data[,1] == 'Year'))
+  instrument_name <- names(raw_data)[2]
+  sheet_data <- read_excel(ingest_filename, sheet, skip = first_row)
+  if (any(names(sheet_data) == "two_sigma")) {
+    bounds <- calculate.bounds.two_sigma(sheet_data[,instrument_name], sheet_data$two_sigma)
+    print(bounds)
+  } else {
+    valid_rows <- !is.na(sheet_data$effective_count)
+    bounds <- data.frame(lb=vector(mode='numeric', length=length(valid_rows))) + NA
+    bounds$ub <- NA
+    bounds[valid_rows,] <- calculate.bounds.effective_count(
+                            sheet_data[valid_rows,instrument_name],
+                            sheet_data$effective_count[valid_rows])
+  }
+
+  sheet_data[,'lb'] = bounds$lb
+  sheet_data[,'ub'] = bounds$ub
+  sheet_data
+}
+
+read.ingest.file <- function(ingest_filename) {
+  sheets <- Filter(function(x) {grepl('Obs-', x)}, excel_sheets(ingest_filename))
+  datasets <- Map(function(x) {read.ingest.sheet(ingest_filename, x)}, sheets)
+
+}
+

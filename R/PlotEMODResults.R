@@ -55,12 +55,16 @@ plot.incidence <- function(data,
                             date.start,
                             date.end) {
   incidence <- calculate.incidence(data)
-  plot.by_gender(incidence,2000,2050,'incidence') +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0,0.038,0.01),limits=c(0,0.038))
-
+  plot.by_gender(incidence,date.start,date.end,'incidence') +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0,0.038,0.01),limits=c(0,0.038)) +
+    ylab("HIV Incidence (%)")
 }
 
 
+plot.art <- function(data,
+                     date.start,
+                     date.end) {
 
+}
 
 
