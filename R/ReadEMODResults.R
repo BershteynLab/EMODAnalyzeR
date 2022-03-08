@@ -61,5 +61,4 @@ read.simulation.results <- function(results_path,
   dat.all.files
 }
 
-actual = read.csv('D:/Dropbox (NYU CEDS)/Nyanza Results/Nyanza_Output_NYU/Baseline-campaign_Nyanza_baseline_03112021_NoPrEP-Baseline/Data/Kenya_prevalence.csv')
 
