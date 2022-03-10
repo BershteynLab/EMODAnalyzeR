@@ -3,7 +3,7 @@ Type: Package
 Title: Assists in analyzing EMOD results
 Version: 0.1.0
 Author: Bershteyn Lab
-Maintainer: david.kaftan@nyulangone.org
+Maintainer: David Kaftan david.kaftan@nyulangone.org
 Description: Load, process, and visualize EMOD data
 License: What license is it under?
 Encoding: UTF-8
