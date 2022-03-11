@@ -1,6 +1,6 @@
 # EMODAnalyzeR
 
-This package intends to help members of the Bershteyn Lab analyze results of emod.
+This package intends to help members of the Bershteyn Lab analyze results of emod. This package was developed by members of the Bershteyn lab.
 
 ## Installation
 
@@ -10,3 +10,10 @@ This package intends to help members of the Bershteyn Lab analyze results of emo
 4. Run `install_github("BershteynLab/EMODAnalyzeR")`
 
 As of 2022-03-10, installation problems might come up as it has mostly been tested on David Kaftan's machine.
+
+## Usage
+
+    library(EMODAnalyzeR)
+    data = read.simulation.results(<path to runscenarios output folder>, 'Baseline', c("Infected", "Population"), min_age_inclusive = 15, max_age_inclusive = 49)
+    plot.prevalence(data, 2000, 2040)
+    
