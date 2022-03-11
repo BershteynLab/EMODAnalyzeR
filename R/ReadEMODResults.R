@@ -36,6 +36,7 @@ read.simulation.results <- function(results_path,
                                                         "Infected", "On_ART","Died", "Died_from_HIV",
                                                         "Tested.Past.Year.or.On_ART", "Tested.Ever",
                                                         "Diagnosed"),
+                                  stratify_columns = c("Year", "Gender"),
                                   min_age_inclusive = 15,
                                   max_age_inclusive = 49) {
   ### Read 250 simulation and aggregate by age 15+
