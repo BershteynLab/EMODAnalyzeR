@@ -21,6 +21,7 @@ library(reshape2)
 library(plyr)
 library(plotrix)
 library(data.table)
+library(tidyr)
 
 SummarizeEachSimByAgeAndGender <- function (data, summarize_columns, stratify_columns, min_age_inclusive = 0, max_age_inclusive = Inf) {
   data %>%
