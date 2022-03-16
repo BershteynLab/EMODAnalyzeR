@@ -22,10 +22,10 @@ library(plyr)
 library(plotrix)
 library(data.table)
 
-SummarizeEachSimByAgeAndGender <- function (data, summarize_columns, min_age_inclusive = 0, max_age_inclusive = Inf) {
+SummarizeEachSimByAgeAndGender <- function (data, summarize_columns, stratify_columns, min_age_inclusive = 0, max_age_inclusive = Inf) {
   data %>%
     filter( (Age >= min_age_inclusive) & (Age <= max_age_inclusive) ) %>%
-    group_by(Year, Gender) %>%
+    group_by_at(stratify_columns) %>%
     summarise_at(summarize_columns, sum, na.rm=T)
 }
 
@@ -48,7 +48,7 @@ read.simulation.results <- function(results_path,
   for (i in seq(1,length(file_list),1)){
     f <- paste(results_path, file_list[i], sep="/")
     raw.data <- fread(f, check.names = TRUE)
-    dat <- SummarizeEachSimByAgeAndGender(raw.data, summarize_columns, min_age_inclusive, max_age_inclusive )
+    dat <- SummarizeEachSimByAgeAndGender(raw.data, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
     dat$sim.id <- paste0(file_list[i])
     dat$scenario_name <- scenario_name
     if (i==1) {
@@ -88,6 +88,6 @@ read.ingest.sheet <- function(ingest_filename, sheet) {
 read.ingest.file <- function(ingest_filename) {
   sheets <- Filter(function(x) {grepl('Obs-', x)}, excel_sheets(ingest_filename))
   datasets <- Map(function(x) {read.ingest.sheet(ingest_filename, x)}, sheets)
-
+  datasets
 }
 

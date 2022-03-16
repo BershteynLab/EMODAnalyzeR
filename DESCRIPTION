@@ -17,3 +17,4 @@ Imports:
     plyr,
     plotrix,
     data.table,
+    tidyr
