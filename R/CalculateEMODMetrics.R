@@ -71,12 +71,11 @@ calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, disc
   m2 <- data %>%
         dplyr::group_by(Year_Integer, Age, sim.id, scenario_name) %>%
         dplyr::summarise(Died_from_HIV = sum(Died_from_HIV),
-                         Infected = sum(Infected),
-                         On_ART = sum(On_ART),
+                         Infected = mean(Infected),
+                         On_ART = mean(On_ART),
                          pop_scaling_factor = mean(pop_scaling_factor))
 
   m2 <- m2 %>%
-        dplyr::group_by(Year_Integer, Age, sim.id, scenario_name)%>%
         mutate(On_ART_calib = On_ART*pop_scaling_factor,
         Infected_calib = Infected*pop_scaling_factor,
         Died_from_HIV_calib = Died_from_HIV*pop_scaling_factor,
@@ -91,8 +90,8 @@ calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, disc
 
   disability.tibble <- m3 %>%
                         dplyr::group_by(Year_Integer) %>%
-                        dplyr::summarize(infected_untreated = mean(Infected_off_ART_calib_median),
-                                                    on_art = mean(On_ART_calib_median)) %>%
+                        dplyr::summarize(infected_untreated = sum(Infected_off_ART_calib_median),
+                                         on_art = sum(On_ART_calib_median)) %>%
                         dplyr::rename(year = Year_Integer)
 
   m4 <- m3 %>% mutate(year_applied = Year_Integer - (Age - 81))
