@@ -1,3 +1,8 @@
+#' Calculate incidence of an EMOD simulation
+#'
+#' @param data A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")).
+#' More aggregate columns can be used, but more stratify columns will be ignored
+#' @return A tibble with columns incidence and Year
 calculate.incidence <- function(data) {
   data$Year_Integer <- floor((data$Year-0.5))
 
@@ -21,6 +26,15 @@ calculate.incidence <- function(data) {
 
 }
 
+#' Calculate the scaling factor for a population run on EMOD. Typically when we run EMOD, we scale down our population for the sake of
+#' computation costs. In order to get correct counts of different statuses (i.e., number of people who died from HIV), we need to scale our data.
+#' This function will not scale the data, rather it will add a scaling-factor column to the data that you can multiply any column of interest by.
+#'
+#' @param data A tibble returned from read.simulation.results(..., stratify_columns = c("Year"), aggregate_columns = c("Population")).
+#' More aggregate and stratify columns can be used
+#' @param reference_year The year that you want to calibrate the total population to
+#' @param reference_population the actual population of the area being studied at the time of "reference_year"
+#' @return A tibble with all original columns found in "data", plus a column for pop_scaling_factor
 calculate.pop_scaling_factor <- function(data, reference_year, reference_population) {
   for_pop_scaling_factor <- aggregate(Population ~ Year + sim.id + scenario_name,
                                       subset(data,
@@ -35,34 +49,26 @@ calculate.pop_scaling_factor <- function(data, reference_year, reference_populat
 
 }
 
-calculate.bounds.two_sigma <- function(mean_vector, two_sigma_vector) {
-  one.96_sigma = ( two_sigma_vector / 2.0 ) * 1.96
-  lb <- mean_vector - one.96_sigma
-  ub <- mean_vector + one.96_sigma
-  names(lb) <- c('lb')
-  names(ub) <- c('ub')
-  data.frame(lb = lb, ub = ub)
-}
+#' Calculate the DALY population run on EMOD. DALY stands for Disability Adjusted Life Years. It is a measure of years lost
+#' due to a disease - in this case, HIV. It is adjusted for the disability of living with the disease. By default, living
+#' with untreated HIV has a weight of 0.3 (or a year with HIV is worth 70% of a healthy year). Living under ART treatment is given
+#' a weight of 0.1. We also discount future years of DALY. By default, each future year is discounted a compounding 3%. For example,
+#' by the 10th year, we the DALY will be multiplied by 0.97^10.
+#'
+#' @param data A tibble returned from calculate.pop_scaling_factor, which was passed data from
+#'  read.simulation.results(..., stratify_columns = c("Year", "Age"),
+#'                               aggregate_columns = c("Died_from_HIV", "Infected", "On_ART")).
+#' @param infected_weight The disability weight for being infected with HIV, but without treatment (default 0.3)
+#' @param art_weight The disability weight for being infected with HIV, but on ART (default 0.1)
+#' @param discount_start_year The year in which the DALY starts becoming reduced for being in the future
+#' @param discount_percent The compounding percent to reduce DALY each year in the future
+#' @return A tibble with columns year, daly, and daly_future_discounted
+calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, discount_start_year = 2023, discount_percent = 0.03) {
 
-calculate.bounds.effective_count <- function (mean_vectors, effective_counts) {
-  x <- as.vector(mean_vectors * effective_counts)
-  alpha <- x + 1
-  beta <- effective_counts - x + 1
-  names(alpha) <- c('alpha_1')
-  names(beta) <- c('beta_1')
-  tibble(alpha, beta) %>%
-    mutate(lb = qbeta(0.025, alpha_1, beta_1)) %>%
-    mutate(ub = qbeta(0.975, alpha_1, beta_1)) %>%
-    select(lb, ub)
-}
+  data$Year_Integer <- floor((data$Year-0.5))
 
 
-calculate.DALY <- function(scenario_allyr.all.age,   infected_weight = 0.3, art_weight = 0.1) {
-
-  scenario_allyr.all.age$Year_Integer <- floor((scenario_allyr.all.age$Year-0.5))
-
-
-  m2 <- scenario_allyr.all.age %>%
+  m2 <- data %>%
         dplyr::group_by(Year_Integer, Age, sim.id, scenario_name) %>%
         dplyr::summarise(Died_from_HIV = sum(Died_from_HIV),
                          Infected = sum(Infected),
@@ -85,24 +91,62 @@ calculate.DALY <- function(scenario_allyr.all.age,   infected_weight = 0.3, art_
 
   disability.tibble <- m3 %>%
                         dplyr::group_by(Year_Integer) %>%
-                        dplyr::summarize(infections = sum(Infected_off_ART_calib_median),
-                                                    on_art = sum(On_ART_calib_median)) %>%
+                        dplyr::summarize(infected_untreated = mean(Infected_off_ART_calib_median),
+                                                    on_art = mean(On_ART_calib_median)) %>%
                         dplyr::rename(year = Year_Integer)
 
-  m4 <- m3 %>% mutate(
-                      year_applied = Year_Integer - (Age - 81))
+  m4 <- m3 %>% mutate(year_applied = Year_Integer - (Age - 81))
 
-  daly.tibble = tibble(year = seq(min(m4$Year_Integer), max(m4$Year_Integer)))
+  daly.tibble <- tibble(year = seq(min(m4$Year_Integer), max(m4$Year_Integer)))
 
-  yll = daly.tibble %>% rowwise() %>%
-        do( yll = sum(
-          m4[(m4$Year_Integer < .$year) & (m4$year_applied > .$year),]$Died_from_HIV_calib_median ), year = .$year[[1]] ) %>%
-        unnest()
+  yll <- daly.tibble %>% rowwise() %>%
+            do( yll = sum(  m4[(m4$Year_Integer < .$year) &
+                                 (m4$year_applied > .$year),'Died_from_HIV_calib_median'] ),
+                            year = .$year[[1]] ) %>%
+            unnest()
 
   daly = left_join(yll, disability.tibble, on="year") %>%
          replace(is.na(.), 0)
 
-  daly <- daly %>% mutate(daly = infections*infected_weight + on_art*art_weight + yll)
+  daly <- daly %>% mutate(daly = infected_untreated*infected_weight + on_art*art_weight + yll)
+  daly <- daly %>% mutate(discount_factor = (1 - discount_percent)^(year - discount_start_year) )
+  daly[daly$year < discount_start_year,'discount_factor'] <- 1.0
+  daly <- daly %>% mutate(daly_future_discounted = daly*discount_factor )
+
   return (daly)
 
+}
+
+
+#' Calculate the 95 percent confidence interval of an estimate given 2 sigma. This is used to
+#' calculate confidence intervals from EMOD calibration data that comes from a Gaussian distribution
+#'
+#' @param mean_vector A vector of the estimated value of a measurement
+#' @param two_sigma_vector A vector of the two standard deviations from the mean of a measurement
+#' @return A data.frame with columns lb and ub corresponding to upper and lower bounds (95% CI)
+calculate.bounds.two_sigma <- function(mean_vector, two_sigma_vector) {
+  one.96_sigma = ( two_sigma_vector / 2.0 ) * 1.96
+  lb <- mean_vector - one.96_sigma
+  ub <- mean_vector + one.96_sigma
+  names(lb) <- c('lb')
+  names(ub) <- c('ub')
+  data.frame(lb = lb, ub = ub)
+}
+
+#' Calculate the 95 percent confidence interval of an estimate given effective counts. This is used to
+#' calculate confidence intervals from EMOD calibration data that comes from a Beta distribution
+#'
+#' @param mean_vector A vector of the estimated value of a measurement
+#' @param effective_counts A vector of the effective number of samples from which the measurement was made
+#' @return A tibble with columns lb and ub corresponding to upper and lower bounds (95% CI)
+calculate.bounds.effective_count <- function (mean_vectors, effective_counts) {
+  x <- as.vector(mean_vectors * effective_counts)
+  alpha <- x + 1
+  beta <- effective_counts - x + 1
+  names(alpha) <- c('alpha_1')
+  names(beta) <- c('beta_1')
+  tibble(alpha, beta) %>%
+    mutate(lb = qbeta(0.025, alpha_1, beta_1)) %>%
+    mutate(ub = qbeta(0.975, alpha_1, beta_1)) %>%
+    select(lb, ub)
 }
