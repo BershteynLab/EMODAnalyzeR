@@ -99,7 +99,7 @@ calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, disc
   daly.tibble <- tibble(year = seq(min(m4$Year_Integer), max(m4$Year_Integer)))
 
   yll <- daly.tibble %>% rowwise() %>%
-            do( yll = sum(  m4[(m4$Year_Integer < .$year) &
+            do( yll = sum(  m4[(m4$Year_Integer <= .$year) &
                                  (m4$year_applied > .$year),'Died_from_HIV_calib_median'] ),
                             year = .$year[[1]] ) %>%
             unnest()
