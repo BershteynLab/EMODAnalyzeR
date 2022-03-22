@@ -22,6 +22,7 @@ library(plyr)
 library(plotrix)
 library(data.table)
 library(tidyr)
+library(stringr)
 
 SummarizeEachSimByAgeAndGender <- function (data, summarize_columns, stratify_columns, min_age_inclusive = 0, max_age_inclusive = Inf) {
   data %>%
@@ -63,6 +64,41 @@ read.simulation.results <- function(results_path,
   dat.all.files
 }
 
+read.simulation.results.bigpurple <- function(experiment_path,
+                                    scenario_name,
+                                    summarize_columns = c("Newly.Infected", "Newly.Tested.Positive",
+                                                          "Newly.Tested.Negative","Population",
+                                                          "Infected", "On_ART","Died", "Died_from_HIV",
+                                                          "Tested.Past.Year.or.On_ART", "Tested.Ever",
+                                                          "Diagnosed"),
+                                    stratify_columns = c("Year", "Gender"),
+                                    min_age_inclusive = 15,
+                                    max_age_inclusive = 49) {
+  ### Read 250 simulation and aggregate by age 15+
+  folder.list = Sys.glob(paste0(experiment_path, "/Simulation_*"))
+
+
+
+  n_runs_to_analyze = length(folder.list)
+  print(paste('Found',as.character(n_runs_to_analyze),'output files for scenario',scenario_name))
+
+  for (i in seq(1,length(folder.list),1)){
+    f <- paste(folder.list[i], "output/ReportHIVByAgeAndGender.csv", sep="/")
+    raw.data <- fread(f, check.names = TRUE)
+    dat <- SummarizeEachSimByAgeAndGender(raw.data, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
+    dat$sim.id <- paste0(file_list[i])
+    dat$scenario_name <- scenario_name
+    if (i==1) {
+      dat.all.files <- dat
+    } else {
+      dat.all.files <- rbind(dat.all.files, dat)
+      print(paste('Analyzed file for all year infections:',i))
+    }
+  }
+
+  dat.all.files
+}
+
 
 read.ingest.sheet <- function(ingest_filename, sheet) {
   raw_data <- read_excel(ingest_filename, sheet)
@@ -89,6 +125,13 @@ read.ingest.sheet <- function(ingest_filename, sheet) {
 read.ingest.file <- function(ingest_filename) {
   sheets <- Filter(function(x) {grepl('Obs-', x)}, excel_sheets(ingest_filename))
   datasets <- Map(function(x) {read.ingest.sheet(ingest_filename, x)}, sheets)
+  site_data <- read_excel(ingest_filename, "Site")
+  site_t = t(site_data)
+  colnames(site_t) <- site_t[1,]
+  site_t = site_t[-1,]
+  sites = sapply(site_t[,'Node number'], as.numeric)
+  names(sites) = site_t[,"Node name"]
+  datasets[['site_map']] = sites
   datasets
 }
 
