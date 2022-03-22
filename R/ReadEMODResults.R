@@ -86,7 +86,7 @@ read.simulation.results.bigpurple <- function(experiment_path,
     f <- paste(folder.list[i], "output/ReportHIVByAgeAndGender.csv", sep="/")
     raw.data <- fread(f, check.names = TRUE)
     dat <- SummarizeEachSimByAgeAndGender(raw.data, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
-    dat$sim.id <- paste0(file_list[i])
+    dat$sim.id <- paste0(f)
     dat$scenario_name <- scenario_name
     if (i==1) {
       dat.all.files <- dat
