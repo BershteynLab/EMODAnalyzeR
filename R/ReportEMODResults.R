@@ -22,7 +22,7 @@ report.calibration.results <- function(experiment_path, ingest_path) {
     actuals <- ingest_data[['Obs-Prevalence']] %>%
                   filter(Province == plottopics.prevalence[[i_row,'Province']] &
                            AgeBin == plottopics.prevalence[[i_row,'AgeBin']] )
-    data <- read.simulation.results(#read.simulation.results.bigpurple(
+    data <- read.simulation.results.bigpurple(
                                       experiment_path, "calibration",
                                       min_age_inclusive = plottopics.prevalence$age.min[i_row],
                                       max_age_inclusive = plottopics.prevalence$age.max[i_row] + 1,
