@@ -18,7 +18,7 @@ report.calibration.results <- function(experiment_path, ingest_path) {
                             select(Province, AgeBin) %>%
                             distinct() %>%
                             agebin.to.min.max()
-  for (i_row in seq(1, nrow(plottopics.prevalence))){
+  for (i_row in seq(1, nrow(plottopics.prevalence) - 1)){
     actuals <- ingest_data[['Obs-Prevalence']] %>%
                   filter(Province == plottopics.prevalence[[i_row,'Province']] &
                            AgeBin == plottopics.prevalence[[i_row,'AgeBin']] )
@@ -31,6 +31,7 @@ report.calibration.results <- function(experiment_path, ingest_path) {
             filter(ingest_data[["site_map"]][[plottopics.prevalence[[i_row,'Province']]]] == NodeId)
 
     plot.prevalence(data, 2000, 2025) +
+      geom_point(aes(x=Year, y=Prevalence)) +
       geom_errorbar(data = actuals, aes(x=Year, ymin=lb, ymax=ub), color="black", width=2, size=1)
 
     ggsave(paste0(plottopics.prevalence[[i_row,'Province']], plottopics.prevalence[[i_row,'age.min']], '-', plottopics.prevalence[[i_row,'age.max']], ".png"))
