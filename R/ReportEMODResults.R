@@ -20,7 +20,7 @@ report.calibration.results <- function(experiment_path, ingest_path, pop_scaling
     min_age_inclusive = -1,
     max_age_inclusive = 200,
     stratify_columns = c("Year","NodeId", "Gender", "Age"),
-    summarize_columns = c("Population","Infected", "On_ART"))
+    summarize_columns = c("Population","Infected", "On_ART", "Newly.Infected"))
 
   data$pop_scaling_factor = ifelse(pop_scaling_factor < 1, 1/pop_scaling_factor, pop_scaling_factor)
   if (any("Obs-OnART" == names(ingest_data))) {
