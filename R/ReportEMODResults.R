@@ -94,11 +94,11 @@ report.calibration.results <- function(experiment_path, ingest_path, pop_scaling
                    Age < ( plottopics.incidence$age.max[i_row] + 1 ) &
                    ingest_data[["site_map"]][[plottopics.incidence[[i_row,'Province']]]] == NodeId) %>%
           dplyr::group_by(Year, Gender, sim.id, scenario_name) %>%
-          dplyr::summarize(Population = sum(Population), Infected = sum(Infected))
+          dplyr::summarize(Population = sum(Population), Infected = sum(Infected), Newly.Infected = sum(Newly.Infected))
       }
 
       plot.incidence(this.sim.data, 2000, 2025) +
-        geom_point(data = actuals, aes(x=Year, y=Prevalence)) +
+        geom_point(data = actuals, aes(x=Year, y=Incidence)) +
         geom_errorbar(data = actuals, aes(x=Year, ymin=lb, ymax=ub), color="black", width=2, size=1)
 
       ggsave(paste0(figure_path, '/',
