@@ -63,7 +63,7 @@ calculate.pop_scaling_factor <- function(data, reference_year, reference_populat
 #' @param discount_start_year The year in which the DALY starts becoming reduced for being in the future
 #' @param discount_percent The compounding percent to reduce DALY each year in the future
 #' @return A tibble with columns year, daly, and daly_future_discounted
-calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, discount_start_year = 2023, discount_percent = 0.03) {
+calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, discount_start_year = 2023, discount_percent = 0.03, life_expectancy = 80) {
 
   data$Year_Integer <- floor((data$Year-0.5))
 
@@ -81,7 +81,7 @@ calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, disc
         Died_from_HIV_calib = Died_from_HIV*pop_scaling_factor,
         Infected_off_ART_calib = (Infected - On_ART)*pop_scaling_factor)
 
-  m2$Age <- ifelse(m2$Age >80, 80, m2$Age)
+  m2$Age <- ifelse(m2$Age >life_expectancy, life_expectancy, m2$Age)
 
   m3 <- m2 %>%
         select(Year_Integer, Age, sim.id, scenario_name, Died_from_HIV_calib, Infected_off_ART_calib, On_ART_calib) %>%
@@ -94,7 +94,7 @@ calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, disc
                                          on_art = sum(On_ART_calib_median)) %>%
                         dplyr::rename(year = Year_Integer)
 
-  m4 <- m3 %>% mutate(year_applied = Year_Integer - (Age - 81))
+  m4 <- m3 %>% mutate(year_applied = Year_Integer - (Age - (life_expectancy + 1)))
 
   daly.tibble <- tibble(year = seq(min(m4$Year_Integer), max(m4$Year_Integer)))
 
