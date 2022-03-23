@@ -87,7 +87,7 @@ report.calibration.results <- function(experiment_path, ingest_path, pop_scaling
           filter(Age > plottopics.incidence$age.min[i_row] &
                    Age < ( plottopics.incidence$age.max[i_row] + 1 ) ) %>%
           dplyr::group_by(Year, Gender, sim.id, scenario_name) %>%
-          dplyr::summarize(Population = sum(Population), Infected = sum(Infected))
+          dplyr::summarize(Population = sum(Population), Infected = sum(Infected), Newly.Infected = sum(Newly.Infected))
       } else {
         this.sim.data = data %>%
           filter(Age > plottopics.incidence$age.min[i_row] &
