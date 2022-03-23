@@ -65,6 +65,9 @@ plot.art <- function(data,
                      date.start,
                      date.end) {
 
+  data$On_Art_scaled <- data$pop_scaling_factor * data$On_ART
+  plot.by_gender(data,date.start,date.end,'On_Art_scaled') +
+    ylab("Number on Art")
 }
 
 
