@@ -15,7 +15,7 @@ agebin.to.min.max <- function(agebin) {
 report.calibration.results <- function(experiment_path, ingest_path, pop_scaling_factor = 1, figure_path = "./") {
   ingest_data <- read.ingest.file(ingest_path)
 
-  data <- read.simulation.results(#.bigpurple(
+  data <- read.simulation.results.bigpurple(
     experiment_path, "calibration",
     min_age_inclusive = -1,
     max_age_inclusive = 200,
