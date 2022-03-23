@@ -1,6 +1,6 @@
 # EMODAnalyzeR
 
-This package intends to help members of the Bershteyn Lab analyze results of emod. This package was developed by members of the Bershteyn lab.
+This package intends to help members of the Bershteyn Lab analyze results of emod. This package was developed by members of the Bershteyn lab and Edinah Mudimu.
 
 ## Installation
 
