@@ -41,7 +41,7 @@ report.calibration.results <- function(experiment_path, ingest_path, figure_path
         this.sim.data = data %>%
           filter(Age > plottopics.prevalence$age.min[i_row] &
                    Age < ( plottopics.prevalence$age.max[i_row] + 1 ) ) %>%
-          dplyr::group_by(Year, Gender, sim.id) %>%
+          dplyr::group_by(Year, Gender, sim.id, scenario_name) %>%
           dplyr::summarize(Population = sum(Population), Infected = sum(Infected))
       } else {
         this.sim.data = data %>%

@@ -46,22 +46,17 @@ read.simulation.results <- function(results_path,
 
   n_runs_to_analyze = length(file_list)
   print(paste('Found',as.character(n_runs_to_analyze),'output files for scenario',scenario_name))
-
+  data.list <- list()
   for (i in seq(1,length(file_list),1)){
     f <- paste(results_path, file_list[i], sep="/")
     raw.data <- fread(f, check.names = TRUE)
-    dat <- SummarizeEachSimByAgeAndGender(raw.data, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
-    dat$sim.id <- paste0(file_list[i])
-    dat$scenario_name <- scenario_name
-    if (i==1) {
-      dat.all.files <- dat
-    } else {
-      dat.all.files <- rbind(dat.all.files, dat)
-      print(paste('Analyzed file for all year infections:',i))
-    }
+    data.list[[i]] <- SummarizeEachSimByAgeAndGender(raw.data, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
+    data.list[[i]]$sim.id <- paste0(f)
+    data.list[[i]]$scenario_name <- scenario_name
+    print(paste0("Done Reading File ", i))
   }
 
-  dat.all.files
+  bind_rows(data.list)
 }
 
 read.simulation.results.bigpurple <- function(experiment_path,
@@ -77,26 +72,18 @@ read.simulation.results.bigpurple <- function(experiment_path,
   ### Read 250 simulation and aggregate by age 15+
   folder.list = Sys.glob(paste0(experiment_path, "/Simulation_*"))
 
-
-
   n_runs_to_analyze = length(folder.list)
   print(paste('Found',as.character(n_runs_to_analyze),'output files for scenario',scenario_name))
-
+  data.list = list()
   for (i in seq(1,length(folder.list),1)){
     f <- paste(folder.list[i], "output/ReportHIVByAgeAndGender.csv", sep="/")
     raw.data <- fread(f, check.names = TRUE)
-    dat <- SummarizeEachSimByAgeAndGender(raw.data, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
-    dat$sim.id <- paste0(f)
-    dat$scenario_name <- scenario_name
-    if (i==1) {
-      dat.all.files <- dat
-    } else {
-      dat.all.files <- rbind(dat.all.files, dat)
-      print(paste('Analyzed file for all year infections:',i))
-    }
+    data.list[[i]] <- SummarizeEachSimByAgeAndGender(raw.data, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
+    data.list[[i]]$sim.id <- paste0(f)
+    data.list[[i]]$scenario_name <- scenario_name
   }
 
-  dat.all.files
+  bind_rows(data.list)
 }
 
 
