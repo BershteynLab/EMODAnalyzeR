@@ -35,9 +35,11 @@ calculate.incidence <- function(data) {
 #' @param reference_year The year that you want to calibrate the total population to
 #' @param reference_population the actual population of the area being studied at the time of "reference_year"
 #' @return A tibble with all original columns found in "data", plus a column for pop_scaling_factor
-calculate.pop_scaling_factor <- function(data, reference_year, reference_population) {
+calculate.pop_scaling_factor <- function(data, reference_year, reference_population, age_min_inclusive=0, age_max_inclusive = 200) {
+  data.within.age <- data %>%
+          filter((Age >= age_min_inclusive) & (Age <= age_max_inclusive))
   for_pop_scaling_factor <- aggregate(Population ~ Year + sim.id + scenario_name,
-                                      subset(data,
+                                      subset(data.within.age,
                                              Year == reference_year), FUN=sum)
 
   for_pop_scaling_factor$pop_scaling_factor <- reference_population/for_pop_scaling_factor$Population
@@ -64,7 +66,6 @@ calculate.pop_scaling_factor <- function(data, reference_year, reference_populat
 #' @param discount_percent The compounding percent to reduce DALY each year in the future
 #' @return A tibble with columns year, daly, and daly_future_discounted
 calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, discount_start_year = 2023, discount_percent = 0.03, life_expectancy = 80) {
-
   data$Year_Integer <- floor((data$Year-0.5))
 
 
@@ -84,8 +85,8 @@ calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, disc
   m2$Age <- ifelse(m2$Age >life_expectancy, life_expectancy, m2$Age)
 
   m3 <- m2 %>%
-        select(Year_Integer, Age, sim.id, scenario_name, Died_from_HIV_calib, Infected_off_ART_calib, On_ART_calib) %>%
         dplyr::group_by(Year_Integer, Age, scenario_name) %>%
+        dplyr::select(Year_Integer, Age, scenario_name, Died_from_HIV_calib, Infected_off_ART_calib, On_ART_calib) %>%
         dplyr::summarise_all(list(median=median))
 
   disability.tibble <- m3 %>%
