@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EMODAnalyzeR &mdash; EMODAnalyzeR 0.0.1 documentation</title>
+  <title>reStructuredText &mdash; EMODAnalyzeR 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="calculate.bounds.effective_count" href="functions/calculate.bounds.effective_count.html" /> 
+    <link rel="next" title="EMODAnalyzeR" href="EMODAnalyzeR.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -36,13 +36,19 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="EMODAnalyzeR.html">EMODAnalyzeR</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="functions/calculate.bounds.effective_count.html"><code class="docutils literal notranslate"><span class="pre">calculate.bounds.effective_count</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions/calculate.bounds.two_sigma.html"><code class="docutils literal notranslate"><span class="pre">calculate.bounds.two_sigma</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions/calculate.DALY.html"><code class="docutils literal notranslate"><span class="pre">calculate.DALY</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions/calculate.incidence.html"><code class="docutils literal notranslate"><span class="pre">calculate.incidence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions/calculate.pop_scaling_factor.html"><code class="docutils literal notranslate"><span class="pre">calculate.pop_scaling_factor</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions/plot.by_gender.html"><code class="docutils literal notranslate"><span class="pre">plot.by_gender</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions/plot.prevalence.html"><code class="docutils literal notranslate"><span class="pre">plot.prevalence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions/read.simulation.results.bigpurple.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results.bigpurple</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions/read.simulation.results.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions/report.calibration.results.html"><code class="docutils literal notranslate"><span class="pre">report.calibration.results</span></code></a></li>
@@ -62,7 +68,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>EMODAnalyzeR</li>
+      <li>reStructuredText</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -72,27 +78,58 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="emodanalyzer">
-<h1>EMODAnalyzeR<a class="headerlink" href="#emodanalyzer" title="Permalink to this headline"></a></h1>
-<style> .red {color:red} </style><p>This package intends to help members of the Bershteyn Lab analyze results of emod. This package was developed by members of the Bershteyn lab and Edinah Mudimu.</p>
-</section>
-<section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
-<ol class="arabic simple">
-<li><p>Make sure you are running R 4.0 or greater</p></li>
-<li><p>Make sure you have devtools installed (if not, run <cite>install.packages(“devtools”)</cite> )</p></li>
-<li><p>Run <cite>library(devtools)</cite></p></li>
-<li><p>Run <cite>install_github(“BershteynLab/EMODAnalyzeR”)</cite></p></li>
-</ol>
-<p>As of 2022-03-10, installation problems might come up as it has mostly been tested on David Kaftan’s machine.</p>
-</section>
-<section id="usage">
-<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h1>
-<blockquote>
-<div><p>library(EMODAnalyzeR)
-data = read.simulation.results(&lt;path to runscenarios output folder&gt;, ‘Baseline’, c(“Infected”, “Population”), min_age_inclusive = 15, max_age_inclusive = 49)
-plot.prevalence(data, 2000, 2040)</p>
-</div></blockquote>
+  <section id="restructuredtext">
+<h1>reStructuredText<a class="headerlink" href="#restructuredtext" title="Permalink to this headline"></a></h1>
+<style> .red {color:red} </style><p>This main document is in <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html">‘reStructuredText’ (“rst”) format</a>,
+which differs in many ways from standard markdown commonly used in R packages.
+<code class="docutils literal notranslate"><span class="pre">rst</span></code> is richer and more powerful than markdown. The remainder of this main
+document demonstrates some of the features, with links to additional <code class="docutils literal notranslate"><span class="pre">rst</span></code>
+documentation to help you get started. The definitive argument for the benefits
+of <code class="docutils literal notranslate"><span class="pre">rst</span></code> over markdown is the <a class="reference external" href="https://www.python.org/dev/peps/pep-0287/">official language format documentation</a>, which starts with a very clear
+explanation of the <a class="reference external" href="https://www.python.org/dev/peps/pep-0287/#benefits">benefits</a>.</p>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h2>
+<p>All of the following are defined within the <code class="docutils literal notranslate"><span class="pre">docs/index.rst</span></code> file. Here is
+some <span class="red">coloured</span> text which demonstrates how raw HTML commands can be
+incorporated. The following are examples of <code class="docutils literal notranslate"><span class="pre">rst</span></code> “admonitions”:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Here is a note</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>With a warning inside the note</p>
+</div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The full list of <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html">‘restructuredtext’ directives</a> or a similar list of <a class="reference external" href="https://restructuredtext.documatt.com/admonitions.html">admonitions</a>.</p>
+</div>
+<p class="centered">
+<strong>This is a line of <span class="red">centered text</span></strong></p><table class="hlist"><tr><td><ul class="simple">
+<li><p>and here is</p></li>
+<li><p>A list of</p></li>
+</ul>
+</td><td><ul class="simple">
+<li><p>short items</p></li>
+<li><p>that are</p></li>
+</ul>
+</td><td><ul class="simple">
+<li><p>displayed</p></li>
+<li><p>in 3 columns</p></li>
+</ul>
+</td></tr></table>
+<p>The remainder of this document shows three tables of contents for the main
+<code class="docutils literal notranslate"><span class="pre">README</span></code> (under “Introduction”), and the vignettes and R directories of
+a package. These can be restructured any way you like by changing the main
+<code class="docutils literal notranslate"><span class="pre">docs/index.rst</span></code> file. The contents of this file – and indeed the contents
+of any <a class="reference external" href="https://readthedocs.org">readthedocs</a> file – can be viewed by
+clicking <em>View page source</em> at the top left of any page.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="EMODAnalyzeR.html">EMODAnalyzeR</a></li>
+</ul>
+</div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -103,18 +140,21 @@ plot.prevalence(data, 2000, 2040)</p>
 <li class="toctree-l1"><a class="reference internal" href="functions/calculate.DALY.html"><code class="docutils literal notranslate"><span class="pre">calculate.DALY</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions/calculate.incidence.html"><code class="docutils literal notranslate"><span class="pre">calculate.incidence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions/calculate.pop_scaling_factor.html"><code class="docutils literal notranslate"><span class="pre">calculate.pop_scaling_factor</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions/plot.by_gender.html"><code class="docutils literal notranslate"><span class="pre">plot.by_gender</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions/plot.prevalence.html"><code class="docutils literal notranslate"><span class="pre">plot.prevalence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions/read.simulation.results.bigpurple.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results.bigpurple</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions/read.simulation.results.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions/report.calibration.results.html"><code class="docutils literal notranslate"><span class="pre">report.calibration.results</span></code></a></li>
 </ul>
 </div>
 </section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="functions/calculate.bounds.effective_count.html" class="btn btn-neutral float-right" title="calculate.bounds.effective_count" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="EMODAnalyzeR.html" class="btn btn-neutral float-right" title="EMODAnalyzeR" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

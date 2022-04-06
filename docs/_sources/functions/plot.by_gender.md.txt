@@ -1,0 +1,39 @@
+# `plot.by_gender`
+
+Plot by gender
+
+
+## Description
+
+Plot by gender
+
+
+## Usage
+
+```r
+list(list("plot"), list("by_gender"))(data, date.start, date.end, col2plot, title = "", unit = "")
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+`data`     |     A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")). More aggregate columns can be used, but more stratify columns will cause problems in the plot.
+`date.start`     |     integer year to start the plotting (i.e., 2000)
+`date.end`     |     integer year to end the plotting (i.e., 2030)
+`col2plot`     |     string of column name you want to plot (i.e., "Infected")
+`title`     |     string of plot title (i.e., "Infected Plot")
+`unit`     |     string of the units for col2plot (i.e., "(Number of People)")
+
+
+## Details
+
+plots a metric in data. First, it faintly plots all simulations. Then it plots a bold line of the mean of all simulations
+
+
+## Value
+
+a ggplot with all data plotted
+
+
