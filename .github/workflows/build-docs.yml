@@ -37,7 +37,12 @@ jobs:
           library(r2readthedocs)
           r2readthedocs::rtd_build()
         shell: Rscript {0}
-      - run: cp -a ./docs/_build/html/. ./docs
+      - run: cp -a ./docs/_build/html/ ../html
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          ref: 'docs'      
+      - run: cp -a ../html/. ./docs
       - run: pwd
       - run: ls -lsa
       - name: Create Pull Request
