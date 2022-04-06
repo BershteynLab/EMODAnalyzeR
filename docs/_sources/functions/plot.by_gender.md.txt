@@ -19,7 +19,7 @@ list(list("plot"), list("by_gender"))(data, date.start, date.end, col2plot, titl
 
 Argument      |Description
 ------------- |----------------
-`data`     |     A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")). More aggregate columns can be used, but more stratify columns will cause problems in the plot.
+`data`     |     A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")) More aggregate columns can be used, but more stratify columns will cause problems in the plot.
 `date.start`     |     integer year to start the plotting (i.e., 2000)
 `date.end`     |     integer year to end the plotting (i.e., 2030)
 `col2plot`     |     string of column name you want to plot (i.e., "Infected")
