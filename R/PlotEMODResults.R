@@ -2,6 +2,12 @@ library(ggplot2)
 
 colors = c("#0072b2","#009e73","#cc79a7")
 
+
+#' Plot by gender
+#'
+#' @param data A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")).
+#' More aggregate columns can be used, but more stratify columns will be ignored
+#' @return A tibble with columns incidence and Year
 plot.by_gender <- function(data,
                          date.start,
                          date.end,
