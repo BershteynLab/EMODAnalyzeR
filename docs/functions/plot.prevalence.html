@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>read.simulation.results &mdash; EMODAnalyzeR 0.0.1 documentation</title>
+  <title>plot.prevalence &mdash; EMODAnalyzeR 0.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,8 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="report.calibration.results" href="report.calibration.results.html" />
-    <link rel="prev" title="read.simulation.results.bigpurple" href="read.simulation.results.bigpurple.html" /> 
+    <link rel="prev" title="plot.by_gender" href="plot.by_gender.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -38,21 +37,14 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Functions</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="calculate.bounds.effective_count.html"><code class="docutils literal notranslate"><span class="pre">calculate.bounds.effective_count</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.bounds.two_sigma.html"><code class="docutils literal notranslate"><span class="pre">calculate.bounds.two_sigma</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.DALY.html"><code class="docutils literal notranslate"><span class="pre">calculate.DALY</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.incidence.html"><code class="docutils literal notranslate"><span class="pre">calculate.incidence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.pop_scaling_factor.html"><code class="docutils literal notranslate"><span class="pre">calculate.pop_scaling_factor</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="read.simulation.results.bigpurple.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results.bigpurple</span></code></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">read.simulation.results</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#arguments">Arguments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#details">Details</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#value">Value</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="read.simulation.results.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="report.calibration.results.html"><code class="docutils literal notranslate"><span class="pre">report.calibration.results</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../EMODAnalyzeR.html">EMODAnalyzeR</a></li>
 </ul>
@@ -64,16 +56,15 @@
 <li class="toctree-l1"><a class="reference internal" href="calculate.incidence.html"><code class="docutils literal notranslate"><span class="pre">calculate.incidence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.pop_scaling_factor.html"><code class="docutils literal notranslate"><span class="pre">calculate.pop_scaling_factor</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot.by_gender.html"><code class="docutils literal notranslate"><span class="pre">plot.by_gender</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot.prevalence.html"><code class="docutils literal notranslate"><span class="pre">plot.prevalence</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="read.simulation.results.bigpurple.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results.bigpurple</span></code></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">read.simulation.results</span></code></a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">plot.prevalence</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#arguments">Arguments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#details">Details</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#value">Value</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="read.simulation.results.bigpurple.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results.bigpurple</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.simulation.results.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="report.calibration.results.html"><code class="docutils literal notranslate"><span class="pre">report.calibration.results</span></code></a></li>
 </ul>
 
@@ -91,9 +82,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><code class="docutils literal notranslate"><span class="pre">read.simulation.results</span></code></li>
+      <li><code class="docutils literal notranslate"><span class="pre">plot.prevalence</span></code></li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/functions/read.simulation.results.md.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/functions/plot.prevalence.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -101,25 +92,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="read-simulation-results">
-<h1><code class="docutils literal notranslate"><span class="pre">read.simulation.results</span></code><a class="headerlink" href="#read-simulation-results" title="Permalink to this headline"></a></h1>
-<p>Read results of an EMOD simulation</p>
+  <section id="plot-prevalence">
+<h1><code class="docutils literal notranslate"><span class="pre">plot.prevalence</span></code><a class="headerlink" href="#plot-prevalence" title="Permalink to this headline"></a></h1>
+<p>Plot prevalence of hiv stratified by gender</p>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
-<p>Read results of an EMOD simulation</p>
+<p>plots prevalence of EMOD simulations. First, it faintly plots all simulations. Then it plots a bold line of the mean of all simulations</p>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">read.simulation.results</span><span class="p">(</span>
-  <span class="n">results_path</span><span class="p">,</span>
-  <span class="n">scenario_name</span><span class="p">,</span>
-  <span class="n">summarize_columns</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;Newly.Infected&quot;</span><span class="p">,</span> <span class="s">&quot;Newly.Tested.Positive&quot;</span><span class="p">,</span>
-    <span class="s">&quot;Newly.Tested.Negative&quot;</span><span class="p">,</span> <span class="s">&quot;Population&quot;</span><span class="p">,</span> <span class="s">&quot;Infected&quot;</span><span class="p">,</span> <span class="s">&quot;On_ART&quot;</span><span class="p">,</span> <span class="s">&quot;Died&quot;</span><span class="p">,</span> <span class="s">&quot;Died_from_HIV&quot;</span><span class="p">,</span>
-    <span class="s">&quot;Tested.Past.Year.or.On_ART&quot;</span><span class="p">,</span> <span class="s">&quot;Tested.Ever&quot;</span><span class="p">,</span> <span class="s">&quot;Diagnosed&quot;</span><span class="p">),</span>
-  <span class="n">stratify_columns</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;Year&quot;</span><span class="p">,</span> <span class="s">&quot;Gender&quot;</span><span class="p">),</span>
-  <span class="n">min_age_inclusive</span> <span class="o">=</span> <span class="m">15</span><span class="p">,</span>
-  <span class="n">max_age_inclusive</span> <span class="o">=</span> <span class="m">49</span>
-<span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">list</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="s">&quot;plot&quot;</span><span class="p">),</span> <span class="nf">list</span><span class="p">(</span><span class="s">&quot;prevalence&quot;</span><span class="p">))(</span><span class="n">data</span><span class="p">,</span> <span class="n">date.start</span><span class="p">,</span> <span class="n">date.end</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;HIV prevalence&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -132,35 +114,21 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">results_path</span></code></p></td>
-<td><p>string pointing to the folder which contains the ReportHIVByAgeAndGender.csv files</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data</span></code></p></td>
+<td><p>A tibble returned from read.simulation.results(…, stratify_columns = c(“Year”, “Gender”), aggregate_columns = c(“Population”,”Newly.Infected”, “Infected”)). More aggregate columns can be used, but more stratify columns will cause problems in the plot.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scenario_name</span></code></p></td>
-<td><p>string for the name of the scenario being read. For example, you might use “baseline” for the baseline scenario.</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">date.start</span></code></p></td>
+<td><p>integer year to start the plotting (i.e., 2000)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">summarize_columns</span></code></p></td>
-<td><p>a vector of strings containing names of columns to be aggregated via summation. Note that spaces in column names are replaced by a period (“.”). For example, “Newly Infected” becomes “Newly.Infected”.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stratify_columns</span></code></p></td>
-<td><p>a vector of strings containing names of columns by which we will stratify the data. For example, we might want to have a separate row in the dataset for each year, so we would set stratify_columns = c(“Year”)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">min_age_inclusive</span></code></p></td>
-<td><p>an integer representing the minimum age to keep while reading the data (all ages below will be filtered out)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_age_inclusive</span></code></p></td>
-<td><p>an integer representing the maximum age to keep while reading the data (all ages above will be filtered out)</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">date.end</span></code></p></td>
+<td><p>integer year to end the plotting (i.e., 2030)</p></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="details">
-<h2>Details<a class="headerlink" href="#details" title="Permalink to this headline"></a></h2>
-<p>The results of an EMOD simulation are stored in a series of csv files titled “ReportHIVByAgeAndGender.csv”. One of these files exists for each
-simulation run (typically 250 files). This function reads and aggregates those files into a single tibble.</p>
-</section>
 <section id="value">
 <h2>Value<a class="headerlink" href="#value" title="Permalink to this headline"></a></h2>
-<p>A tibble with columns incidence and Year</p>
+<p>a ggplot with prevalence plotted</p>
 </section>
 </section>
 
@@ -168,8 +136,7 @@ simulation run (typically 250 files). This function reads and aggregates those f
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="read.simulation.results.bigpurple.html" class="btn btn-neutral float-left" title="read.simulation.results.bigpurple" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="report.calibration.results.html" class="btn btn-neutral float-right" title="report.calibration.results" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="plot.by_gender.html" class="btn btn-neutral float-left" title="plot.by_gender" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
