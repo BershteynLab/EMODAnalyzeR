@@ -17,9 +17,13 @@ jobs:
           cache-version: 2
           extra-packages: |
             any::devtools
+            ropenscilabs/r2readthedocs
       - name: Build Docs
         run: |
           library(devtools)
           devtools::document()
         shell: Rscript {0}
+      - run: git add -u
+      - run: git commit -m "Update Docs"
+      - run: git push
       - run: echo "🍏 This job's status is ${{ job.status }}."
