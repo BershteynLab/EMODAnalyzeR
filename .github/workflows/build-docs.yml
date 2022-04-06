@@ -31,6 +31,7 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           title: "Update r docs"
+          branch: "update-r-docs"
       - name: Build docs site
         run: |
           library(r2readthedocs)
@@ -44,5 +45,6 @@ jobs:
         with:
           base: docs
           title: "Update docs website"
+          branch: "update-r-website"
           add-paths: "'docs/*'"
       - run: echo "🍏 This job's status is ${{ job.status }}."
