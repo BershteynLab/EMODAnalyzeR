@@ -1,0 +1,29 @@
+# `calculate.incidence`
+
+Calculate incidence of an EMOD simulation
+
+
+## Description
+
+Calculate incidence of an EMOD simulation
+
+
+## Usage
+
+```r
+calculate.incidence(data)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+`data`     |     A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")). More aggregate columns can be used, but more stratify columns will be ignored
+
+
+## Value
+
+A tibble with columns incidence and Year
+
+
