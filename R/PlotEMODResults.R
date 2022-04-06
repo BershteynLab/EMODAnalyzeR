@@ -50,6 +50,15 @@ plot.by_gender <- function(data,
     labs(title= title)
 }
 
+
+#' Plot prevalence of hiv stratified by gender
+#' @description plots prevalence of EMOD simulations. First, it faintly plots all simulations. Then it plots a bold line of the mean of all simulations
+#' @param data A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")).
+#' More aggregate columns can be used, but more stratify columns will cause problems in the plot.
+#' @param date.start integer year to start the plotting (i.e., 2000)
+#' @param date.end integer year to end the plotting (i.e., 2030)
+#' @return a ggplot with prevalence plotted
+
 plot.prevalence <- function(data,
                            date.start,
                            date.end,
