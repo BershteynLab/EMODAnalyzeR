@@ -5,7 +5,7 @@ colors = c("#0072b2","#009e73","#cc79a7")
 
 #' Plot by gender
 #' @details plots a metric in data. First, it faintly plots all simulations. Then it plots a bold line of the mean of all simulations
-#' @param data A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")).
+#' @param data A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected"))
 #' More aggregate columns can be used, but more stratify columns will cause problems in the plot.
 #' @param date.start integer year to start the plotting (i.e., 2000)
 #' @param date.end integer year to end the plotting (i.e., 2030)

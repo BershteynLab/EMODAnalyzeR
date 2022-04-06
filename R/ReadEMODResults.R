@@ -25,7 +25,7 @@ SummarizeEachSimByAgeAndGender <- function (data, summarize_columns, stratify_co
 
 #' Read results of an EMOD simulation
 #' @details The results of an EMOD simulation are stored in a series of csv files titled "ReportHIVByAgeAndGender.csv". One of these files exists for each
-#' simulation run (typically 250 files). This function reads and aggregates those files into a single tibble.
+#' simulation run (typically 250 files). This function reads and aggregates those files into a single tibble
 #' @param results_path string pointing to the folder which contains the ReportHIVByAgeAndGender.csv files
 #' @param scenario_name string for the name of the scenario being read. For example, you might use "baseline" for the baseline scenario.
 #' @param summarize_columns a vector of strings containing names of columns to be aggregated via summation. Note that spaces in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".
