@@ -1,12 +1,3 @@
-# Hello, world!
-#
-# This is an example function named 'hello'
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
 # Some useful keyboard shortcuts for package authoring:
 #
 #   Install Package:           'Ctrl + Shift + B'
@@ -31,6 +22,17 @@ SummarizeEachSimByAgeAndGender <- function (data, summarize_columns, stratify_co
     summarise_at(summarize_columns, sum, na.rm=T)
 }
 
+
+#' Read results of an EMOD simulation
+#' @details The results of an EMOD simulation are stored in a series of csv files titled "ReportHIVByAgeAndGender.csv". One of these files exists for each
+#' simulation run (typically 250 files). This function reads and aggregates those files into a single tibble.
+#' @param results_path string pointing to the folder which contains the ReportHIVByAgeAndGender.csv files
+#' @param scenario_name string for the name of the scenario being read. For example, you might use "baseline" for the baseline scenario.
+#' @param summarize_columns a vector of strings containing names of columns to be aggregated via summation. Note that spaces in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".
+#' @param stratify_columns a vector of strings containing names of columns by which we will stratify the data. For example, we might want to have a separate row in the dataset for each year, so we would set stratify_columns = c("Year")
+#' @param min_age_inclusive an integer representing the minimum age to keep while reading the data (all ages below will be filtered out)
+#' @param max_age_inclusive an integer representing the maximum age to keep while reading the data (all ages above will be filtered out)
+#' @return A tibble with columns incidence and Year
 read.simulation.results <- function(results_path,
                                   scenario_name,
                                   summarize_columns = c("Newly.Infected", "Newly.Tested.Positive",
@@ -59,6 +61,19 @@ read.simulation.results <- function(results_path,
   bind_rows(data.list)
 }
 
+#' Read results of an EMOD simulation from its original location off the BigPurple filesystem
+#' @details When a simulation is run on BigPurple, dtk-tools creates a simulation folder somewhere on BigPurple (the folder which contains the simulation folder
+#' is specified in simtools.ini using the parameter "sim_root"). In this folder is a set of folders - each one representing a different run of the
+#' simulation. These folders will look something like "Simulation_6CGUFHY7". The results of each simulation are stored within these folders.
+#' The results of an EMOD simulation are stored in a series of csv files titled "ReportHIVByAgeAndGender.csv". One of these files exists for each
+#' simulation run (typically 250 files). This function reads and aggregates those files into a single tibble.
+#' @param experiment_path string pointing to the folder which contains the Simulation_XXXXXXXX folders. For example, /gpfs/scratch/kaftad01/experiments/Baseline-campaign_Nyanza_baseline_03112021_NoPrEP-Baseline___2022_02_17_21_34_51_660565
+#' @param scenario_name string for the name of the scenario being read. For example, you might use "baseline" for the baseline scenario.
+#' @param summarize_columns a vector of strings containing names of columns to be aggregated via summation. Note that spaces in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".
+#' @param stratify_columns a vector of strings containing names of columns by which we will stratify the data. For example, we might want to have a separate row in the dataset for each year, so we would set stratify_columns = c("Year")
+#' @param min_age_inclusive an integer representing the minimum age to keep while reading the data (all ages below will be filtered out)
+#' @param max_age_inclusive an integer representing the maximum age to keep while reading the data (all ages above will be filtered out)
+#' @return A tibble with columns incidence and Year
 read.simulation.results.bigpurple <- function(experiment_path,
                                     scenario_name,
                                     summarize_columns = c("Newly.Infected", "Newly.Tested.Positive",

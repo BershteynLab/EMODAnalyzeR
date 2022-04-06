@@ -13,7 +13,8 @@ calculate.DALY(
   infected_weight = 0.3,
   art_weight = 0.1,
   discount_start_year = 2023,
-  discount_percent = 0.03
+  discount_percent = 0.03,
+  life_expectancy = 80
 )
 }
 \arguments{

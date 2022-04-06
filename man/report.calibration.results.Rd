@@ -4,7 +4,12 @@
 \alias{report.calibration.results}
 \title{Report calibration fit of EMOD simulation}
 \usage{
-report.calibration.results(experiment_path, ingest_path)
+report.calibration.results(
+  experiment_path,
+  ingest_path,
+  pop_scaling_factor = 1,
+  figure_path = "./"
+)
 }
 \arguments{
 \item{experiment_path}{path on big purple where experiment was run. Typically this will look like

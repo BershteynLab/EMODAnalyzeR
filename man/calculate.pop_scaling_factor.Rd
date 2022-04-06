@@ -6,7 +6,13 @@
 computation costs. In order to get correct counts of different statuses (i.e., number of people who died from HIV), we need to scale our data.
 This function will not scale the data, rather it will add a scaling-factor column to the data that you can multiply any column of interest by.}
 \usage{
-calculate.pop_scaling_factor(data, reference_year, reference_population)
+calculate.pop_scaling_factor(
+  data,
+  reference_year,
+  reference_population,
+  age_min_inclusive = 0,
+  age_max_inclusive = 200
+)
 }
 \arguments{
 \item{data}{A tibble returned from read.simulation.results(..., stratify_columns = c("Year"), aggregate_columns = c("Population")).
