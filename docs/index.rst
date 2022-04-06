@@ -36,18 +36,3 @@ Usage
 .. toctree::
    :maxdepth: 1
    :caption: Vignettes
-
-
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Functions
-
-   functions/calculate.bounds.effective_count.md
-   functions/calculate.bounds.two_sigma.md
-   functions/calculate.DALY.md
-   functions/calculate.incidence.md
-   functions/calculate.pop_scaling_factor.md
-   functions/read.simulation.results.bigpurple.md
-   functions/read.simulation.results.md
-   functions/report.calibration.results.md
