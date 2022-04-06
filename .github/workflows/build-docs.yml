@@ -48,7 +48,6 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          base: docs
           title: "Update docs website"
           branch: "update-r-website"
       - run: echo "🍏 This job's status is ${{ job.status }}."
