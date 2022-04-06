@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>report.calibration.results &mdash; EMODAnalyzeR 0.0.1 documentation</title>
+  <title>emodplot.prevalence &mdash; EMODAnalyzeR 0.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,7 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="read.simulation.results" href="read.simulation.results.html" /> 
+    <link rel="next" title="emodplot.by_gender" href="plot.by_gender.html" />
+    <link rel="prev" title="calculate.pop_scaling_factor" href="calculate.pop_scaling_factor.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,16 +48,17 @@
 <li class="toctree-l1"><a class="reference internal" href="calculate.DALY.html"><code class="docutils literal notranslate"><span class="pre">calculate.DALY</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.incidence.html"><code class="docutils literal notranslate"><span class="pre">calculate.incidence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.pop_scaling_factor.html"><code class="docutils literal notranslate"><span class="pre">calculate.pop_scaling_factor</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="emodplot.prevalence.html"><code class="docutils literal notranslate"><span class="pre">emodplot.prevalence</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot.by_gender.html"><code class="docutils literal notranslate"><span class="pre">emodplot.by_gender</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="read.simulation.results.bigpurple.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results.bigpurple</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="read.simulation.results.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results</span></code></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">report.calibration.results</span></code></a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">emodplot.prevalence</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#value">Value</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="plot.by_gender.html"><code class="docutils literal notranslate"><span class="pre">emodplot.by_gender</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.simulation.results.bigpurple.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results.bigpurple</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.simulation.results.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="report.calibration.results.html"><code class="docutils literal notranslate"><span class="pre">report.calibration.results</span></code></a></li>
 </ul>
 
         </div>
@@ -73,9 +75,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><code class="docutils literal notranslate"><span class="pre">report.calibration.results</span></code></li>
+      <li><code class="docutils literal notranslate"><span class="pre">emodplot.prevalence</span></code></li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/functions/report.calibration.results.md.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/functions/emodplot.prevalence.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -83,21 +85,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="report-calibration-results">
-<h1><code class="docutils literal notranslate"><span class="pre">report.calibration.results</span></code><a class="headerlink" href="#report-calibration-results" title="Permalink to this headline"></a></h1>
-<p>Report calibration fit of EMOD simulation</p>
+  <section id="emodplot-prevalence">
+<h1><code class="docutils literal notranslate"><span class="pre">emodplot.prevalence</span></code><a class="headerlink" href="#emodplot-prevalence" title="Permalink to this headline"></a></h1>
+<p>Plot prevalence of hiv stratified by gender</p>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
-<p>Report calibration fit of EMOD simulation</p>
+<p>plots prevalence of EMOD simulations. First, it faintly plots all simulations. Then it plots a bold line of the mean of all simulations</p>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">report.calibration.results</span><span class="p">(</span>
-  <span class="n">experiment_path</span><span class="p">,</span>
-  <span class="n">ingest_path</span><span class="p">,</span>
-  <span class="n">pop_scaling_factor</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
-  <span class="n">figure_path</span> <span class="o">=</span> <span class="s">&quot;./&quot;</span>
-<span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">emodplot.prevalence</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">date.start</span><span class="p">,</span> <span class="n">date.end</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;HIV prevalence&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -110,11 +107,21 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">experiment_path</span></code></p></td>
-<td><p>path on big purple where experiment was run. Typically this will look like /gpfs/scratch/kaftad01/experiments/Zambia–0.02–rep7–testCalibrateSeedYear_iter32___2022_03_21_12_39_07_01727</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data</span></code></p></td>
+<td><p>A tibble returned from read.simulation.results(…, stratify_columns = c(“Year”, “Gender”), aggregate_columns = c(“Population”,”Newly.Infected”, “Infected”)). More aggregate columns can be used, but more stratify columns will cause problems in the plot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">date.start</span></code></p></td>
+<td><p>integer year to start the plotting (i.e., 2000)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">date.end</span></code></p></td>
+<td><p>integer year to end the plotting (i.e., 2030)</p></td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="value">
+<h2>Value<a class="headerlink" href="#value" title="Permalink to this headline"></a></h2>
+<p>a ggplot with prevalence plotted</p>
 </section>
 </section>
 
@@ -122,7 +129,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="read.simulation.results.html" class="btn btn-neutral float-left" title="read.simulation.results" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="calculate.pop_scaling_factor.html" class="btn btn-neutral float-left" title="calculate.pop_scaling_factor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plot.by_gender.html" class="btn btn-neutral float-right" title="emodplot.by_gender" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

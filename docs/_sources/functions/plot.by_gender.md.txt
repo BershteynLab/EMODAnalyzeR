@@ -1,4 +1,4 @@
-# `plot.by_gender`
+# `emodplot.by_gender`
 
 Plot by gender
 
@@ -11,7 +11,7 @@ Plot by gender
 ## Usage
 
 ```r
-list(list("plot"), list("by_gender"))(data, date.start, date.end, col2plot, title = "", unit = "")
+emodplot.by_gender(data, date.start, date.end, col2plot, title = "", unit = "")
 ```
 
 

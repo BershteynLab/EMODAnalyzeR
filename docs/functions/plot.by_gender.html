@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>plot.by_gender &mdash; EMODAnalyzeR 0.0.1 documentation</title>
+  <title>emodplot.by_gender &mdash; EMODAnalyzeR 0.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="plot.prevalence" href="plot.prevalence.html" />
-    <link rel="prev" title="calculate.pop_scaling_factor" href="calculate.pop_scaling_factor.html" /> 
+    <link rel="next" title="read.simulation.results.bigpurple" href="read.simulation.results.bigpurple.html" />
+    <link rel="prev" title="emodplot.prevalence" href="emodplot.prevalence.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,7 +48,8 @@
 <li class="toctree-l1"><a class="reference internal" href="calculate.DALY.html"><code class="docutils literal notranslate"><span class="pre">calculate.DALY</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.incidence.html"><code class="docutils literal notranslate"><span class="pre">calculate.incidence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.pop_scaling_factor.html"><code class="docutils literal notranslate"><span class="pre">calculate.pop_scaling_factor</span></code></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">plot.by_gender</span></code></a><ul>
+<li class="toctree-l1"><a class="reference internal" href="emodplot.prevalence.html"><code class="docutils literal notranslate"><span class="pre">emodplot.prevalence</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">emodplot.by_gender</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#arguments">Arguments</a></li>
@@ -56,7 +57,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#value">Value</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="plot.prevalence.html"><code class="docutils literal notranslate"><span class="pre">plot.prevalence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="read.simulation.results.bigpurple.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results.bigpurple</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="read.simulation.results.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="report.calibration.results.html"><code class="docutils literal notranslate"><span class="pre">report.calibration.results</span></code></a></li>
@@ -76,7 +76,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><code class="docutils literal notranslate"><span class="pre">plot.by_gender</span></code></li>
+      <li><code class="docutils literal notranslate"><span class="pre">emodplot.by_gender</span></code></li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/functions/plot.by_gender.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -86,8 +86,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="plot-by-gender">
-<h1><code class="docutils literal notranslate"><span class="pre">plot.by_gender</span></code><a class="headerlink" href="#plot-by-gender" title="Permalink to this headline"></a></h1>
+  <section id="emodplot-by-gender">
+<h1><code class="docutils literal notranslate"><span class="pre">emodplot.by_gender</span></code><a class="headerlink" href="#emodplot-by-gender" title="Permalink to this headline"></a></h1>
 <p>Plot by gender</p>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
@@ -95,7 +95,7 @@
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">list</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="s">&quot;plot&quot;</span><span class="p">),</span> <span class="nf">list</span><span class="p">(</span><span class="s">&quot;by_gender&quot;</span><span class="p">))(</span><span class="n">data</span><span class="p">,</span> <span class="n">date.start</span><span class="p">,</span> <span class="n">date.end</span><span class="p">,</span> <span class="n">col2plot</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">emodplot.by_gender</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">date.start</span><span class="p">,</span> <span class="n">date.end</span><span class="p">,</span> <span class="n">col2plot</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -143,8 +143,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="calculate.pop_scaling_factor.html" class="btn btn-neutral float-left" title="calculate.pop_scaling_factor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="plot.prevalence.html" class="btn btn-neutral float-right" title="plot.prevalence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="emodplot.prevalence.html" class="btn btn-neutral float-left" title="emodplot.prevalence" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="read.simulation.results.bigpurple.html" class="btn btn-neutral float-right" title="read.simulation.results.bigpurple" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
