@@ -45,6 +45,8 @@ jobs:
       - run: cp -a ../html/. ./docs
       - run: pwd
       - run: ls -lsa
+      - run: ls -lsa ./docs
+      - run: ls -lsa ../
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
