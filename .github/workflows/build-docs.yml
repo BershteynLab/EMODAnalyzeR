@@ -23,7 +23,6 @@ jobs:
           library(devtools)
           devtools::document()
         shell: Rscript {0}
-      - run: git add -u
-      - run: git commit -m "Update Docs"
-      - run: git push
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
       - run: echo "🍏 This job's status is ${{ job.status }}."
