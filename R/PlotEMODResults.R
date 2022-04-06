@@ -2,8 +2,8 @@ library(ggplot2)
 
 colors = c("#0072b2","#009e73","#cc79a7")
 
-
 #' Plot by gender
+#' @rdname plot.by_gender
 #' @details plots a metric in data. First, it faintly plots all simulations. Then it plots a bold line of the mean of all simulations
 #' @param data A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected"))
 #' More aggregate columns can be used, but more stratify columns will cause problems in the plot.
@@ -13,7 +13,7 @@ colors = c("#0072b2","#009e73","#cc79a7")
 #' @param title string of plot title (i.e., "Infected Plot")
 #' @param unit string of the units for col2plot (i.e., "(Number of People)")
 #' @return a ggplot with all data plotted
-plot.by_gender <- function(data,
+emodplot.by_gender <- function(data,
                          date.start,
                          date.end,
                          col2plot,
@@ -59,34 +59,34 @@ plot.by_gender <- function(data,
 #' @param date.end integer year to end the plotting (i.e., 2030)
 #' @return a ggplot with prevalence plotted
 
-plot.prevalence <- function(data,
+emodplot.prevalence <- function(data,
                            date.start,
                            date.end,
                            title = "HIV prevalence") {
   data <- data %>% mutate(prevalence = Infected / Population)
   y.lim.max <- max(data$prevalence) * 1.2
-  plot.by_gender(data, date.start, date.end, 'prevalence', title=title ) +
+  emodplot.by_gender(data, date.start, date.end, 'prevalence', title=title ) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0, y.lim.max,0.05), limits=c(0,y.lim.max)) +
     ylab("HIV Prevalence (%)")
 
 }
 
-plot.incidence <- function(data,
+emodplot.incidence <- function(data,
                             date.start,
                             date.end) {
   incidence <- calculate.incidence(data)
-  plot.by_gender(incidence,date.start,date.end,'incidence') +
+  emodplot.by_gender(incidence,date.start,date.end,'incidence') +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0,0.038,0.01),limits=c(0,0.038)) +
     ylab("HIV Incidence (%)")
 }
 
 
-plot.art <- function(data,
+emodplot.art <- function(data,
                      date.start,
                      date.end) {
 
   data$On_Art_scaled <- data$pop_scaling_factor * data$On_ART
-  plot.by_gender(data,date.start,date.end,'On_Art_scaled') +
+  emodplot.by_gender(data,date.start,date.end,'On_Art_scaled') +
     ylab("Number on Art")
 }
 
