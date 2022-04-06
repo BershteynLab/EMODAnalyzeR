@@ -7,7 +7,7 @@
 \method{plot}{by_gender}(data, date.start, date.end, col2plot, title = "", unit = "")
 }
 \arguments{
-\item{data}{A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")).
+\item{data}{A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected"))
 More aggregate columns can be used, but more stratify columns will cause problems in the plot.}
 
 \item{date.start}{integer year to start the plotting (i.e., 2000)}

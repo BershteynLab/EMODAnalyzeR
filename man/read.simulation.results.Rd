@@ -36,5 +36,5 @@ Read results of an EMOD simulation
 }
 \details{
 The results of an EMOD simulation are stored in a series of csv files titled "ReportHIVByAgeAndGender.csv". One of these files exists for each
-simulation run (typically 250 files). This function reads and aggregates those files into a single tibble.
+simulation run (typically 250 files). This function reads and aggregates those files into a single tibble
 }
