@@ -1,0 +1,48 @@
+# `calculate.DALY`
+
+Calculate the DALY population run on EMOD. DALY stands for Disability Adjusted Life Years. It is a measure of years lost
+ due to a disease - in this case, HIV. It is adjusted for the disability of living with the disease. By default, living
+ with untreated HIV has a weight of 0.3 (or a year with HIV is worth 70 % of a healthy year). Living under ART treatment is given 
+ a weight of 0.1. We also discount future years of DALY. By default, each future year is discounted a compounding 3 %. For example, 
+ by the 10th year, we the DALY will be multiplied by 0.97^10.
+
+
+## Description
+
+Calculate the DALY population run on EMOD. DALY stands for Disability Adjusted Life Years. It is a measure of years lost
+ due to a disease - in this case, HIV. It is adjusted for the disability of living with the disease. By default, living
+ with untreated HIV has a weight of 0.3 (or a year with HIV is worth 70 % of a healthy year). Living under ART treatment is given 
+ a weight of 0.1. We also discount future years of DALY. By default, each future year is discounted a compounding 3 %. For example, 
+ by the 10th year, we the DALY will be multiplied by 0.97^10.
+
+
+## Usage
+
+```r
+calculate.DALY(
+  data,
+  infected_weight = 0.3,
+  art_weight = 0.1,
+  discount_start_year = 2023,
+  discount_percent = 0.03,
+  life_expectancy = 80
+)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+`data`     |     A tibble returned from calculate.pop_scaling_factor, which was passed data from read.simulation.results(..., stratify_columns = c("Year", "Age"), aggregate_columns = c("Died_from_HIV", "Infected", "On_ART")).
+`infected_weight`     |     The disability weight for being infected with HIV, but without treatment (default 0.3)
+`art_weight`     |     The disability weight for being infected with HIV, but on ART (default 0.1)
+`discount_start_year`     |     The year in which the DALY starts becoming reduced for being in the future
+`discount_percent`     |     The compounding percent to reduce DALY each year in the future
+
+
+## Value
+
+A tibble with columns year, daly, and daly_future_discounted
+
+
