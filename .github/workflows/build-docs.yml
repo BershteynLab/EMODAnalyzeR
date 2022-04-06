@@ -29,14 +29,17 @@ jobs:
         shell: Rscript {0}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
+        with:
+          title: "Update r docs"
       - name: Build docs site
         run: |
           library(r2readthedocs)
           r2readthedocs::rtd_build()
         shell: Rscript {0}
-      - run: cp -a ./docs/_build/html/. ./docs
+      - run: mv -a ./docs/_build/html/. ./docs
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
           base: docs
+          title: "Update docs website"
       - run: echo "🍏 This job's status is ${{ job.status }}."
