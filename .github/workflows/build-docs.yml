@@ -42,5 +42,5 @@ jobs:
         with:
           base: docs
           title: "Update docs website"
-          add-paths: "'docs/*'"
+          path: docs/
       - run: echo "🍏 This job's status is ${{ job.status }}."
