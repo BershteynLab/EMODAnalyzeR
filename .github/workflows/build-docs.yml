@@ -37,6 +37,8 @@ jobs:
           r2readthedocs::rtd_build()
         shell: Rscript {0}
       - run: cp -a ./docs/_build/html/. ./docs
+      - run: pwd
+      - run: ls -lsa
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
