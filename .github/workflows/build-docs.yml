@@ -15,6 +15,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: pip install sphinx myst_parser sphinx_rtd_theme
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache-version: 2
@@ -28,7 +29,6 @@ jobs:
         shell: Rscript {0}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
-      - run: pip install sphinx myst_parser sphinx_rtd_theme
       - name: Build docs site
         run: |
           library(r2readthedocs)
