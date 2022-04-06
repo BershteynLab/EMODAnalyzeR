@@ -51,5 +51,4 @@ jobs:
           base: docs
           title: "Update docs website"
           branch: "update-r-website"
-          add-paths: "'docs/*'"
       - run: echo "🍏 This job's status is ${{ job.status }}."
