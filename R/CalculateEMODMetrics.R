@@ -2,28 +2,71 @@
 #'
 #' @param data A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")).
 #' More aggregate columns can be used, but more stratify columns will be ignored
+#' @param gender.breakdown - Boolean which controls whether to disaggregate the data by gender. Defaults to TRUE.
+#' @param debug - Boolean which controls whether function returns intermediate results. Defaults to TRUE.
 #' @return A tibble with columns incidence and Year
-calculate.incidence <- function(data) {
+calculate.incidence <- function(data,gender.breakdown = TRUE, debug = FALSE) {
+  # Group rows together by year
   data$Year_Integer <- floor((data$Year-0.5))
 
-  trajectories_IR.1a <- aggregate(Newly.Infected ~ Year_Integer+Gender+sim.id+scenario_name, data=data,FUN=sum) #sum number of new infections in each year
-  print(head(trajectories_IR.1a, 10))
-
-  #Make the denominator as HIV-negative individuals
-  trajectories_IR.2 <- aggregate(Population - Infected ~ Year+Gender+sim.id+scenario_name, data=data, FUN=sum)
-  head(trajectories_IR.2,10)
-
-  trajectories_IR.2$Year_Integer <- floor(trajectories_IR.2$Year-0.5)
-
-  trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","Gender","sim.id","scenario_name")]),] #remove second instance of duplicate rows
-
-  trajectories_IR.2 <- trajectories_IR.2[-match("Year",names(trajectories_IR.2))]
-
-  trajectories_IRoverall <- merge(trajectories_IR.1a, trajectories_IR.2, by=c("Year_Integer","Gender","sim.id","scenario_name"))
-
+  if (gender.breakdown == TRUE){
+    # Aggregate number of new infections each year, broken down by Year_Integer and Gender
+    trajectories_IR.1a <- aggregate(Newly.Infected ~ Year_Integer+Gender+sim.id+scenario_name, data=data,FUN=sum)
+    if (debug) print(head(trajectories_IR.1a, 10))
+    #Make the denominator as HIV-negative individuals
+    trajectories_IR.2 <- aggregate(Population - Infected ~ Year+Gender+sim.id+scenario_name, data=data, FUN=sum)
+    if (debug) print(head(trajectories_IR.2,10))
+    trajectories_IR.2$Year_Integer <- floor(trajectories_IR.2$Year-0.5)
+    #remove second instance of duplicate rows
+    trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","Gender","sim.id","scenario_name")]),] 
+    trajectories_IR.2 <- trajectories_IR.2[-match("Year",names(trajectories_IR.2))]
+    trajectories_IRoverall <- merge(trajectories_IR.1a, trajectories_IR.2, by=c("Year_Integer","Gender","sim.id","scenario_name"))
+  } else {
+    # Aggregate number of new infections each year, broken down by Year_Integer but not by Gender
+    trajectories_IR.1a <- aggregate(Newly.Infected ~ Year_Integer+sim.id+scenario_name, data=data,FUN=sum)
+    if (debug) print(head(trajectories_IR.1a, 10))
+    #Make the denominator as HIV-negative individuals
+    trajectories_IR.2 <- aggregate(Population - Infected ~ Year+sim.id+scenario_name, data=data, FUN=sum)
+    if (debug) print(head(trajectories_IR.2,10))
+    trajectories_IR.2$Year_Integer <- floor(trajectories_IR.2$Year-0.5)
+    #remove second instance of duplicate rows
+    trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","sim.id","scenario_name")]),] 
+    trajectories_IR.2 <- trajectories_IR.2[-match("Year",names(trajectories_IR.2))]
+    trajectories_IRoverall <- merge(trajectories_IR.1a, trajectories_IR.2, by=c("Year_Integer","sim.id","scenario_name"))
+  }
+  
   trajectories_IRoverall$incidence <- trajectories_IRoverall$Newly.Infected / (trajectories_IRoverall$Population-(trajectories_IRoverall$Newly.Infected/2))
   trajectories_IRoverall %>% dplyr::rename(Year = Year_Integer)
 
+}
+
+
+#' Calculate number of tests performed in an EMOD simulation
+#'
+#' @param data A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")).
+#' More aggregate columns can be used, but more stratify columns will be ignored
+#' @param gender.breakdown - Boolean which controls whether to disaggregate the data by gender. Defaults to TRUE.
+#' @param debug - Boolean which controls whether function returns intermediate results. Defaults to TRUE.
+#' @return A tibble with columns Year; Number of Negative Tests performed; Number of Positive Tests performed; Total Tests performed; Proportion of Positive Tests performed.
+calculate.incidence <- function(data, gender.breakdown = TRUE, debug = FALSE) {
+  # Group rows together by year
+  data$Year_Integer <- floor((data$Year-0.5))
+
+  if (gender.breakdown == TRUE){
+    # Aggregate number of positive and negative tests, broken down by Year_Integer and Gender
+    test.trajectories <- aggregate(cbind(Newly.Tested.Positive, Newly.Tested.Negative) ~ Year_Integer+Gender+sim.id+scenario_name, data=data,FUN=sum) 
+    if (debug) print(head(test.trajectories, 10))
+  } else {
+    # Aggregate number of positive and negative tests, broken down by Year_Integer but not by Gender
+    test.trajectories <- aggregate(cbind(Newly.Tested.Positive, Newly.Tested.Negative) ~ Year_Integer+sim.id+scenario_name, data=data,FUN=sum) 
+    if (debug) print(head(test.trajectories, 10))
+  }
+  # Calculate Total Tests and Proportion of Positive Tests
+  test.trajectories %>% 
+    dplyr::rename(Year = Year_Integer) %>%
+    mutate(Total.Tests = Newly.Tested.Negative + Newly.Tested.Positive) %>% 
+    mutate(Proportion.Positive.Tests = case_when(Total.Tests == 0 ~ 0,
+                                                 Total.Tests > 0 ~ Newly.Tested.Positive/Total.Tests))
 }
 
 #' Calculate the scaling factor for a population run on EMOD. Typically when we run EMOD, we scale down our population for the sake of
