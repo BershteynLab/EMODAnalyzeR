@@ -48,7 +48,7 @@ calculate.incidence <- function(data,gender.breakdown = TRUE, debug = FALSE) {
 #' @param gender.breakdown - Boolean which controls whether to disaggregate the data by gender. Defaults to TRUE.
 #' @param debug - Boolean which controls whether function returns intermediate results. Defaults to TRUE.
 #' @return A tibble with columns Year; Number of Negative Tests performed; Number of Positive Tests performed; Total Tests performed; Proportion of Positive Tests performed.
-calculate.incidence <- function(data, gender.breakdown = TRUE, debug = FALSE) {
+calculate.tests.performed <- function(data, gender.breakdown = TRUE, debug = FALSE) {
   # Group rows together by year
   data$Year_Integer <- floor((data$Year-0.5))
 
