@@ -18,7 +18,7 @@ read.simulation.results(
 \arguments{
 \item{results_path}{string pointing to the folder which contains the ReportHIVByAgeAndGender.csv files}
 
-\item{scenario_name}{string for the name of the scenario being read. For example, you might use "baseline" for the baseline scenario.}
+\item{scenario_name}{Provide a string label for the scenario being read in. For example, you might use "baseline" for the baseline scenario.}
 
 \item{summarize_columns}{a vector of strings containing names of columns to be aggregated via summation. Note that spaces in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".}
 
