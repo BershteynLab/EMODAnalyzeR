@@ -27,7 +27,7 @@ SummarizeEachSimByAgeAndGender <- function (data, summarize_columns, stratify_co
 #' @details The results of an EMOD simulation are stored in a series of csv files titled "ReportHIVByAgeAndGender.csv". One of these files exists for each
 #' simulation run (typically 250 files). This function reads and aggregates those files into a single tibble
 #' @param results_path string pointing to the folder which contains the ReportHIVByAgeAndGender.csv files
-#' @param scenario_name string for the name of the scenario being read. For example, you might use "baseline" for the baseline scenario.
+#' @param scenario_name Provide a string label for the scenario being read in. For example, you might use "baseline" for the baseline scenario.
 #' @param summarize_columns a vector of strings containing names of columns to be aggregated via summation. Note that spaces in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".
 #' @param stratify_columns a vector of strings containing names of columns by which we will stratify the data. For example, we might want to have a separate row in the dataset for each year, so we would set stratify_columns = c("Year")
 #' @param min_age_inclusive an integer representing the minimum age to keep while reading the data (all ages below will be filtered out)
@@ -107,7 +107,7 @@ read.ingest.sheet <- function(ingest_filename, sheet) {
   raw_data <- read_excel(ingest_filename, sheet)
   first_row <- last(which(raw_data[,1] == 'Year'))
   instrument_name <- names(raw_data)[2]
-  sheet_data <- read_excel(ingest_filename, sheet, skip = first_row)
+  sheet_data <- read_excel(ingest_filename, sheet, skip = first_row, .name_repair = "minimal")
   if (any(names(sheet_data) == "two_sigma")) {
     bounds <- calculate.bounds.two_sigma(sheet_data[,instrument_name], sheet_data$two_sigma)
     print(bounds)
