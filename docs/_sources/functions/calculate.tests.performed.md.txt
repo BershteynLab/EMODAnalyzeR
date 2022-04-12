@@ -1,17 +1,17 @@
-# `calculate.incidence`
+# `calculate.tests.performed`
 
-Calculate incidence of an EMOD simulation
+Calculate number of tests performed in an EMOD simulation
 
 
 ## Description
 
-Calculate incidence of an EMOD simulation
+Calculate number of tests performed in an EMOD simulation
 
 
 ## Usage
 
 ```r
-calculate.incidence(data, gender.breakdown = TRUE, debug = FALSE)
+calculate.tests.performed(data, gender.breakdown = TRUE, debug = FALSE)
 ```
 
 
@@ -26,6 +26,6 @@ Argument      |Description
 
 ## Value
 
-A tibble with columns incidence and Year
+A tibble with columns Year; Number of Negative Tests performed; Number of Positive Tests performed; Total Tests performed; Proportion of Positive Tests performed.
 
 
