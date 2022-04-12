@@ -21,7 +21,7 @@ jobs:
           cache-version: 2
           extra-packages: |
             any::devtools
-            ropenscilabs/r2readthedocs
+            ropenscilabs/r2readthedocs@0e85261
       - name: Build Docs
         run: |
           library(devtools)
