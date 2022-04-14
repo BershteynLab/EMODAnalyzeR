@@ -107,7 +107,7 @@ read.ingest.sheet <- function(ingest_filename, sheet) {
   raw_data <- read_excel(ingest_filename, sheet)
   first_row <- last(which(raw_data[,1] == 'Year'))
   instrument_name <- names(raw_data)[2]
-  sheet_data <- read_excel(ingest_filename, sheet, skip = first_row, .name_repair = "minimal")
+  sheet_data <- read_excel(ingest_filename, sheet, skip = first_row, .name_repair = make.unique)
   if (any(names(sheet_data) == "two_sigma")) {
     bounds <- calculate.bounds.two_sigma(sheet_data[,instrument_name], sheet_data$two_sigma)
     print(bounds)
