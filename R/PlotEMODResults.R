@@ -79,9 +79,10 @@ emodplot.prevalence <- function(data,
 emodplot.incidence <- function(data,
                             date.start,
                             date.end) {
-  incidence <- calculate.incidence(data)
-  emodplot.by_gender(incidence,date.start,date.end,'incidence') +
-    scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0,0.038,0.01),limits=c(0,0.038)) +
+  data.incidence <- EMODAnalyzeR::calculate.incidence(data)
+  y.lim.max <- min(max(data.incidence$incidence) * 1.2, 1)
+  emodplot.by_gender(data.incidence,date.start,date.end,'incidence') +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0,y.lim.max,0.005),limits=c(0,y.lim.max)) +
     ylab("HIV Incidence (%)")
 }
 
