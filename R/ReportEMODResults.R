@@ -11,9 +11,10 @@ agebin.to.min.max <- function(agebin) {
 #' Report calibration fit of EMOD simulation
 #'
 #' @param experiment_path path on big purple where experiment was run. Typically this will look like
+#' @param ingest_file_path path to ingest file
 #' /gpfs/scratch/kaftad01/experiments/Zambia--0.02--rep7--testCalibrateSeedYear_iter32___2022_03_21_12_39_07_01727
-report.calibration.results <- function(experiment_path, ingest_path, pop_scaling_factor = 1, figure_path = "./") {
-  ingest_data <- read.ingest.file(ingest_path)
+report.calibration.results <- function(experiment_path, ingest_file_path, pop_scaling_factor = 1, figure_path = "./") {
+  ingest_data <- read.ingest.file(ingest_file_path)
 
   data <- read.simulation.results.bigpurple(
     experiment_path, "calibration",

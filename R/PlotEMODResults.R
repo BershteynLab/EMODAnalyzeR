@@ -29,10 +29,11 @@ emodplot.by_gender <- function(data,
   data['col2plot'] = data[col2plot]
   data.mean <- data %>%
     group_by(Year, Gender, scenario_name) %>%
-    dplyr::summarise(mean(col2plot))
-  ggplot(data=subset(data, (date.start <= Year) & (Year <= date.end) ) ) +
-    geom_point(size=1.0, aes(x=Year, y=col2plot*1, group=sim.id, color=scenario_name), alpha=0.005)+
-    geom_line(data=subset(data.mean, (date.start <= Year) & (Year <= date.end)), aes(x=Year, y=`mean(col2plot)`*1, group=scenario_name, color=scenario_name), size=1.5) +
+    dplyr::summarise(mean.col2plot = mean(col2plot), .groups = 'keep')
+  ggplot(data=subset(data, (date.start <= Year) & (Year <= date.end))) +
+    geom_point(size=1.0, aes(x=Year, y=col2plot*1, group=sim.id, color=scenario_name), alpha=0.005) +
+    geom_line(data=subset(data.mean, (date.start <= Year) & (Year <= date.end)), 
+              aes(x=Year, y=mean.col2plot*1, group=scenario_name, color=scenario_name), size=1.5) +
     # geom_point(data = prevalence.data, size=2, color = "black", aes(x=Year, y=Prevalence*1)) +
     # geom_errorbar(data = prevalence.data, aes(x=Year, ymin=lb*1, ymax=ub*1), color="black", width=2, size=1) +
     facet_wrap(~ Gender, ncol=2) +
@@ -63,9 +64,13 @@ emodplot.prevalence <- function(data,
                            date.start,
                            date.end,
                            title = "HIV prevalence") {
-  data <- data %>% mutate(prevalence = Infected / Population)
-  y.lim.max <- max(data$prevalence) * 1.2
-  emodplot.by_gender(data, date.start, date.end, 'prevalence', title=title ) +
+  data <- data %>% 
+    group_by_at(Year, Gender, sim.id, scenario_name) %>% 
+    summarize(Infected = sum(Infected), Population = sum(Population), .groups = 'keep') %>% 
+    mutate(Prevalence = case_when(Population == 0 ~ 0,
+                                  Population > 0 ~ Infected / Population))
+  y.lim.max <- min(max(data$Prevalence) * 1.2, 1)
+  emodplot.by_gender(data, date.start, date.end, 'Prevalence', title=title ) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0, y.lim.max,0.05), limits=c(0,y.lim.max)) +
     ylab("HIV Prevalence (%)")
 

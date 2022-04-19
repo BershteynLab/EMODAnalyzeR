@@ -19,7 +19,8 @@ SummarizeEachSimByAgeAndGender <- function (data, summarize_columns, stratify_co
   data %>%
     filter( (Age >= min_age_inclusive) & (Age <= max_age_inclusive) ) %>%
     group_by_at(stratify_columns) %>%
-    summarise_at(summarize_columns, sum, na.rm=T)
+    summarise_at(summarize_columns, sum, na.rm=T) %>% 
+    ungroup()
 }
 
 
@@ -83,7 +84,8 @@ read.simulation.results.bigpurple <- function(experiment_path,
                                                           "Diagnosed"),
                                     stratify_columns = c("Year", "Gender"),
                                     min_age_inclusive = 15,
-                                    max_age_inclusive = 49) {
+                                    max_age_inclusive = 49,
+                                    verbose = FALSE) {
   ### Read 250 simulation and aggregate by age 15+
   folder.list = Sys.glob(paste0(experiment_path, "/Simulation_*"))
 
@@ -96,7 +98,7 @@ read.simulation.results.bigpurple <- function(experiment_path,
     data.list[[i]] <- SummarizeEachSimByAgeAndGender(raw.data, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
     data.list[[i]]$sim.id <- paste0(f)
     data.list[[i]]$scenario_name <- scenario_name
-    print(paste0("Done Reading File ", i))
+    if (verbose) print(paste0("Done Reading File ", i))
   }
 
   bind_rows(data.list)
