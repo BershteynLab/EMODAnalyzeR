@@ -32,7 +32,3 @@ Usage
     plot.prevalence(data, 2000, 2040)
 
 
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Vignettes

@@ -54,7 +54,7 @@ report.calibration.results <- function(experiment_path, ingest_file_path, pop_sc
           dplyr::summarize(Population = sum(Population), On_ART = sum(On_ART), pop_scaling_factor = mean(pop_scaling_factor))
       }
 
-      plot.art(this.sim.data, 2000, 2025) +
+      emodplot.art(this.sim.data, 2000, 2025) +
         geom_point(data = actuals, aes(x=Year, y=OnART)) +
         geom_errorbar(data = actuals, aes(x=Year, ymin=lb, ymax=ub), color="black", width=2, size=1)
 
@@ -98,7 +98,7 @@ report.calibration.results <- function(experiment_path, ingest_file_path, pop_sc
           dplyr::summarize(Population = sum(Population), Infected = sum(Infected), Newly.Infected = sum(Newly.Infected))
       }
 
-      plot.incidence(this.sim.data, 2000, 2025) +
+      emodplot.incidence(this.sim.data, 2000, 2025) +
         geom_point(data = actuals, aes(x=Year, y=Incidence)) +
         geom_errorbar(data = actuals, aes(x=Year, ymin=lb, ymax=ub), color="black", width=2, size=1)
 
@@ -143,7 +143,7 @@ report.calibration.results <- function(experiment_path, ingest_file_path, pop_sc
           dplyr::summarize(Population = sum(Population), Infected = sum(Infected))
       }
 
-      plot.prevalence(this.sim.data, 2000, 2025) +
+      emodplot.prevalence(this.sim.data, 2000, 2025) +
         geom_point(data = actuals, aes(x=Year, y=Prevalence)) +
         geom_errorbar(data = actuals, aes(x=Year, ymin=lb, ymax=ub), color="black", width=2, size=1)
 
