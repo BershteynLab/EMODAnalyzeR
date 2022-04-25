@@ -6,13 +6,15 @@
 \usage{
 report.calibration.results(
   experiment_path,
-  ingest_path,
+  ingest_file_path,
   pop_scaling_factor = 1,
   figure_path = "./"
 )
 }
 \arguments{
-\item{experiment_path}{path on big purple where experiment was run. Typically this will look like
+\item{experiment_path}{path on big purple where experiment was run. Typically this will look like}
+
+\item{ingest_file_path}{path to ingest file
 /gpfs/scratch/kaftad01/experiments/Zambia--0.02--rep7--testCalibrateSeedYear_iter32___2022_03_21_12_39_07_01727}
 }
 \description{

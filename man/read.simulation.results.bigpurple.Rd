@@ -12,7 +12,8 @@ read.simulation.results.bigpurple(
     "Tested.Past.Year.or.On_ART", "Tested.Ever", "Diagnosed"),
   stratify_columns = c("Year", "Gender"),
   min_age_inclusive = 15,
-  max_age_inclusive = 49
+  max_age_inclusive = 49,
+  verbose = FALSE
 )
 }
 \arguments{
