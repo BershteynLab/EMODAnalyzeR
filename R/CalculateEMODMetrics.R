@@ -18,7 +18,7 @@ calculate.incidence <- function(data,gender.breakdown = TRUE, debug = FALSE) {
     if (debug) print(head(trajectories_IR.2,10))
     trajectories_IR.2$Year_Integer <- floor(trajectories_IR.2$Year-0.5)
     #remove second instance of duplicate rows
-    trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","Gender","sim.id","scenario_name")]),] 
+    trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","Gender","sim.id","scenario_name")]),]
     trajectories_IR.2 <- trajectories_IR.2[-match("Year",names(trajectories_IR.2))]
     trajectories_IRoverall <- merge(trajectories_IR.1a, trajectories_IR.2, by=c("Year_Integer","Gender","sim.id","scenario_name"))
   } else {
@@ -30,11 +30,11 @@ calculate.incidence <- function(data,gender.breakdown = TRUE, debug = FALSE) {
     if (debug) print(head(trajectories_IR.2,10))
     trajectories_IR.2$Year_Integer <- floor(trajectories_IR.2$Year-0.5)
     #remove second instance of duplicate rows
-    trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","sim.id","scenario_name")]),] 
+    trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","sim.id","scenario_name")]),]
     trajectories_IR.2 <- trajectories_IR.2[-match("Year",names(trajectories_IR.2))]
     trajectories_IRoverall <- merge(trajectories_IR.1a, trajectories_IR.2, by=c("Year_Integer","sim.id","scenario_name"))
   }
-  
+
   trajectories_IRoverall$incidence <- trajectories_IRoverall$Newly.Infected / (trajectories_IRoverall$Population-(trajectories_IRoverall$Newly.Infected/2))
   trajectories_IRoverall %>% dplyr::rename(Year = Year_Integer)
 
@@ -54,20 +54,21 @@ calculate.tests.performed <- function(data, gender.breakdown = TRUE, debug = FAL
 
   if (gender.breakdown == TRUE){
     # Aggregate number of positive and negative tests, broken down by Year_Integer and Gender
-    test.trajectories <- aggregate(cbind(Newly.Tested.Positive, Newly.Tested.Negative) ~ Year_Integer+Gender+sim.id+scenario_name, data=data,FUN=sum) 
+    test.trajectories <- aggregate(cbind(Newly.Tested.Positive, Newly.Tested.Negative) ~ Year_Integer+Gender+sim.id+scenario_name, data=data,FUN=sum)
     if (debug) print(head(test.trajectories, 10))
   } else {
     # Aggregate number of positive and negative tests, broken down by Year_Integer but not by Gender
-    test.trajectories <- aggregate(cbind(Newly.Tested.Positive, Newly.Tested.Negative) ~ Year_Integer+sim.id+scenario_name, data=data,FUN=sum) 
+    test.trajectories <- aggregate(cbind(Newly.Tested.Positive, Newly.Tested.Negative) ~ Year_Integer+sim.id+scenario_name, data=data,FUN=sum)
     if (debug) print(head(test.trajectories, 10))
   }
   # Calculate Total Tests and Proportion of Positive Tests
-  test.trajectories %>% 
+  test.trajectories %>%
     dplyr::rename(Year = Year_Integer) %>%
-    mutate(Total.Tests = Newly.Tested.Negative + Newly.Tested.Positive) %>% 
+    mutate(Total.Tests = Newly.Tested.Negative + Newly.Tested.Positive) %>%
     mutate(Proportion.Positive.Tests = case_when(Total.Tests == 0 ~ 0,
                                                  Total.Tests > 0 ~ Newly.Tested.Positive/Total.Tests))
 }
+
 
 #' Calculate the scaling factor for a population run on EMOD. Typically when we run EMOD, we scale down our population for the sake of
 #' computation costs. In order to get correct counts of different statuses (i.e., number of people who died from HIV), we need to scale our data.
@@ -80,16 +81,16 @@ calculate.tests.performed <- function(data, gender.breakdown = TRUE, debug = FAL
 #' @return A tibble with all original columns found in "data", plus a column for pop_scaling_factor
 calculate.pop_scaling_factor <- function(data, reference_year, reference_population, age_min_inclusive=0, age_max_inclusive = 200) {
   data.within.age <- data %>%
-          filter((Age >= age_min_inclusive) & (Age <= age_max_inclusive))
+    filter((Age >= age_min_inclusive) & (Age <= age_max_inclusive))
   for_pop_scaling_factor <- aggregate(Population ~ Year + sim.id + scenario_name,
                                       subset(data.within.age,
                                              Year == reference_year), FUN=sum)
 
   for_pop_scaling_factor$pop_scaling_factor <- reference_population/for_pop_scaling_factor$Population
-  data <- merge(data,
-                for_pop_scaling_factor
-                %>% select(pop_scaling_factor, sim.id, scenario_name),
-                by=c('sim.id', "scenario_name"),suffixes = c("",".y"))
+  data <- dplyr::inner_join(data,
+                            for_pop_scaling_factor
+                            %>% select(pop_scaling_factor, sim.id, scenario_name),
+                            by=c('sim.id', "scenario_name"), suffix = c("",".y"))
   data
 
 }
