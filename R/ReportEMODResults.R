@@ -16,7 +16,7 @@ agebin.to.min.max <- function(agebin) {
 report.calibration.results <- function(experiment_path, ingest_file_path, pop_scaling_factor = 1, figure_path = "./") {
   ingest_data <- read.ingest.file(ingest_file_path)
 
-  data <- read.simulation.results.bigpurple(
+  data <- read.simulation.results(
     experiment_path, "calibration",
     min_age_inclusive = -1,
     max_age_inclusive = 200,
@@ -24,6 +24,41 @@ report.calibration.results <- function(experiment_path, ingest_file_path, pop_sc
     summarize_columns = c("Population","Infected", "On_ART", "Newly.Infected"))
 
   data$pop_scaling_factor = ifelse(pop_scaling_factor < 1, 1/pop_scaling_factor, pop_scaling_factor)
+
+  if (any("Obs-ARTCoverage" == names(ingest_data))) {
+    plottopics.artcoverage <- ingest_data[['Obs-ARTCoverage']] %>%
+      select(Province, AgeBin) %>%
+      distinct() %>%
+      agebin.to.min.max() %>%
+      filter(
+        (!is.na(Province)) &
+          (!is.na(AgeBin)) )
+
+    for (i_row in seq(1, nrow(plottopics.artcoverage))) {
+      actuals <- ingest_data[['Obs-ARTCoverage']] %>%
+        filter(Province == plottopics.artcoverage[[i_row,'Province']] &
+                 AgeBin == plottopics.artcoverage[[i_row,'AgeBin']] )
+
+
+      this.sim.data = data %>%
+        filter(Age > plottopics.artcoverage$age.min[i_row] &
+                 Age < ( plottopics.artcoverage$age.max[i_row] + 1 ) )
+
+      node_id = ifelse(str_to_lower(plottopics.artcoverage[[i_row,'Province']]) == 'all', 'all', ingest_data[["site_map"]][[plottopics.artcoverage[[i_row,'Province']]]])
+
+      emodplot.artcoverage(this.sim.data, 2000, 2025, node_id = node_id) +
+        geom_point(data = actuals, aes(x=Year, y=Incidence)) +
+        geom_errorbar(data = actuals, aes(x=Year, ymin=lb, ymax=ub), color="black", width=2, size=1)
+
+      ggsave(paste0(figure_path, '/',
+                    plottopics.artcoverage[[i_row,'Province']],
+                    plottopics.artcoverage[[i_row,'age.min']],
+                    '-',
+                    plottopics.artcoverage[[i_row,'age.max']],
+                    "ART_Coverage.png"))
+
+    }
+  }
   if (any("Obs-OnART" == names(ingest_data))) {
     plottopics.on_art <- ingest_data[['Obs-OnART']] %>%
       select(Province, AgeBin) %>%
@@ -156,6 +191,7 @@ report.calibration.results <- function(experiment_path, ingest_file_path, pop_sc
 
     }
   }
+
 
 }
 

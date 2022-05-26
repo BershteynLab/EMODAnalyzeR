@@ -18,5 +18,7 @@ Imports:
     plotrix,
     data.table,
     tidyr,
-    stringr
+    stringr,
+    purrr,
+    rsample
 RoxygenNote: 7.1.2

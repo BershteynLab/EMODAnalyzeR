@@ -37,9 +37,9 @@ emodplot.by_gender <- function(data,
     # geom_point(data = prevalence.data, size=2, color = "black", aes(x=Year, y=Prevalence*1)) +
     # geom_errorbar(data = prevalence.data, aes(x=Year, ymin=lb*1, ymax=ub*1), color="black", width=2, size=1) +
     facet_wrap(~ Gender, ncol=2) +
-    xlab("Year")+
+    xlab("Year") +
     xlim(c(date.start, date.end)) +
-    ylab(paste0(col2plot, " ", unit))+
+    ylab(paste0(col2plot, " ", unit)) +
     theme_bw(base_size=16) +
     guides(fill = guide_legend(keywidth = 2, keyheight = 1)) +
     scale_x_continuous(breaks = seq(date.start,date.end,10)) +
@@ -75,6 +75,26 @@ emodplot.prevalence <- function(data,
     ylab("HIV Prevalence (%)")
 
 }
+
+emodplot.artcoverage <- function(data,
+                                date.start,
+                                date.end,
+                                title = "ART Coverage",
+                                node_id = "All") {
+  if (str_to_lower(node_id) != "all") {
+    data <- data %>% filter(NodeId == node_id)
+  }
+  data <- data %>%
+    group_by(Year, Gender, scenario_name, sim.id) %>%
+    summarize(On_ART = sum(On_ART), Infected = sum(Infected))
+  data <- data %>% filter(Infected > 0) %>% mutate(art_coverage = On_ART / Infected )
+  y.lim.max <- min(max(data$art_coverage) * 1.2, 1.0)
+  emodplot.by_gender(data, date.start, date.end, 'art_coverage', title=title ) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0, y.lim.max,0.05), limits=c(0,y.lim.max)) +
+    ylab("ART Coverage (% of Infected)")
+
+}
+
 
 emodplot.incidence <- function(data,
                             date.start,
