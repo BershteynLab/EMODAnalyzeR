@@ -62,7 +62,7 @@ calculate.infections.averted <- function(data.intervention, data.nointervention,
     dplyr::rename( year = Year_Integer )
 }
 
-calculate.icer <- function(data.intervention,
+icer.calculate <- function(data.intervention,
                            data.nointervention,
                            discount_rate,
                            cost.treatment_initiation,
@@ -128,21 +128,22 @@ calculate.icer <- function(data.intervention,
 }
 
 
-run.comparison <- function (data.intervention,
+icer.run.comparison <- function (data.intervention,
                             data.nointervention,
                             discount_rate,
                             experiment_name,
-                            end_year,
                             cost.treatment_initiation = 21.39 / 3,
                             cost.treatment_annual_2025through2027 = 131.46,
                             cost.treatment_annual_2028onward = 110.61,
                             name.treatment_population_column = "Received_DPP",
                             name.treatment_initiation_column = "Received_DPP",
+                            start_year = 2025,
+                            end_year = 2055,
                             additional_DALY_per_PY_On_Treatment = 0,
                             use_condom = FALSE) {
 
-  icer.data = calculate.icer(data.intervention,
-                             data.nointervention,
+  icer.data = icer.calculate(data.intervention ,
+                             data.nointervention ,
                              discount_rate,
                              cost.treatment_initiation,
                              cost.treatment_annual_2025through2027,
