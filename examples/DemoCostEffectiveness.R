@@ -1,6 +1,6 @@
 #To use the EMODAnalyzeR Package, follow the instructions below
 # Make sure you are running R 4.0 or greater
-# Make sure you have devtools installed (if not, run install.packages(“devtools”) )
+# Make sure you have devtools installed (if not, run install.packages("devtools") )
 # Run library(devtools)
 # Run install_github("BershteynLab/EMODAnalyzeR")
 
