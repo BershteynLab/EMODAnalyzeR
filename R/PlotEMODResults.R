@@ -28,7 +28,7 @@ emodplot.by_gender <- function(data,
   data <- data %>% mutate(Gender = case_when(Gender==0 ~ "Male", Gender==1 ~ "Female"))
   data['col2plot'] = data[col2plot]
   data.mean <- data %>%
-    group_by(Year, Gender, scenario_name) %>%
+    dplyr::group_by(Year, Gender, scenario_name) %>%
     dplyr::summarise(mean(col2plot))
   ggplot(data=subset(data, (date.start <= Year) & (Year <= date.end) ) ) +
     geom_point(size=1.0, aes(x=Year, y=col2plot*1, group=sim.id, color=scenario_name), alpha=0.005)+
@@ -63,7 +63,7 @@ emodplot.prevalence <- function(data,
                            date.start,
                            date.end,
                            title = "HIV prevalence") {
-  data <- data %>% mutate(prevalence = Infected / Population)
+  data <- data %>% dplyr::mutate(prevalence = Infected / Population)
   y.lim.max <- max(data$prevalence) * 1.2
   emodplot.by_gender(data, date.start, date.end, 'prevalence', title=title ) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0, y.lim.max,0.05), limits=c(0,y.lim.max)) +
