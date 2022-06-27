@@ -65,7 +65,7 @@ emodplot.prevalence <- function(data,
                            date.end,
                            title = "HIV prevalence") {
   data <- data %>%
-    dplyr::group_by_at(Year, Gender, sim.id, scenario_name) %>%
+    dplyr::group_by(Year, Gender, sim.id, scenario_name) %>%
     dplyr::summarize(Infected = sum(Infected), Population = sum(Population), .groups = 'keep') %>%
     dplyr::mutate(Prevalence = case_when(Population == 0 ~ 0,
                                           Population > 0 ~ Infected / Population))
