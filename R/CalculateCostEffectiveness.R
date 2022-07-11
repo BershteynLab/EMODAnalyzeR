@@ -71,6 +71,7 @@ icer.calculate <- function(data.intervention,
                            end_year,
                            name.treatment_population_column,
                            name.treatment_initiation_column,
+                           life_expectancy,
                            additional_DALY_per_PY_On_Treatment = 0,
                            use_condom = FALSE) {
 
@@ -97,8 +98,8 @@ icer.calculate <- function(data.intervention,
                                cost.treatment_annual_2028onward,
                                name.treatment_population_column,
                                name.treatment_initiation_column)
-    this_daly.Treatment = calculate.DALY(this_data.intervention, discount_percent = discount_rate, art_weight = 0.1, life_expectancy = 66)
-    this_daly.noTreatment = calculate.DALY(this_data.nointervention, discount_percent = discount_rate, art_weight = 0.1, life_expectancy = 66)
+    this_daly.Treatment = calculate.DALY(this_data.intervention, discount_percent = discount_rate, art_weight = 0.1, life_expectancy = life_expectancy)
+    this_daly.noTreatment = calculate.DALY(this_data.nointervention, discount_percent = discount_rate, art_weight = 0.1, life_expectancy = life_expectancy)
     this_daly.Treatment$averted = this_daly.noTreatment$daly_future_discounted - this_daly.Treatment$daly_future_discounted
     if (use_condom) {
       this_daly.Treatment$averted <- this_daly.Treatment$averted * (1 - (0.78 / 0.90))
@@ -142,7 +143,8 @@ icer.run.comparison <- function (data.intervention,
                             start_year = 2025,
                             end_year = 2055,
                             additional_DALY_per_PY_On_Treatment = 0,
-                            use_condom = FALSE) {
+                            use_condom = FALSE,
+                            life_expectancy = 66 ) {
 
   icer.data = icer.calculate(data.intervention ,
                              data.nointervention ,
@@ -153,6 +155,7 @@ icer.run.comparison <- function (data.intervention,
                              end_year,
                              name.treatment_population_column,
                              name.treatment_initiation_column,
+                             life_expectancy,
                              additional_DALY_per_PY_On_Treatment, use_condom )
 
   summary_fun <- function (.data) {
