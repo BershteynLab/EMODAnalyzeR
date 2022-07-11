@@ -80,6 +80,7 @@ icer.calculate <- function(data.intervention,
   icers_without_art = rep(NA, length(Treatment.sims))
   cost_per_infection_averted = rep(NA, length(Treatment.sims))
   averted = rep(NA, length(Treatment.sims))
+  MMYLLaverted = rep(NA, length(Treatment.sims))
   cost = rep(NA, length(Treatment.sims))
   infections = rep(NA, length(Treatment.sims))
   PYonTreatment = rep(NA, length(Treatment.sims))
@@ -118,12 +119,13 @@ icer.calculate <- function(data.intervention,
     PYonTreatment[iSim] = sum(daly_and_cost$PY_On_Treatment * daly_and_cost$discount_factor )
     Avert1DALY[iSim] = PYonTreatment[iSim] / sum(daly_and_cost$averted)
     Avert1Infection[iSim] = PYonTreatment[iSim] / sum(infection_and_daly$infection_discounted)
+    MMYLLaverted[iSim] = sum(daly_and_cost$MMLLYAverted)
     averted[iSim] = sum(daly_and_cost$averted)
     cost[iSim] = cost_art_discounted
     infections[iSim] = sum(infection_and_daly$infection_discounted)
   }
 
-  tibble(icers_with_art,icers_without_art,cost_per_infection_averted,PYonTreatment,Avert1DALY,Avert1Infection, averted, cost, infections)
+  tibble(icers_with_art,icers_without_art,cost_per_infection_averted,PYonTreatment,Avert1DALY,Avert1Infection, averted, MMYLLaverted, cost, infections)
 
 }
 
@@ -158,6 +160,8 @@ icer.run.comparison <- function (data.intervention,
                         cost_per_infection_averted = sum(cost) / sum(infections),
                         PYonTreatment_per_infection_averted = sum(PYonTreatment) / sum(infections),
                         PYonTreatment_per_DALY_averted = sum(PYonTreatment) / sum(averted),
+                        averted = mean(averted),
+                        mmyyllaverted = mean(MMYLLaverted),
                         PYonTreatment = mean(PYonTreatment))
   }
   bt_resamples <- bootstraps(icer.data, times = 500)

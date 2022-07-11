@@ -13,15 +13,24 @@ agebin.to.min.max <- function(agebin) {
 #' @param experiment_path path on big purple where experiment was run. Typically this will look like
 #' @param ingest_file_path path to ingest file
 #' /gpfs/scratch/kaftad01/experiments/Zambia--0.02--rep7--testCalibrateSeedYear_iter32___2022_03_21_12_39_07_01727
-report.calibration.results <- function(experiment_path, ingest_file_path, pop_scaling_factor = 1, figure_path = "./") {
+report.calibration.results <- function(experiment_path, ingest_file_path, pop_scaling_factor = 1, figure_path = "./", completed_run=TRUE) {
   ingest_data <- read.ingest.file(ingest_file_path)
 
-  data <- read.simulation.results(
-    experiment_path, "calibration",
-    min_age_inclusive = -1,
-    max_age_inclusive = 200,
-    stratify_columns = c("Year","NodeId", "Gender", "Age"),
-    summarize_columns = c("Population","Infected", "On_ART", "Newly.Infected"))
+  if (completed_run) {
+    data <- read.simulation.results(
+      experiment_path, "calibration",
+      min_age_inclusive = -1,
+      max_age_inclusive = 200,
+      stratify_columns = c("Year","NodeId", "Gender", "Age"),
+      summarize_columns = c("Population","Infected", "On_ART", "Newly.Infected"))
+  } else {
+    data <- read.simulation.results.bigpurple(
+      experiment_path, "calibration",
+      min_age_inclusive = -1,
+      max_age_inclusive = 200,
+      stratify_columns = c("Year","NodeId", "Gender", "Age"),
+      summarize_columns = c("Population","Infected", "On_ART", "Newly.Infected"))
+  }
 
   data$pop_scaling_factor = ifelse(pop_scaling_factor < 1, 1/pop_scaling_factor, pop_scaling_factor)
 
