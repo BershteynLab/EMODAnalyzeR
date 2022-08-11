@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/BershteynLab/EMODAnalyzeR/branch/main/graph/badge.svg?token=G6NWONEW83)](https://codecov.io/gh/BershteynLab/EMODAnalyzeR)
+
 # EMODAnalyzeR
 
 This package intends to help members of the Bershteyn Lab analyze results of emod. This package was developed by members of the Bershteyn lab and Edinah Mudimu.
