@@ -4,6 +4,8 @@
 
 This package intends to help members of the Bershteyn Lab analyze results of emod. This package was developed by members of the Bershteyn lab and Edinah Mudimu.
 
+[View Documentation Here](https://bershteynlab.github.io/EMODAnalyzeR/)
+
 ## Installation
 
 1. Make sure you are running R 4.0 or greater
