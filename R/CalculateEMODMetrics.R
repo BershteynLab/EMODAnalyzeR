@@ -110,10 +110,18 @@ calculate.pop_scaling_factor <- function(data, reference_year, reference_populat
 #' @param discount_percent The compounding percent to reduce DALY each year in the future
 #' @return A tibble with columns year, daly, and daly_future_discounted
 calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, discount_start_year = 2023, discount_percent = 0.03, life_expectancy = 80) {
-  data$Year_Integer <- floor((data$Year-0.5))
+  data_by_age_year <- data %>%
+                      dplyr::group_by(Year, Age, sim.id, scenario_name) %>%
+                      dplyr::summarise(Died_from_HIV = sum(Died_from_HIV),
+                                       Infected = sum(Infected),
+                                       On_ART = sum(On_ART),
+                                       pop_scaling_factor = mean(pop_scaling_factor))
 
 
-  m2 <- data %>%
+  data_by_age_year$Year_Integer <- floor((data_by_age_year$Year-0.5))
+
+
+  m2 <- data_by_age_year %>%
         dplyr::group_by(Year_Integer, Age, sim.id, scenario_name) %>%
         dplyr::summarise(Died_from_HIV = sum(Died_from_HIV),
                          Infected = mean(Infected),

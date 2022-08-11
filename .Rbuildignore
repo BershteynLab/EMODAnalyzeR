@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 .readthedocs.yaml
 ^docs/
+^\.github$
