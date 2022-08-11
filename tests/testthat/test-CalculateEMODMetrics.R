@@ -24,13 +24,14 @@ test_that("simple daly calculation", {
   Year = seq(2000,2004)
   Age = rep(50,5)
   Died_from_HIV = c(0,1,2,0,0)
-  On_ART = c(0,1,0,2,0)
+  On_ART = c(0,1,0,1,0)
   Infected = c(1,2,2,1,1)
-  sim = data.frame(Year,Age,Died_from_HIV,On_ART)
+  sim = data.frame(Year,Age,Died_from_HIV,On_ART, Infected)
   sim$pop_scaling_factor = 1
   sim$sim.id = "test"
   sim$scenario_name = "testtest"
   dalys = calculate.DALY(sim, infected_weight = 0.1,discount_percent = 0, art_weight = 0.01)
 
   expect_equal(sum(dalys$yll),10)
+  expect_equal(sum(dalys$daly), 10. + 0.1*5 + 0.01*2)
 })
