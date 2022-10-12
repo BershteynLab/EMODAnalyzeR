@@ -21,7 +21,7 @@ calculate.cost <- function(simulation.data,
               Treatment_Initiated = sum(Treatment_Initiated))
 
   Treatment.cost.through.2027 <- simulation.data.cost %>%
-    dplyr::mutate( young.on.Treatment = if_else( (Age >= 15) & (Age < 40), On_Treatment, 0)) %>%
+    dplyr::mutate( young.on.Treatment = if_else( (Age >= 15) & (Age < 45), On_Treatment, 0)) %>%
     dplyr::filter((Year_Integer < 2028) & (Year_Integer >= 2025 )) %>%
     dplyr::mutate( cost =
               Treatment_Initiated * ( cost.treatment_initiation ) +
