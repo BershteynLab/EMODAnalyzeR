@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -74,21 +76,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="emodanalyzer">
-<h1>EMODAnalyzeR<a class="headerlink" href="#emodanalyzer" title="Permalink to this headline"></a></h1>
+  <p><a class="reference external" href="https://codecov.io/gh/BershteynLab/EMODAnalyzeR"><img alt="codecov" src="https://codecov.io/gh/BershteynLab/EMODAnalyzeR/branch/main/graph/badge.svg?token=G6NWONEW83" /></a></p>
+<section id="emodanalyzer">
+<h1>EMODAnalyzeR<a class="headerlink" href="#emodanalyzer" title="Permalink to this heading"></a></h1>
 <p>This package intends to help members of the Bershteyn Lab analyze results of emod. This package was developed by members of the Bershteyn lab and Edinah Mudimu.</p>
+<p><a class="reference external" href="https://bershteynlab.github.io/EMODAnalyzeR/">View Documentation Here</a></p>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>Make sure you are running R 4.0 or greater</p></li>
 <li><p>Make sure you have devtools installed (if not, run <code class="docutils literal notranslate"><span class="pre">install.packages(&quot;devtools&quot;)</span></code> )</p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">library(devtools)</span></code></p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">install_github(&quot;BershteynLab/EMODAnalyzeR&quot;)</span></code></p></li>
 </ol>
-<p>As of 2022-03-10, installation problems might come up as it has mostly been tested on David Kaftan’s machine.</p>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>library(EMODAnalyzeR)
 data = read.simulation.results(&lt;path to runscenarios output folder&gt;, &#39;Baseline&#39;, c(&quot;Infected&quot;, &quot;Population&quot;), min_age_inclusive = 15, max_age_inclusive = 49)
 plot.prevalence(data, 2000, 2040)
