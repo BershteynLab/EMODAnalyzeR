@@ -19,7 +19,7 @@ SummarizeEachSimByAgeAndGender <- function (data, summarize_columns, stratify_co
   data %>%
     filter( (Age >= min_age_inclusive) & (Age <= max_age_inclusive) ) %>%
     group_by_at(stratify_columns) %>%
-    summarise_at(summarize_columns, sum, na.rm=T) %>% 
+    summarise_at(summarize_columns, sum, na.rm=T) %>%
     ungroup()
 }
 
@@ -111,7 +111,7 @@ read.ingest.sheet <- function(ingest_filename, sheet) {
   instrument_name <- names(raw_data)[2]
   sheet_data <- read_excel(ingest_filename, sheet, skip = first_row, .name_repair =  ~ make.names(make.unique(.)))
   if (any(names(sheet_data) == "two_sigma")) {
-    bounds <- calculate.bounds.two_sigma(sheet_data[,instrument_name], sheet_data$two_sigma)
+    bounds <- calculate.bounds.two_sigma(sheet_data[,instrument_name], as.numeric(sheet_data$two_sigma))
     print(bounds)
   } else {
     valid_rows <- !is.na(sheet_data$effective_count)
@@ -119,7 +119,7 @@ read.ingest.sheet <- function(ingest_filename, sheet) {
     bounds$ub <- NA
     bounds[valid_rows,] <- calculate.bounds.effective_count(
                             sheet_data[valid_rows,instrument_name],
-                            sheet_data$effective_count[valid_rows])
+                            as.numeric(sheet_data$effective_count[valid_rows]))
   }
 
   sheet_data[,'lb'] = bounds$lb
