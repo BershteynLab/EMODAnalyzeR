@@ -13,4 +13,6 @@ figure_output_folder <- "./"
 pop_scaling_factor = 0.002
 
 report.calibration.results(path_to_report_by_age_and_gender, path_to_ingest_file, figure_path = figure_output_folder, pop_scaling_factor = pop_scaling_factor)
+expect_true(TRUE)
+
 })
