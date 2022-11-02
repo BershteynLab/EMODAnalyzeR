@@ -111,7 +111,7 @@ read.ingest.sheet <- function(ingest_filename, sheet) {
   instrument_name <- names(raw_data)[2]
   sheet_data <- read_excel(ingest_filename, sheet, skip = first_row, .name_repair =  ~ make.names(make.unique(.)))
   if (any(names(sheet_data) == "two_sigma")) {
-    bounds <- calculate.bounds.two_sigma(sheet_data[,instrument_name], as.numeric(sheet_data$two_sigma))
+    bounds <- calculate.bounds.two_sigma(sheet_data[,instrument_name], sheet_data$two_sigma)
     print(bounds)
   } else {
     valid_rows <- (!is.na(sheet_data$effective_count)) & (!is.na(sheet_data[,instrument_name]))
