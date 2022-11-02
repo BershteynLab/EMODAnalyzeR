@@ -3,10 +3,7 @@ test_that("multiplication works", {
 })
 
 
-test_that("read.simulation.results works", {
-  read.simulation.results("../test_data/ReportHIVByAgeAndGender",scenario_name = "test")
-  expect_true(TRUE)
-})
+
 
 
 test_that("dalys are consistant across different stratifications", {
