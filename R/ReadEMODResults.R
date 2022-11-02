@@ -114,12 +114,12 @@ read.ingest.sheet <- function(ingest_filename, sheet) {
     bounds <- calculate.bounds.two_sigma(sheet_data[,instrument_name], as.numeric(sheet_data$two_sigma))
     print(bounds)
   } else {
-    valid_rows <- !is.na(sheet_data$effective_count)
+    valid_rows <- (!is.na(sheet_data$effective_count)) & (!is.na(sheet_data[,instrument_name]))
     bounds <- data.frame(lb=vector(mode='numeric', length=length(valid_rows))) + NA
     bounds$ub <- NA
     bounds[valid_rows,] <- calculate.bounds.effective_count(
-                            sheet_data[valid_rows,instrument_name],
-                            as.numeric(sheet_data$effective_count[valid_rows]))
+                            as.numeric(sheet_data[valid_rows,instrument_name] %>% unlist(use.names = FALSE)),
+                            as.numeric(sheet_data[valid_rows, "effective_count"] %>% unlist(use.names = FALSE)))
   }
 
   sheet_data[,'lb'] = bounds$lb
