@@ -104,12 +104,12 @@ calculate.pop_scaling_factor <- function(data, reference_year, reference_populat
 #' @param data A tibble returned from calculate.pop_scaling_factor, which was passed data from
 #'  read.simulation.results(..., stratify_columns = c("Year", "Age"),
 #'                               aggregate_columns = c("Died_from_HIV", "Infected", "On_ART")).
-#' @param infected_weight The disability weight for being infected with HIV, but without treatment (default 0.3)
+#' @param infected_weight The disability weight for being infected with HIV, but without treatment (default 0.274)
 #' @param art_weight The disability weight for being infected with HIV, but on ART (default 0.1)
 #' @param discount_start_year The year in which the DALY starts becoming reduced for being in the future
 #' @param discount_percent The compounding percent to reduce DALY each year in the future
 #' @return A tibble with columns year, daly, and daly_future_discounted
-calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, discount_start_year = 2023, discount_percent = 0.03, life_expectancy = 80) {
+calculate.DALY <- function(data,   infected_weight = 0.274, art_weight = 0.078, discount_start_year = 2023, discount_percent = 0.03, life_expectancy = 80) {
   data_by_age_year <- data %>%
                       dplyr::group_by(Year, Age, sim.id, scenario_name) %>%
                       dplyr::summarise(Died_from_HIV = sum(Died_from_HIV),
