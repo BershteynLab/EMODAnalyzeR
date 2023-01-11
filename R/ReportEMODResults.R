@@ -38,8 +38,11 @@ report.calibration.results <- function(experiment_path, ingest_file_path, pop_sc
   data$pop_scaling_factor = ifelse(pop_scaling_factor < 1, 1/pop_scaling_factor, pop_scaling_factor)
 
   if (any("Obs-OnART" == names(ingest_data))) {
-    grouped_on_art <- ingest_data[['Obs-OnART']] %>% group_by(Year, AgeBin) %>% dplyr::summarize(OnART = sum(OnART), lb = sum(lb), ub = sum(ub)) %>% mutate(Province = 'all')
-    ingest_data[['Obs-OnART']] <-ingest_data[['Obs-OnART']] %>% select(Year, AgeBin, OnART, lb, ub, Province) %>% rbind(grouped_on_art)
+    ingest_data[['Obs-OnART']]  = ingest_data[['Obs-OnART']] %>% filter((str_to_lower(Gender) == "male") | (str_to_lower(Gender) == "female"))
+    if (!("all" %in% str_to_lower(ingest_data[['Obs-OnART']]))) {
+      grouped_on_art <- ingest_data[['Obs-OnART']] %>% group_by(Year, AgeBin, Gender) %>% dplyr::summarize(OnART = sum(OnART), lb = sum(lb), ub = sum(ub)) %>% mutate(Province = 'all')
+      ingest_data[['Obs-OnART']] <-ingest_data[['Obs-OnART']] %>% select(Year, AgeBin, Gender, OnART, lb, ub, Province) %>% rbind(grouped_on_art)
+    }
     plottopics.on_art <- ingest_data[['Obs-OnART']] %>%
       select(Province, AgeBin) %>%
       distinct() %>%

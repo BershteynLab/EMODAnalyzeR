@@ -53,7 +53,7 @@ calculate.phia_survey.effective_count = function(input) {
 
     to_minimize <- function(alpha){
       alpha <- abs(alpha)
-      beta_computed <- -alpha + 2 + ( (alpha-1)/input[row_iter,'prevalence'] ) #alpha*((1-input[row_iter,'prevalence'])/input[row_iter,'prevalence'])
+      beta_computed <- -alpha + ( (alpha)/input[row_iter,'prevalence'] ) #alpha*((1-input[row_iter,'prevalence'])/input[row_iter,'prevalence'])
       #        print(alpha/(alpha+beta_computed))
       penalty <- (input[row_iter,'lb'] - qbeta(0.025, alpha, beta_computed,  ncp = 0, lower.tail = TRUE, log.p = FALSE))^2  +
         (input[row_iter,'ub'] - qbeta(0.975, alpha, beta_computed,  ncp = 0, lower.tail = TRUE, log.p = FALSE))^2
@@ -63,11 +63,11 @@ calculate.phia_survey.effective_count = function(input) {
     to_minimize(alpha_initial)
 
     alpha_optimized[row_iter] = optim(alpha_initial, to_minimize, method="Brent", lower=0, upper=1e6, control = list(abstol = 0.00000001))$par
-    beta_optimized[row_iter]  <- -alpha_optimized[row_iter] + 2 + ( (alpha_optimized[row_iter]-1)/input[row_iter,'prevalence'] ) #((1-input[row_iter,'prevalence'])/input[row_iter,'prevalence'])*alpha_optimized[row_iter]
+    beta_optimized[row_iter]  <- -alpha_optimized[row_iter]  + ( (alpha_optimized[row_iter])/input[row_iter,'prevalence'] ) #-alpha + ( (alpha)/input[row_iter,'prevalence'] )
 
     lower_fitted[row_iter]    = qbeta(0.025, alpha_optimized[row_iter], beta_optimized[row_iter], ncp = 0, lower.tail = TRUE, log.p = FALSE)
     upper_fitted[row_iter]    = qbeta(0.975, alpha_optimized[row_iter], beta_optimized[row_iter], ncp = 0, lower.tail = TRUE, log.p = FALSE)
-    mean_fitted[row_iter]     = (alpha_optimized[row_iter]-1)/(alpha_optimized[row_iter] + beta_optimized[row_iter]-2)
+    mean_fitted[row_iter]     = (alpha_optimized[row_iter])/(alpha_optimized[row_iter] + beta_optimized[row_iter])
 
 
     effective_count[row_iter] = alpha_optimized[row_iter] + beta_optimized[row_iter] - 1
@@ -90,4 +90,5 @@ calculate.phia_survey.effective_count = function(input) {
   input$pct_diff_mean   <- (input$mean_fitted-input$prevalence)/input$mean_fitted
   input$pct_diff_lower  <- (input$lower_fitted-input$lb)/input$lower_fitted
   input$pct_diff_upper  <- (input$upper_fitted-input$upper)/input$upper_fitted
+  input
 }
