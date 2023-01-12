@@ -10,8 +10,8 @@ by the 10th year, we the DALY will be multiplied by 0.97^10.}
 \usage{
 calculate.DALY(
   data,
-  infected_weight = 0.3,
-  art_weight = 0.1,
+  infected_weight = 0.274,
+  art_weight = 0.078,
   discount_start_year = 2023,
   discount_percent = 0.03,
   life_expectancy = 80
@@ -22,7 +22,7 @@ calculate.DALY(
 read.simulation.results(..., stratify_columns = c("Year", "Age"),
                              aggregate_columns = c("Died_from_HIV", "Infected", "On_ART")).}
 
-\item{infected_weight}{The disability weight for being infected with HIV, but without treatment (default 0.3)}
+\item{infected_weight}{The disability weight for being infected with HIV, but without treatment (default 0.274)}
 
 \item{art_weight}{The disability weight for being infected with HIV, but on ART (default 0.1)}
 
