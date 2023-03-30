@@ -157,7 +157,7 @@ calculate.DALY <- function(data,   infected_weight = 0.274, art_weight = 0.078, 
                             year = .$year[[1]] ) %>%
             unnest()
 
-  daly = left_join(yll, disability.tibble, on="year") %>%
+  daly = left_join(yll, disability.tibble, by="year") %>%
          replace(is.na(.), 0)
 
   daly <- daly %>% mutate(daly = infected_untreated*infected_weight + on_art*art_weight + yll)
