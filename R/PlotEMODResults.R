@@ -70,9 +70,10 @@ emodplot.prevalence <- function(data,
     mutate(Prevalence = case_when(Population == 0 ~ 0,
                                   Population > 0 ~ Infected / Population))
   y.lim.max <- min(max(data$Prevalence) * 1.2, 1)
-  emodplot.by_gender(data, date.start, date.end, 'Prevalence', title=title ) +
+  p <- emodplot.by_gender(data, date.start, date.end, 'Prevalence', title=title ) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0, y.lim.max,0.05), limits=c(0,y.lim.max)) +
     ylab("HIV Prevalence (%)")
+  return(p)
 
 }
 
@@ -81,9 +82,10 @@ emodplot.incidence <- function(data,
                             date.end) {
   data.incidence <- EMODAnalyzeR::calculate.incidence(data)
   y.lim.max <- min(max(data.incidence$incidence) * 1.2, 1)
-  emodplot.by_gender(data.incidence,date.start,date.end,'incidence') +
+  p <- emodplot.by_gender(data.incidence,date.start,date.end,'incidence') +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0,y.lim.max,0.005),limits=c(0,y.lim.max)) +
     ylab("HIV Incidence (%)")
+  return(p)
 }
 
 
@@ -92,8 +94,94 @@ emodplot.art <- function(data,
                      date.end) {
 
   data$On_Art_scaled <- data$pop_scaling_factor * data$On_ART
-  emodplot.by_gender(data,date.start,date.end,'On_Art_scaled') +
+  p <- emodplot.by_gender(data,date.start,date.end,'On_Art_scaled') +
     ylab("Number on Art")
+  return(p)
 }
 
-
+#' Plot age-prevalence curves, stratified by year and gender
+#' @description Plots age-prevalence curves using EMOD simulation outputs. Plots will show mean prevalence +/- 2 standard deviations.
+#' @param data A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Age"," "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")).
+#' More aggregate columns can be used, but more stratify columns will cause problems in the plot.
+#' @param subset_years list of years to plot
+#' @param age_bins list of age bin boundaries, will be used to generate a vector of age bins formatted as "[age_0,age_1)", "[age_1,age_2)", etc
+#' @param title Plot Title
+#' @return ggplot of age-prevalence curves
+emodplot.age_prevalence <- function(data,
+                                    subset_years = c(2006, 2011, 2015),
+                                    age_bins = c(15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 99),
+                                    title = ""){
+  nScenarios = length(unique(data$scenario_name))
+  if (nScenarios == 1) {
+    colors2plot <- c('blue3')
+  } else {
+    colors2plot <- colors[1:nScenarios]
+  }
+  
+  # Transform data
+  data <- data %>% mutate(Gender = case_when(Gender==0 ~ "Male", Gender==1 ~ "Female"))
+  # Subset data on years
+  data <- data %>% filter(Year %in% subset_years)
+  
+  # Age bins
+  age_labels = c()
+  for (i in 1:(length(age_bins) - 1)){
+    age_labels <- append(age_labels, paste0("[",age_bins[i],":",age_bins[i + 1],")"))
+  }
+  # Label each age by its bin
+  data <- data %>% mutate(
+    AgeBin = cut(Age,breaks = age_bins, right = FALSE)
+    ) %>%
+    filter(!is.na(AgeBin))
+  
+  data <- data %>% mutate(AgeBin_index = factor(AgeBin, 
+                                                labels = 1:length(age_labels)))
+  
+  # Include prevalence
+  data <- data %>% 
+    group_by(Year, AgeBin_index, Gender, sim.id, scenario_name) %>% 
+    summarize(Infected = sum(Infected), Population = sum(Population), .groups = 'keep') %>% 
+    mutate(Prevalence = case_when(Population == 0 ~ 0,
+                                  Population > 0 ~ Infected / Population))
+  
+  data.mean <- data %>%
+    group_by(Year, AgeBin_index, Gender, scenario_name) %>%
+    dplyr::summarise(mean.col2plot = mean(Prevalence), 
+                     sd.col2plot = sd(Prevalence),
+                     .groups = 'keep') %>% 
+    mutate(lower = mean.col2plot - 2* sd.col2plot,
+           upper = mean.col2plot + 2*sd.col2plot)
+  
+  # Plot
+  p <- data.mean %>% 
+    ggplot() + 
+    # data
+    geom_errorbar(
+      mapping = aes(
+        x=AgeBin_index, ymin=lower, ymax=upper,
+        color=scenario_name),
+      width=.25, size=1) + 
+    # means
+    geom_point(
+      mapping = aes(
+        x=AgeBin_index, y=mean.col2plot, 
+        group=scenario_name, color=scenario_name), 
+      size=1.5) + 
+    facet_grid(cols = vars(Gender), rows = vars(Year)) + 
+    xlab("Age") + 
+    ylab("Prevalence") +
+    theme_bw(base_size=16) +
+    guides(fill = guide_legend(keywidth = 2, keyheight = 1)) +
+    scale_x_discrete(
+      breaks = 1:length(age_labels),
+      labels = age_labels
+      ) +
+    theme(legend.position="bottom") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    theme(strip.background = element_rect(colour="black", fill="white")) +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+    scale_color_manual(values=colors2plot)  + 
+    labs(title = title)
+  
+  return(p)
+}
