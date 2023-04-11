@@ -18,7 +18,7 @@ calculate.incidence <- function(data,gender.breakdown = TRUE, debug = FALSE) {
     if (debug) print(head(trajectories_IR.2,10))
     trajectories_IR.2$Year_Integer <- floor(trajectories_IR.2$Year-0.5)
     #remove second instance of duplicate rows
-    trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","Gender","sim.id","scenario_name")]),] 
+    trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","Gender","sim.id","scenario_name")]),]
     trajectories_IR.2 <- trajectories_IR.2[-match("Year",names(trajectories_IR.2))]
     trajectories_IRoverall <- merge(trajectories_IR.1a, trajectories_IR.2, by=c("Year_Integer","Gender","sim.id","scenario_name"))
   } else {
@@ -30,11 +30,11 @@ calculate.incidence <- function(data,gender.breakdown = TRUE, debug = FALSE) {
     if (debug) print(head(trajectories_IR.2,10))
     trajectories_IR.2$Year_Integer <- floor(trajectories_IR.2$Year-0.5)
     #remove second instance of duplicate rows
-    trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","sim.id","scenario_name")]),] 
+    trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","sim.id","scenario_name")]),]
     trajectories_IR.2 <- trajectories_IR.2[-match("Year",names(trajectories_IR.2))]
     trajectories_IRoverall <- merge(trajectories_IR.1a, trajectories_IR.2, by=c("Year_Integer","sim.id","scenario_name"))
   }
-  
+
   trajectories_IRoverall$incidence <- trajectories_IRoverall$Newly.Infected / (trajectories_IRoverall$Population-(trajectories_IRoverall$Newly.Infected/2))
   trajectories_IRoverall %>% dplyr::rename(Year = Year_Integer)
 
@@ -54,20 +54,21 @@ calculate.tests.performed <- function(data, gender.breakdown = TRUE, debug = FAL
 
   if (gender.breakdown == TRUE){
     # Aggregate number of positive and negative tests, broken down by Year_Integer and Gender
-    test.trajectories <- aggregate(cbind(Newly.Tested.Positive, Newly.Tested.Negative) ~ Year_Integer+Gender+sim.id+scenario_name, data=data,FUN=sum) 
+    test.trajectories <- aggregate(cbind(Newly.Tested.Positive, Newly.Tested.Negative) ~ Year_Integer+Gender+sim.id+scenario_name, data=data,FUN=sum)
     if (debug) print(head(test.trajectories, 10))
   } else {
     # Aggregate number of positive and negative tests, broken down by Year_Integer but not by Gender
-    test.trajectories <- aggregate(cbind(Newly.Tested.Positive, Newly.Tested.Negative) ~ Year_Integer+sim.id+scenario_name, data=data,FUN=sum) 
+    test.trajectories <- aggregate(cbind(Newly.Tested.Positive, Newly.Tested.Negative) ~ Year_Integer+sim.id+scenario_name, data=data,FUN=sum)
     if (debug) print(head(test.trajectories, 10))
   }
   # Calculate Total Tests and Proportion of Positive Tests
-  test.trajectories %>% 
+  test.trajectories %>%
     dplyr::rename(Year = Year_Integer) %>%
-    mutate(Total.Tests = Newly.Tested.Negative + Newly.Tested.Positive) %>% 
+    mutate(Total.Tests = Newly.Tested.Negative + Newly.Tested.Positive) %>%
     mutate(Proportion.Positive.Tests = case_when(Total.Tests == 0 ~ 0,
                                                  Total.Tests > 0 ~ Newly.Tested.Positive/Total.Tests))
 }
+
 
 #' Calculate the scaling factor for a population run on EMOD. Typically when we run EMOD, we scale down our population for the sake of
 #' computation costs. In order to get correct counts of different statuses (i.e., number of people who died from HIV), we need to scale our data.
@@ -80,16 +81,16 @@ calculate.tests.performed <- function(data, gender.breakdown = TRUE, debug = FAL
 #' @return A tibble with all original columns found in "data", plus a column for pop_scaling_factor
 calculate.pop_scaling_factor <- function(data, reference_year, reference_population, age_min_inclusive=0, age_max_inclusive = 200) {
   data.within.age <- data %>%
-          filter((Age >= age_min_inclusive) & (Age <= age_max_inclusive))
+    filter((Age >= age_min_inclusive) & (Age <= age_max_inclusive))
   for_pop_scaling_factor <- aggregate(Population ~ Year + sim.id + scenario_name,
                                       subset(data.within.age,
                                              Year == reference_year), FUN=sum)
 
   for_pop_scaling_factor$pop_scaling_factor <- reference_population/for_pop_scaling_factor$Population
-  data <- merge(data,
-                for_pop_scaling_factor
-                %>% select(pop_scaling_factor, sim.id, scenario_name),
-                by=c('sim.id', "scenario_name"),suffixes = c("",".y"))
+  data <- dplyr::inner_join(data,
+                            for_pop_scaling_factor
+                            %>% select(pop_scaling_factor, sim.id, scenario_name),
+                            by=c('sim.id', "scenario_name"), suffix = c("",".y"))
   data
 
 }
@@ -103,16 +104,24 @@ calculate.pop_scaling_factor <- function(data, reference_year, reference_populat
 #' @param data A tibble returned from calculate.pop_scaling_factor, which was passed data from
 #'  read.simulation.results(..., stratify_columns = c("Year", "Age"),
 #'                               aggregate_columns = c("Died_from_HIV", "Infected", "On_ART")).
-#' @param infected_weight The disability weight for being infected with HIV, but without treatment (default 0.3)
+#' @param infected_weight The disability weight for being infected with HIV, but without treatment (default 0.274)
 #' @param art_weight The disability weight for being infected with HIV, but on ART (default 0.1)
 #' @param discount_start_year The year in which the DALY starts becoming reduced for being in the future
 #' @param discount_percent The compounding percent to reduce DALY each year in the future
 #' @return A tibble with columns year, daly, and daly_future_discounted
-calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, discount_start_year = 2023, discount_percent = 0.03, life_expectancy = 80) {
-  data$Year_Integer <- floor((data$Year-0.5))
+calculate.DALY <- function(data,   infected_weight = 0.274, art_weight = 0.078, discount_start_year = 2023, discount_percent = 0.03, life_expectancy = 80) {
+  data_by_age_year <- data %>%
+                      dplyr::group_by(Year, Age, sim.id, scenario_name) %>%
+                      dplyr::summarise(Died_from_HIV = sum(Died_from_HIV),
+                                       Infected = sum(Infected),
+                                       On_ART = sum(On_ART),
+                                       pop_scaling_factor = mean(pop_scaling_factor))
 
 
-  m2 <- data %>%
+  data_by_age_year$Year_Integer <- floor((data_by_age_year$Year-0.5))
+
+
+  m2 <- data_by_age_year %>%
         dplyr::group_by(Year_Integer, Age, sim.id, scenario_name) %>%
         dplyr::summarise(Died_from_HIV = sum(Died_from_HIV),
                          Infected = mean(Infected),
@@ -148,7 +157,7 @@ calculate.DALY <- function(data,   infected_weight = 0.3, art_weight = 0.1, disc
                             year = .$year[[1]] ) %>%
             unnest()
 
-  daly = left_join(yll, disability.tibble, on="year") %>%
+  daly = left_join(yll, disability.tibble, by="year") %>%
          replace(is.na(.), 0)
 
   daly <- daly %>% mutate(daly = infected_untreated*infected_weight + on_art*art_weight + yll)
@@ -186,11 +195,11 @@ calculate.bounds.effective_count <- function (mean_vectors, effective_counts) {
   x <- as.vector(mean_vectors * effective_counts)
   alpha <- x + 1
   beta <- effective_counts - x + 1
-  names(alpha) <- c('alpha_1')
-  names(beta) <- c('beta_1')
+  names(alpha) <- c('alpha')
+  names(beta) <- c('beta')
   print(tibble(alpha, beta))
   tibble(alpha, beta) %>%
-    mutate(lb = qbeta(0.025, alpha_1, beta_1)) %>%
-    mutate(ub = qbeta(0.975, alpha_1, beta_1)) %>%
+    mutate(lb = qbeta(0.025, alpha, beta)) %>%
+    mutate(ub = qbeta(0.975, alpha, beta)) %>%
     select(lb, ub)
 }
