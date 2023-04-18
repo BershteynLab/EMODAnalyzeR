@@ -54,6 +54,7 @@ Usage
    functions/calculate.incidence.md
    functions/calculate.pop_scaling_factor.md
    functions/calculate.tests.performed.md
+   functions/emodplot.age_prevalence.md
    functions/emodplot.prevalence.md
    functions/plot.by_gender.md
    functions/read.simulation.results.bigpurple.md
