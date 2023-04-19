@@ -25,7 +25,7 @@ bigpurple.run_on_each_sim <- function(path,
                       min_age_inclusive=min_age_inclusive,
                       max_age_inclusive=max_age_inclusive)
 
-  apply_fun = compose(read_fun, func)
+  apply_fun = compose(func, read_fun)
   files = as.list(list.files(path, recursive = F, full.names = T))
   Slurm_lapply(files, apply_fun, sbatch_opt=bigpurple_opts)
 }
