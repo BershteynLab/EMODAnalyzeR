@@ -1,0 +1,37 @@
+# `emodplot.age_prevalence`
+
+Plot age-prevalence curves, stratified by year and gender
+
+
+## Description
+
+Plots age-prevalence curves using EMOD simulation outputs. Plots will show mean prevalence +/- 2 standard deviations.
+
+
+## Usage
+
+```r
+emodplot.age_prevalence(
+  data,
+  subset_years = c(2005),
+  age_bins = c(15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 99),
+  title = ""
+)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+`data`     |     A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Age"," "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")). More aggregate columns can be used, but more stratify columns will cause problems in the plot.
+`subset_years`     |     list of years to plot
+`age_bins`     |     list of age bin boundaries, will be used to generate a vector of age bins formatted as "[age_0,age_1)", "[age_1,age_2)", etc
+`title`     |     Plot Title
+
+
+## Value
+
+ggplot of age-prevalence curves
+
+
