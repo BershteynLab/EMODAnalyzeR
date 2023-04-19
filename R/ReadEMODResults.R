@@ -4,19 +4,19 @@
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 
-library(openxlsx)
-library(readxl)
-library(dplyr)
-library(ggplot2)
-library(reshape2)
-library(plyr)
-library(plotrix)
-library(data.table)
-library(tidyr)
-library(stringr)
+# library(openxlsx)
+# library(readxl)
+# library(dplyr)
+# library(ggplot2)
+# library(reshape2)
+# library(plyr)
+# library(plotrix)
+# library(data.table)
+# library(tidyr)
+# library(stringr)
 
-SummarizeEachSimByAgeAndGender <- function (data, summarize_columns, stratify_columns, min_age_inclusive = 0, max_age_inclusive = Inf) {
-  data %>%
+read.each_sim_by_age_and_gender <- function (filename, summarize_columns, stratify_columns, min_age_inclusive = 0, max_age_inclusive = Inf) {
+  data.table::fread(filename, check.names = TRUE) %>%
     filter( (Age >= min_age_inclusive) & (Age <= max_age_inclusive) ) %>%
     group_by_at(stratify_columns) %>%
     summarise_at(summarize_columns, sum, na.rm=T) %>%
@@ -52,8 +52,7 @@ read.simulation.results <- function(results_path,
   data.list <- list()
   for (i in seq(1,length(file_list),1)){
     f <- paste(results_path, file_list[i], sep="/")
-    raw.data <- fread(f, check.names = TRUE)
-    data.list[[i]] <- SummarizeEachSimByAgeAndGender(raw.data, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
+    data.list[[i]] <- read.each_sim_by_age_and_gender(f, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
     data.list[[i]]$sim.id <- paste0(f)
     data.list[[i]]$scenario_name <- scenario_name
     print(paste0("Done Reading File ", i))
@@ -112,7 +111,6 @@ read.ingest.sheet <- function(ingest_filename, sheet) {
   sheet_data <- read_excel(ingest_filename, sheet, skip = first_row, .name_repair =  ~ make.names(make.unique(.)))
   if (any(names(sheet_data) == "two_sigma")) {
     bounds <- calculate.bounds.two_sigma(sheet_data[,instrument_name], sheet_data$two_sigma)
-    print(bounds)
   } else {
     valid_rows <- (!is.na(sheet_data$effective_count)) & (!is.na(sheet_data[,instrument_name]))
     bounds <- data.frame(lb=vector(mode='numeric', length=length(valid_rows))) + NA
