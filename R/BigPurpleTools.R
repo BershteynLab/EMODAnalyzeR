@@ -15,7 +15,7 @@ bigpurple.run_on_each_sim <- function(path,
                                        stratify_columns = c("Year", "Gender"),
                                        min_age_inclusive = 15,
                                        max_age_inclusive = 49,
-                                       bigpurple_opts=list(partition="a100_short", time="12:00:00", )){
+                                       bigpurple_opts=list(partition="a100_short", time="12:00:00")){
   if (!slurm_available()) {
     bigpurple.add_slurm_to_path()
   }
