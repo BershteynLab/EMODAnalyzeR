@@ -130,17 +130,17 @@ emodplot.art <- function(data,
 emodplot.age_prevalence <- function(data,
                                     subset_years = c(2005), 
                                     age_bins = c(15,20,25,30,35,40,45,50,55,60,65,99),
-                                    title = "") {
+                                    title = "Age-Prevalence Curves") {
   p <- emodplot.by_age_gender(data, "Infected", "Population",
                               subset_years, age_bins,
                               yaxis_lab = "Prevalence",
-                              title = "Age-Prevalence Curves")
+                              title = title)
   return(p)
 }
 
 #' @rdname plot.by_age_gender
 #' @description Plots simulation prevalence results by age, broken down by year and sex. Plots will show mean prevalence +/- 2 standard deviations.
-#' Specify the numerator and the denominator columns to use, with defaults to prevalence = Infected/Population within each age bracket.
+#' Specify the numerator and the denominator columns to use, with defaults to prevalence = Infected/Population within each age bracket. The generalizability makes it possible to also calculate ART coverage by age and other quantities.
 #' Specify the years for each plot and the age bins.
 #' @param data A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Age"," "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")).
 #' More aggregate columns can be used, but more stratify columns will cause problems in the plot.
@@ -157,8 +157,8 @@ emodplot.by_age_gender <- function(data,
                                    age_bins = c(15,20,25,30,35,40,45,50,55,60,65,99), 
                                    yaxis_lab = "", 
                                    title = "") {
-  # Build color mapping function, each scenario gets its own color
-  nScenarios = length(unique(data$scenario_name))
+# Build color mapping function, each scenario gets its own color
+    nScenarios = length(unique(data$scenario_name))
   if (nScenarios == 1) {
     colors2plot <- c('blue3')
   } else {
@@ -168,7 +168,7 @@ emodplot.by_age_gender <- function(data,
   # Subset data on years
   data <- data %>% filter(Year %in% subset_years)
   
-  # Age bins
+  # Age bins  
   age_labels = c()
   for (i in 1:(length(age_bins) - 1)){
     age_labels <- append(age_labels, paste0("[",age_bins[i],":",age_bins[i + 1],")"))
@@ -179,13 +179,12 @@ emodplot.by_age_gender <- function(data,
     AgeBin = cut(Age, breaks = age_bins, right = FALSE)
     ) %>%
     filter(!is.na(AgeBin))
-  
-  data$AgeBin_index = factor(data$AgeBin,labels = 1:7)
+  data$AgeBin_index = factor(data$AgeBin,labels = 1:length(age_labels))
   
   # Pick out the numerator and denominator
   data['Numerator'] = data[numerator]
   data['Denominator'] = data[denominator]
-  
+    
   # Calculate prevalence, grouping by age bin
   data.prev <- data %>% group_by(Year, AgeBin_index, AgeBin, Gender, scenario_name, sim.id) %>% 
     summarize(num = sum(Numerator), denom = sum(Denominator), .groups = 'keep') %>% 
@@ -199,8 +198,8 @@ emodplot.by_age_gender <- function(data,
            upper = mean.Prevalence + 2*sd.Prevalence)
   
   # Transform data
-  data.prev <- data.prev %>% mutate(Gender = case_when(Gender==0 ~ "Male", Gender==1 ~ "Female"))
-  data.mean <- data.mean %>% mutate(Gender = case_when(Gender==0 ~ "Male", Gender==1 ~ "Female"))
+  data.prev <- data.prev %>% ungroup() %>% mutate(Gender = case_when(Gender==0 ~ "Male", Gender==1 ~ "Female"))
+  data.mean <- data.mean %>% ungroup() %>% mutate(Gender = case_when(Gender==0 ~ "Male", Gender==1 ~ "Female"))
   
   p <- data.mean %>% 
     ggplot() + 
@@ -227,5 +226,6 @@ emodplot.by_age_gender <- function(data,
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
     scale_color_manual(values=colors2plot) + 
     labs(title = title)
+    
   return(p)
 }
