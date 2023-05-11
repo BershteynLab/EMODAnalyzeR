@@ -1,6 +1,10 @@
+[![codecov](https://codecov.io/gh/BershteynLab/EMODAnalyzeR/branch/main/graph/badge.svg?token=G6NWONEW83)](https://codecov.io/gh/BershteynLab/EMODAnalyzeR)
+
 # EMODAnalyzeR
 
 This package intends to help members of the Bershteyn Lab analyze results of emod. This package was developed by members of the Bershteyn lab and Edinah Mudimu.
+
+[View Documentation Here](https://bershteynlab.github.io/EMODAnalyzeR/)
 
 ## Installation
 
@@ -8,8 +12,6 @@ This package intends to help members of the Bershteyn Lab analyze results of emo
 2. Make sure you have devtools installed (if not, run `install.packages("devtools")` )
 3. Run `library(devtools)`
 4. Run `install_github("BershteynLab/EMODAnalyzeR")`
-
-As of 2022-03-10, installation problems might come up as it has mostly been tested on David Kaftan's machine.
 
 ## Usage
 
