@@ -55,6 +55,7 @@ read.simulation.results <- function(results_path,
     raw.data <- fread(f, check.names = TRUE)
     data.list[[i]] <- SummarizeEachSimByAgeAndGender(raw.data, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
     data.list[[i]]$sim.id <- paste0(f)
+    data.list[[i]]$sim.ix <- i
     data.list[[i]]$scenario_name <- scenario_name
     print(paste0("Done Reading File ", i))
   }
@@ -97,6 +98,7 @@ read.simulation.results.bigpurple <- function(experiment_path,
     raw.data <- fread(f, check.names = TRUE)
     data.list[[i]] <- SummarizeEachSimByAgeAndGender(raw.data, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
     data.list[[i]]$sim.id <- paste0(f)
+    data.list[[i]]$sim.ix <- i
     data.list[[i]]$scenario_name <- scenario_name
     if (verbose) print(paste0("Done Reading File ", i))
   }
