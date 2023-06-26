@@ -15,7 +15,7 @@ emodplot.age_prevalence(
   data,
   subset_years = c(2005),
   age_bins = c(15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 99),
-  title = ""
+  title = "Age-Prevalence Curves"
 )
 ```
 
