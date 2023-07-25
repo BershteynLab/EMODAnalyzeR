@@ -185,7 +185,7 @@ emodplot.by_age_gender <- function(data,
   data['Denominator'] = data[denominator]
     
   # Calculate prevalence, grouping by age bin
-  data.prev <- data %>% calculate.prevalence.dev(
+  data.prev <- data %>% calculate.prevalence(
     stratify_columns = c("Year", "AgeBin_index", "AgeBin", "Gender", "scenario_name", "sim.id"),
     numerator = "Numerator",
     denominator = "Denominator")
