@@ -30,10 +30,10 @@ emodplot.by_gender <- function(data,
 data.mean <- data %>%
     dplyr::group_by(Year, Gender, scenario_name) %>%
     dplyr::summarise(mean.col2plot = mean(col2plot), .groups = 'keep')
-  ggplot(data=subset(data, (date.start <= Year) & (Year <= date.end))) +
+    ggplot(data=subset(data, (date.start <= Year) & (Year <= date.end))) +
     geom_point(size=1.0, aes(x=Year, y=col2plot*1, group=sim.id, color=scenario_name), alpha=0.005) +
     geom_line(data=subset(data.mean, (date.start <= Year) & (Year <= date.end)),
-              aes(x=Year, y=mean.col2plot*1, group=scenario_name, color=scenario_name), size=1.5) +
+              aes(x=Year, y=mean.col2plot*1, group=scenario_name, color=scenario_name), linewidth=1.5) +
     # geom_point(data = prevalence.data, size=2, color = "black", aes(x=Year, y=Prevalence*1)) +
     # geom_errorbar(data = prevalence.data, aes(x=Year, ymin=lb*1, ymax=ub*1), color="black", width=2, size=1) +
     facet_wrap(~ Gender, ncol=2) +
@@ -59,19 +59,18 @@ data.mean <- data %>%
 #' @param date.start integer year to start the plotting (i.e., 2000)
 #' @param date.end integer year to end the plotting (i.e., 2030)
 #' @return a ggplot with prevalence plotted
-
+#' 
 emodplot.prevalence <- function(data,
                            date.start,
                            date.end,
                            title = "HIV prevalence") {
-  data <- data %>%
-    dplyr::group_by(Year, Gender, sim.id, scenario_name) %>%
-    dplyr::summarize(Infected = sum(Infected), Population = sum(Population), .groups = 'keep') %>%
-    dplyr::mutate(Prevalence = case_when(Population == 0 ~ 0,
-                                          Population > 0 ~ Infected / Population))
+  data <- calculate.prevalence(data,
+                           stratify_columns = c("Year", "Gender", "sim.id", "scenario_name"),
+                           numerator = "Infected",
+                           denominator = "Population")
   y.lim.max <- min(max(data$Prevalence) * 1.2, 1)
   p <- emodplot.by_gender(data, date.start, date.end, 'Prevalence', title=title ) +
-    scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0, y.lim.max,0.05), limits=c(0,y.lim.max)) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0, y.lim.max,0.25), limits=c(0,y.lim.max)) +
     ylab("HIV Prevalence (%)")
   return(p)
 
@@ -85,14 +84,14 @@ emodplot.artcoverage <- function(data,
   if (str_to_lower(node_id) != "all") {
     data <- data %>% filter(NodeId == node_id)
   }
-  data <- data %>%
-    group_by(Year, Gender, scenario_name, sim.id) %>%
-    summarize(On_ART = sum(On_ART), Infected = sum(Infected))
-  data <- data %>% filter(Infected > 0) %>% mutate(art_coverage = On_ART / Infected )
-  y.lim.max <- min(max(data$art_coverage) * 1.2, 1.0)
-  emodplot.by_gender(data, date.start, date.end, 'art_coverage', title=title ) +
-    scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0, y.lim.max,0.05), limits=c(0,y.lim.max)) +
-    ylab("ART Coverage (% of Infected)")
+  data <- calculate.prevalence(data,
+                         stratify_columns = c("Year", "Gender", "sim.id", "scenario_name"),
+                         numerator = "On_ART",
+                         denominator = "Infected")
+  y.lim.max <- min(max(data$Prevalence) * 1.2, 1.0)
+  emodplot.by_gender(data, date.start, date.end, 'Prevalence', title=title ) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0, y.lim.max,0.25), limits=c(0,y.lim.max)) +
+    ylab("ART Coverage\n (% of Infected)")
 
 }
 
@@ -186,20 +185,26 @@ emodplot.by_age_gender <- function(data,
   data['Denominator'] = data[denominator]
     
   # Calculate prevalence, grouping by age bin
-  data.prev <- data %>% group_by(Year, AgeBin_index, AgeBin, Gender, scenario_name, sim.id) %>% 
-    summarize(num = sum(Numerator), denom = sum(Denominator), .groups = 'keep') %>% 
-    mutate(Prevalence = num/denom)
+  data.prev <- data %>% calculate.prevalence(
+    stratify_columns = c("Year", "AgeBin_index", "AgeBin", "Gender", "scenario_name", "sim.id"),
+    numerator = "Numerator",
+    denominator = "Denominator")
+  
   # Calculate mean prevalence across all sim runs
-  data.mean <- data.prev %>% group_by(Year, AgeBin_index, AgeBin, Gender, scenario_name) %>% 
-    summarize(mean.Prevalence = mean(Prevalence),
+  data.mean <- data.prev %>% 
+    dplyr::group_by(Year, AgeBin_index, AgeBin, Gender, scenario_name) %>% 
+    dplyr::summarize(mean.Prevalence = mean(Prevalence),
               sd.Prevalence = sd(Prevalence),
               .groups = 'keep') %>% 
-    mutate(lower = max(mean.Prevalence - 2* sd.Prevalence, 0), 
-           upper = mean.Prevalence + 2*sd.Prevalence)
+    ungroup() %>% 
+    dplyr::mutate(upper = mean.Prevalence + 2*sd.Prevalence, 
+                  lower = case_when(mean.Prevalence - 2 * sd.Prevalence > 0 ~ mean.Prevalence - 2 * sd.Prevalence,
+                           mean.Prevalence - 2 * sd.Prevalence <= 0 ~ 0)
+                  ) 
   
   # Transform data
-  data.prev <- data.prev %>% ungroup() %>% mutate(Gender = case_when(Gender==0 ~ "Male", Gender==1 ~ "Female"))
-  data.mean <- data.mean %>% ungroup() %>% mutate(Gender = case_when(Gender==0 ~ "Male", Gender==1 ~ "Female"))
+  data.prev <- data.prev %>% mutate(Gender = case_when(Gender==0 ~ "Male", Gender==1 ~ "Female"))
+  data.mean <- data.mean %>% mutate(Gender = case_when(Gender==0 ~ "Male", Gender==1 ~ "Female"))
   
   p <- data.mean %>% 
     ggplot() + 

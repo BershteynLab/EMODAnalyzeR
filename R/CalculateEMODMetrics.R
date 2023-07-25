@@ -1,3 +1,29 @@
+
+#' Calculate prevalence in an EMOD simulation
+#' 
+#' Defaults to calculating HIV prevalence, but also may be used to calculate fraction of PLHIV who know their status, ART coverage, or other measures involving a numerator and denominator.
+#' Prevalence = (numerator)/(denominator)
+#' 
+#' @param data A tibble returned from read.simulation.results()
+#' @param stratify_columns List of strings, names of stratifying columns included in the `group_by` function call before aggregation. The list should include sim.id (or sim.ix) as an argument to calculate the prevalence for each individual simulation run.
+#' @param numerator String, name of prevalence numerator
+#' @param denominator String, name of prevalence denominator
+#' 
+calculate.prevalence <- function(data, stratify_columns = c("Year", "Gender", "sim.id"), numerator = 'Infected', denominator = 'Population'){
+  data['num'] = data[numerator]
+  data['den'] = data[denominator]
+  data <- data %>% 
+    dplyr::group_by_at(stratify_columns) %>% 
+    dplyr::summarize_at(c('num', 'den'), sum, na.rm = T) %>% 
+    ungroup() %>%
+    dplyr::mutate(Prevalence = case_when(den == 0 ~ 0,
+                                         den > 0 ~ num/den)) 
+  
+  colnames(data) <- c(stratify_columns, numerator, denominator, "Prevalence")
+  
+  return(data)
+}
+
 #' Calculate incidence of an EMOD simulation
 #'
 #' @param data A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")).
