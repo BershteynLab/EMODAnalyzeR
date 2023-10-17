@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>emodplot.age_prevalence &mdash; EMODAnalyzeR 0.0.1 documentation</title>
+  <title>calculate.prevalence &mdash; EMODAnalyzeR 0.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="emodplot.prevalence" href="emodplot.prevalence.html" />
-    <link rel="prev" title="calculate.tests.performed" href="calculate.tests.performed.html" /> 
+    <link rel="next" title="calculate.tests.performed" href="calculate.tests.performed.html" />
+    <link rel="prev" title="calculate.pop_scaling_factor" href="calculate.pop_scaling_factor.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,15 +49,14 @@
 <li class="toctree-l1"><a class="reference internal" href="calculate.DALY.html"><code class="docutils literal notranslate"><span class="pre">calculate.DALY</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.incidence.html"><code class="docutils literal notranslate"><span class="pre">calculate.incidence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.pop_scaling_factor.html"><code class="docutils literal notranslate"><span class="pre">calculate.pop_scaling_factor</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="calculate.prevalence.html"><code class="docutils literal notranslate"><span class="pre">calculate.prevalence</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="calculate.tests.performed.html"><code class="docutils literal notranslate"><span class="pre">calculate.tests.performed</span></code></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">emodplot.age_prevalence</span></code></a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">calculate.prevalence</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#arguments">Arguments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#value">Value</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="calculate.tests.performed.html"><code class="docutils literal notranslate"><span class="pre">calculate.tests.performed</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="emodplot.age_prevalence.html"><code class="docutils literal notranslate"><span class="pre">emodplot.age_prevalence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="emodplot.prevalence.html"><code class="docutils literal notranslate"><span class="pre">emodplot.prevalence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot.by_gender.html"><code class="docutils literal notranslate"><span class="pre">emodplot.by_gender</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="read.simulation.results.bigpurple.html"><code class="docutils literal notranslate"><span class="pre">read.simulation.results.bigpurple</span></code></a></li>
@@ -79,9 +78,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">emodplot.age_prevalence</span></code></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">calculate.prevalence</span></code></li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/functions/emodplot.age_prevalence.md.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/functions/calculate.prevalence.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -89,20 +88,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="emodplot-age-prevalence">
-<h1><code class="docutils literal notranslate"><span class="pre">emodplot.age_prevalence</span></code><a class="headerlink" href="#emodplot-age-prevalence" title="Link to this heading"></a></h1>
-<p>Plot age-prevalence curves, stratified by year and gender</p>
+  <section id="calculate-prevalence">
+<h1><code class="docutils literal notranslate"><span class="pre">calculate.prevalence</span></code><a class="headerlink" href="#calculate-prevalence" title="Link to this heading"></a></h1>
+<p>Calculate prevalence in an EMOD simulation</p>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
-<p>Plots age-prevalence curves using EMOD simulation outputs. Plots will show mean prevalence +/- 2 standard deviations.</p>
+<p>Defaults to calculating HIV prevalence, but also may be used to calculate fraction of PLHIV who know their status, ART coverage, or other measures involving a numerator and denominator.
+Prevalence = (numerator)/(denominator)</p>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">emodplot.age_prevalence</span><span class="p">(</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">calculate.prevalence</span><span class="p">(</span>
 <span class="w">  </span><span class="n">data</span><span class="p">,</span>
-<span class="w">  </span><span class="n">subset_years</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">2005</span><span class="p">),</span>
-<span class="w">  </span><span class="n">age_bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">15</span><span class="p">,</span><span class="w"> </span><span class="m">20</span><span class="p">,</span><span class="w"> </span><span class="m">25</span><span class="p">,</span><span class="w"> </span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="m">35</span><span class="p">,</span><span class="w"> </span><span class="m">40</span><span class="p">,</span><span class="w"> </span><span class="m">45</span><span class="p">,</span><span class="w"> </span><span class="m">50</span><span class="p">,</span><span class="w"> </span><span class="m">55</span><span class="p">,</span><span class="w"> </span><span class="m">60</span><span class="p">,</span><span class="w"> </span><span class="m">65</span><span class="p">,</span><span class="w"> </span><span class="m">99</span><span class="p">),</span>
-<span class="w">  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Age-Prevalence Curves&quot;</span>
+<span class="w">  </span><span class="n">stratify_columns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;Year&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Gender&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sim.id&quot;</span><span class="p">),</span>
+<span class="w">  </span><span class="n">numerator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Infected&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">denominator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Population&quot;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -117,23 +117,19 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data</span></code></p></td>
-<td><p>A tibble returned from read.simulation.results(…, stratify_columns = c(“Year”, “Age”,” “Gender”), aggregate_columns = c(“Population”,”Newly.Infected”, “Infected”)). More aggregate columns can be used, but more stratify columns will cause problems in the plot.</p></td>
+<td><p>A tibble returned from read.simulation.results()</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">subset_years</span></code></p></td>
-<td><p>list of years to plot</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stratify_columns</span></code></p></td>
+<td><p>List of strings, names of stratifying columns included in the <code class="docutils literal notranslate"><span class="pre">group_by</span></code> function call before aggregation. The list should include sim.id (or sim.ix) as an argument to calculate the prevalence for each individual simulation run.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">age_bins</span></code></p></td>
-<td><p>list of age bin boundaries, will be used to generate a vector of age bins formatted as “[age_0,age_1)”, “[age_1,age_2)”, etc</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">numerator</span></code></p></td>
+<td><p>String, name of prevalence numerator</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">title</span></code></p></td>
-<td><p>Plot Title</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">denominator</span></code></p></td>
+<td><p>String, name of prevalence denominator</p></td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="value">
-<h2>Value<a class="headerlink" href="#value" title="Link to this heading"></a></h2>
-<p>ggplot of age-prevalence curves</p>
 </section>
 </section>
 
@@ -141,8 +137,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="calculate.tests.performed.html" class="btn btn-neutral float-left" title="calculate.tests.performed" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="emodplot.prevalence.html" class="btn btn-neutral float-right" title="emodplot.prevalence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="calculate.pop_scaling_factor.html" class="btn btn-neutral float-left" title="calculate.pop_scaling_factor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="calculate.tests.performed.html" class="btn btn-neutral float-right" title="calculate.tests.performed" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

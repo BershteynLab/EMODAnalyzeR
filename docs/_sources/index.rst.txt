@@ -53,6 +53,7 @@ Usage
    functions/calculate.DALY.md
    functions/calculate.incidence.md
    functions/calculate.pop_scaling_factor.md
+   functions/calculate.prevalence.md
    functions/calculate.tests.performed.md
    functions/emodplot.age_prevalence.md
    functions/emodplot.prevalence.md
