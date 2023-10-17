@@ -98,7 +98,7 @@ read.simulation.results.bigpurple <- function(experiment_path,
     data.list[[i]]$sim.id <- paste0(f)
     data.list[[i]]$sim.ix <- i
     data.list[[i]]$scenario_name <- scenario_name
-    if (verbose) print(paste0("Done Reading File ", i))
+    if (verbose) print(paste0("Done Reading File ", i)) # nocov
   }
 
   bind_rows(data.list)
