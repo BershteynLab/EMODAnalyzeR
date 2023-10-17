@@ -1,4 +1,4 @@
-
+# nocov start
 bigpurple.add_slurm_to_path <- function() {
   old_path <- Sys.getenv("PATH")
   Sys.setenv(PATH = paste(old_path, "/cm/shared/apps/slurm/current/bin/", sep = ":"))
@@ -29,3 +29,4 @@ bigpurple.run_on_each_sim <- function(path,
   files = as.list(list.files(path, recursive = F, full.names = T))
   Slurm_lapply(files, apply_fun, sbatch_opt=bigpurple_opts, njobs=length(files))
 }
+# nocov end
