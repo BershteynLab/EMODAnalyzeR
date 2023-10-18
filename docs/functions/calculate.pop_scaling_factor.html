@@ -11,13 +11,15 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="calculate.tests.performed" href="calculate.tests.performed.html" />
+    <link rel="next" title="calculate.prevalence" href="calculate.prevalence.html" />
     <link rel="prev" title="calculate.incidence" href="calculate.incidence.html" /> 
 </head>
 
@@ -53,6 +55,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#value">Value</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="calculate.prevalence.html"><code class="docutils literal notranslate"><span class="pre">calculate.prevalence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.tests.performed.html"><code class="docutils literal notranslate"><span class="pre">calculate.tests.performed</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="emodplot.age_prevalence.html"><code class="docutils literal notranslate"><span class="pre">emodplot.age_prevalence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="emodplot.prevalence.html"><code class="docutils literal notranslate"><span class="pre">emodplot.prevalence</span></code></a></li>
@@ -87,18 +90,18 @@
            <div itemprop="articleBody">
              
   <section id="calculate-pop-scaling-factor">
-<h1><code class="docutils literal notranslate"><span class="pre">calculate.pop_scaling_factor</span></code><a class="headerlink" href="#calculate-pop-scaling-factor" title="Permalink to this heading"></a></h1>
+<h1><code class="docutils literal notranslate"><span class="pre">calculate.pop_scaling_factor</span></code><a class="headerlink" href="#calculate-pop-scaling-factor" title="Link to this heading"></a></h1>
 <p>Calculate the scaling factor for a population run on EMOD. Typically when we run EMOD, we scale down our population for the sake of
 computation costs. In order to get correct counts of different statuses (i.e., number of people who died from HIV), we need to scale our data.
 This function will not scale the data, rather it will add a scaling-factor column to the data that you can multiply any column of interest by.</p>
 <section id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
 <p>Calculate the scaling factor for a population run on EMOD. Typically when we run EMOD, we scale down our population for the sake of
 computation costs. In order to get correct counts of different statuses (i.e., number of people who died from HIV), we need to scale our data.
 This function will not scale the data, rather it will add a scaling-factor column to the data that you can multiply any column of interest by.</p>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">calculate.pop_scaling_factor</span><span class="p">(</span>
 <span class="w">  </span><span class="n">data</span><span class="p">,</span>
 <span class="w">  </span><span class="n">reference_year</span><span class="p">,</span>
@@ -110,7 +113,7 @@ This function will not scale the data, rather it will add a scaling-factor colum
 </div>
 </section>
 <section id="arguments">
-<h2>Arguments<a class="headerlink" href="#arguments" title="Permalink to this heading"></a></h2>
+<h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading"></a></h2>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Argument</p></th>
@@ -131,7 +134,7 @@ This function will not scale the data, rather it will add a scaling-factor colum
 </table>
 </section>
 <section id="value">
-<h2>Value<a class="headerlink" href="#value" title="Permalink to this heading"></a></h2>
+<h2>Value<a class="headerlink" href="#value" title="Link to this heading"></a></h2>
 <p>A tibble with all original columns found in “data”, plus a column for pop_scaling_factor</p>
 </section>
 </section>
@@ -141,7 +144,7 @@ This function will not scale the data, rather it will add a scaling-factor colum
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="calculate.incidence.html" class="btn btn-neutral float-left" title="calculate.incidence" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="calculate.tests.performed.html" class="btn btn-neutral float-right" title="calculate.tests.performed" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="calculate.prevalence.html" class="btn btn-neutral float-right" title="calculate.prevalence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -11,9 +11,11 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -53,6 +55,7 @@
 <li class="toctree-l1"><a class="reference internal" href="calculate.DALY.html"><code class="docutils literal notranslate"><span class="pre">calculate.DALY</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.incidence.html"><code class="docutils literal notranslate"><span class="pre">calculate.incidence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.pop_scaling_factor.html"><code class="docutils literal notranslate"><span class="pre">calculate.pop_scaling_factor</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="calculate.prevalence.html"><code class="docutils literal notranslate"><span class="pre">calculate.prevalence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="calculate.tests.performed.html"><code class="docutils literal notranslate"><span class="pre">calculate.tests.performed</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="emodplot.age_prevalence.html"><code class="docutils literal notranslate"><span class="pre">emodplot.age_prevalence</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="emodplot.prevalence.html"><code class="docutils literal notranslate"><span class="pre">emodplot.prevalence</span></code></a></li>
@@ -87,22 +90,22 @@
            <div itemprop="articleBody">
              
   <section id="calculate-bounds-two-sigma">
-<h1><code class="docutils literal notranslate"><span class="pre">calculate.bounds.two_sigma</span></code><a class="headerlink" href="#calculate-bounds-two-sigma" title="Permalink to this heading"></a></h1>
+<h1><code class="docutils literal notranslate"><span class="pre">calculate.bounds.two_sigma</span></code><a class="headerlink" href="#calculate-bounds-two-sigma" title="Link to this heading"></a></h1>
 <p>Calculate the 95 percent confidence interval of an estimate given 2 sigma. This is used to
 calculate confidence intervals from EMOD calibration data that comes from a Gaussian distribution</p>
 <section id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
 <p>Calculate the 95 percent confidence interval of an estimate given 2 sigma. This is used to
 calculate confidence intervals from EMOD calibration data that comes from a Gaussian distribution</p>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">calculate.bounds.two_sigma</span><span class="p">(</span><span class="n">mean_vector</span><span class="p">,</span><span class="w"> </span><span class="n">two_sigma_vector</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="arguments">
-<h2>Arguments<a class="headerlink" href="#arguments" title="Permalink to this heading"></a></h2>
+<h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading"></a></h2>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Argument</p></th>
@@ -120,7 +123,7 @@ calculate confidence intervals from EMOD calibration data that comes from a Gaus
 </table>
 </section>
 <section id="value">
-<h2>Value<a class="headerlink" href="#value" title="Permalink to this heading"></a></h2>
+<h2>Value<a class="headerlink" href="#value" title="Link to this heading"></a></h2>
 <p>A data.frame with columns lb and ub corresponding to upper and lower bounds (95 % CI)</p>
 </section>
 </section>

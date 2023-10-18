@@ -1,0 +1,33 @@
+# `calculate.prevalence`
+
+Calculate prevalence in an EMOD simulation
+
+
+## Description
+
+Defaults to calculating HIV prevalence, but also may be used to calculate fraction of PLHIV who know their status, ART coverage, or other measures involving a numerator and denominator.
+ Prevalence = (numerator)/(denominator)
+
+
+## Usage
+
+```r
+calculate.prevalence(
+  data,
+  stratify_columns = c("Year", "Gender", "sim.id"),
+  numerator = "Infected",
+  denominator = "Population"
+)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+`data`     |     A tibble returned from read.simulation.results()
+`stratify_columns`     |     List of strings, names of stratifying columns included in the `group_by` function call before aggregation. The list should include sim.id (or sim.ix) as an argument to calculate the prevalence for each individual simulation run.
+`numerator`     |     String, name of prevalence numerator
+`denominator`     |     String, name of prevalence denominator
+
+
