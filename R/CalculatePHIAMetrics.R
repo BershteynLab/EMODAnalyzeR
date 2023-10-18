@@ -70,7 +70,7 @@ calculate.phia_survey.effective_count = function(input) {
     mean_fitted[row_iter]     = (alpha_optimized[row_iter])/(alpha_optimized[row_iter] + beta_optimized[row_iter])
 
 
-    effective_count[row_iter] = alpha_optimized[row_iter] + beta_optimized[row_iter] - 1
+    effective_count[row_iter] = alpha_optimized[row_iter] + beta_optimized[row_iter]
 
     print(paste(input$Year,input$Province, input$Gender, input$AgeBin, "alpha=",alpha_optimized[row_iter], "beta=",beta_optimized[row_iter],sep=" "))
     print(paste("Was aiming for mean of ", input[row_iter,'prevalence'], "and got",   mean_fitted[row_iter] ))
@@ -92,3 +92,4 @@ calculate.phia_survey.effective_count = function(input) {
   input$pct_diff_upper  <- (input$upper_fitted-input$upper)/input$upper_fitted
   input
 }
+
