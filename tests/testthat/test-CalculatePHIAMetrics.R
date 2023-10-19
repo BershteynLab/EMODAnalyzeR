@@ -21,3 +21,4 @@ test_that("calculate.phia_survey.effective_count can calculate inverse of qbeta"
   error = abs(effective_counts$effective_count-n)
   expect_true(all(error < 0.0001))
 })
+

@@ -38,10 +38,10 @@ calculate.incidence <- function(data,gender.breakdown = TRUE, debug = FALSE) {
   if (gender.breakdown == TRUE){
     # Aggregate number of new infections each year, broken down by Year_Integer and Gender
     trajectories_IR.1a <- aggregate(Newly.Infected ~ Year_Integer+Gender+sim.id+scenario_name, data=data,FUN=sum)
-    if (debug) print(head(trajectories_IR.1a, 10))
+    if (debug) print(head(trajectories_IR.1a, 10)) # nocov
     #Make the denominator as HIV-negative individuals
     trajectories_IR.2 <- aggregate(Population - Infected ~ Year+Gender+sim.id+scenario_name, data=data, FUN=sum)
-    if (debug) print(head(trajectories_IR.2,10))
+    if (debug) print(head(trajectories_IR.2,10)) # nocov
     trajectories_IR.2$Year_Integer <- floor(trajectories_IR.2$Year-0.5)
     #remove second instance of duplicate rows
     trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","Gender","sim.id","scenario_name")]),]
@@ -50,10 +50,10 @@ calculate.incidence <- function(data,gender.breakdown = TRUE, debug = FALSE) {
   } else {
     # Aggregate number of new infections each year, broken down by Year_Integer but not by Gender
     trajectories_IR.1a <- aggregate(Newly.Infected ~ Year_Integer+sim.id+scenario_name, data=data,FUN=sum)
-    if (debug) print(head(trajectories_IR.1a, 10))
+    if (debug) print(head(trajectories_IR.1a, 10)) # nocov
     #Make the denominator as HIV-negative individuals
     trajectories_IR.2 <- aggregate(Population - Infected ~ Year+sim.id+scenario_name, data=data, FUN=sum)
-    if (debug) print(head(trajectories_IR.2,10))
+    if (debug) print(head(trajectories_IR.2,10)) # nocov
     trajectories_IR.2$Year_Integer <- floor(trajectories_IR.2$Year-0.5)
     #remove second instance of duplicate rows
     trajectories_IR.2 <- trajectories_IR.2[!duplicated(trajectories_IR.2[c("Year_Integer","sim.id","scenario_name")]),]
@@ -61,7 +61,7 @@ calculate.incidence <- function(data,gender.breakdown = TRUE, debug = FALSE) {
     trajectories_IRoverall <- merge(trajectories_IR.1a, trajectories_IR.2, by=c("Year_Integer","sim.id","scenario_name"))
   }
 
-  trajectories_IRoverall$incidence <- trajectories_IRoverall$Newly.Infected / (trajectories_IRoverall$Population-(trajectories_IRoverall$Newly.Infected/2))
+  trajectories_IRoverall$incidence <- trajectories_IRoverall$Newly.Infected / (trajectories_IRoverall$Population)
   trajectories_IRoverall %>% dplyr::rename(Year = Year_Integer)
 
 }
@@ -81,11 +81,11 @@ calculate.tests.performed <- function(data, gender.breakdown = TRUE, debug = FAL
   if (gender.breakdown == TRUE){
     # Aggregate number of positive and negative tests, broken down by Year_Integer and Gender
     test.trajectories <- aggregate(cbind(Newly.Tested.Positive, Newly.Tested.Negative) ~ Year_Integer+Gender+sim.id+scenario_name, data=data,FUN=sum)
-    if (debug) print(head(test.trajectories, 10))
+    if (debug) print(head(test.trajectories, 10)) # nocov
   } else {
     # Aggregate number of positive and negative tests, broken down by Year_Integer but not by Gender
     test.trajectories <- aggregate(cbind(Newly.Tested.Positive, Newly.Tested.Negative) ~ Year_Integer+sim.id+scenario_name, data=data,FUN=sum)
-    if (debug) print(head(test.trajectories, 10))
+    if (debug) print(head(test.trajectories, 10)) # nocov
   }
   # Calculate Total Tests and Proportion of Positive Tests
   test.trajectories %>%
