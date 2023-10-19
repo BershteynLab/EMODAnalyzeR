@@ -22,5 +22,3 @@ test_that("calculate.phia_survey.effective_count can calculate inverse of qbeta"
   expect_true(all(error < 0.0001))
 })
 
-
-test_that("calculate.tests.performed ")
