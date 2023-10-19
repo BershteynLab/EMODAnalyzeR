@@ -76,7 +76,7 @@ calculate.incidence <- function(data,gender.breakdown = TRUE, debug = FALSE) {
 #' @return A tibble with columns Year; Number of Negative Tests performed; Number of Positive Tests performed; Total Tests performed; Proportion of Positive Tests performed.
 calculate.tests.performed <- function(data, gender.breakdown = TRUE, debug = FALSE) {
   # Group rows together by year
-  # data$Year_Integer <- floor((data$Year-0.5))
+  data$Year_Integer <- floor((data$Year-0.5))
 
   if (gender.breakdown == TRUE){
     # Aggregate number of positive and negative tests, broken down by Year_Integer and Gender
