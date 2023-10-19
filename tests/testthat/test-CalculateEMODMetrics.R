@@ -27,7 +27,7 @@ test_that("simple daly calculation", {
   expect_equal(sum(dalys$daly), 10. + 0.1*5 + 0.01*2)
 })
 
-test_that("calculate.incidence correctly calculates one person per gender getting infected each half-year") {
+test_that("calculate.incidence correctly calculates one person per gender getting infected each half-year", {
   Year = seq(2000.5,2004,0.5)
   Population = rep(100, length(Year)) + seq(length(Year))
   Infected = seq(length(Year))
@@ -38,9 +38,9 @@ test_that("calculate.incidence correctly calculates one person per gender gettin
   df = rbind(df_men, df_women) %>% mutate(sim.id=1, scenario_name="test")
   incidence = df %>% calculate.incidence() %>% mutate(error = abs(incidence - 0.02))
   expect_true(all(incidence$error == 0))
-}
+})
 
-test_that("calculate.incidence correctly calculates two people (both men+women) getting infected each half-year") {
+test_that("calculate.incidence correctly calculates two people (both men+women) getting infected each half-year", {
   Year = seq(2000.5,2004,0.5)
   Population = rep(100, length(Year)) + seq(length(Year))
   Infected = seq(length(Year))
@@ -51,10 +51,10 @@ test_that("calculate.incidence correctly calculates two people (both men+women) 
   df = rbind(df_men, df_women) %>% mutate(sim.id=1, scenario_name="test")
   incidence = df %>% calculate.incidence(gender.breakdown = FALSE) %>% mutate(error = abs(incidence - 0.02))
   expect_true(all(incidence$error == 0))
-}
+})
 
 
-test_that("calculate.prevalence correctly calculates two people (both men+women) getting infected each half-year") {
+test_that("calculate.prevalence correctly calculates two people (both men+women) getting infected each half-year", {
   Year = seq(2000.5,2004,0.5)
   Newly.Infected = rep(1, length(Year))
   Population = rep(100, length(Year))
@@ -66,9 +66,9 @@ test_that("calculate.prevalence correctly calculates two people (both men+women)
   df = rbind(df_men, df_women) %>% mutate(sim.id=1, scenario_name="test")
   prevalence = df %>% calculate.prevalence() %>% arrange(Gender)
   expect_true(all(prevalence$Prevalence == correct_prevalence))
-}
+})
 
-test_that("calculate.tests.performed correctly calculates 25% positive proportions") {
+test_that("calculate.tests.performed correctly calculates 25% positive proportions", {
   Year = seq(2000.5,2004,0.5)
   Newly.Tested.Positive = rep(25, length(Year))
   Newly.Tested.Negative = rep(75, length(Year))
@@ -79,6 +79,6 @@ test_that("calculate.tests.performed correctly calculates 25% positive proportio
   tests = df %>% calculate.tests.performed()
   correct_proportion = rep(0.25,nrow(df)/2) # divided by 4 because we aggregate gender and 
   expect_true(all(tests$Proportion.Positive.Tests == correct_proportion))
-}
+})
 
 
