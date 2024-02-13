@@ -132,7 +132,7 @@ read.ingest.file <- function(ingest_filename) {
   site_data <- read_excel(ingest_filename, "Site")
   site_t = t(site_data)
   colnames(site_t) <- site_t[1,]
-  site_t = site_t[-1,]
+  site_t = site_t[-1,, drop=F ]
   sites = sapply(site_t[,'Node number'], as.numeric)
   names(sites) = site_t[,"Node name"]
   datasets[['site_map']] = sites
