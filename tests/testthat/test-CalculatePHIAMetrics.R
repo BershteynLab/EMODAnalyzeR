@@ -9,6 +9,17 @@ test_that("calculate.phia_survey.prevalence matches PHIA website", {
   expect_equal(ci, ci_from_phia_site)
 })
 
+test_that("calculate.phia_survey.art_coverage matches PHIA website", {
+  phia_data = readRDS("../test_data/TestZamphiaRead.RDS")
+  ci = calculate.phia_survey.art_coverage(phia_data, age_min_inclusive = 15, age_max_inclusive = 49)
+  ci_from_phia_site = data.frame(art_coverage=c(0.599,0.617,0.567),
+                                 lb=        c(0.571,0.585,0.522),
+                                 ub=        c(0.628,0.649,0.613),
+                                 gender=c("all","female","male"))
+  ci[,c("art_coverage","lb","ub")] = round(ci[,c("art_coverage","lb","ub")],3)
+  expect_equal(ci, ci_from_phia_site)
+})
+
 test_that("calculate.phia_survey.effective_count can calculate inverse of qbeta", {
   n = 100
   set.seed(1993)
