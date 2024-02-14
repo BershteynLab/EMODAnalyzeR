@@ -117,17 +117,17 @@ report.calibration.results <- function(experiment_path, ingest_file_path, pop_sc
           filter(Age >= plottopics.prevalence$age.min[i_row] &
                    Age < ( plottopics.prevalence$age.max[i_row] ) ) %>%
           dplyr::group_by(Year, Gender, sim.id, scenario_name) %>%
-          dplyr::summarize(Population = sum(Infected), Infected = sum(On_ART))
+          dplyr::summarize(Infected = sum(Infected), On_ART = sum(On_ART))
       } else {
         this.sim.data = data %>%
           filter(Age >= plottopics.prevalence$age.min[i_row] &
                    Age < ( plottopics.prevalence$age.max[i_row] ) &
                    ingest_data[["site_map"]][[plottopics.prevalence[[i_row,'Province']]]] == NodeId) %>%
           dplyr::group_by(Year, Gender, sim.id, scenario_name) %>%
-          dplyr::summarize(Population = sum(Infected), Infected = sum(On_ART))
+          dplyr::summarize(Infected = sum(Infected), On_ART = sum(On_ART))
       }
 
-      emodplot.prevalence(this.sim.data %>% mutate(Population = Population + 1), 2000, 2025) +
+      emodplot.artcoverage(this.sim.data %>% mutate(Population = Population + 1), 2000, 2025,title = paste0("ART Coverage ", plottopics.prevalence[[i_row,'AgeBin']])) +
         geom_point(data = actuals, aes(x=Year, y=ARTCoverage)) +
         geom_errorbar(data = actuals, aes(x=Year, ymin=lb, ymax=ub), color="black", width=2, size=1)
 
