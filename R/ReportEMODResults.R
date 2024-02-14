@@ -127,7 +127,7 @@ report.calibration.results <- function(experiment_path, ingest_file_path, pop_sc
           dplyr::summarize(Infected = sum(Infected), On_ART = sum(On_ART))
       }
 
-      emodplot.artcoverage(this.sim.data %>% mutate(Population = Population + 1), 2000, 2025,title = paste0("ART Coverage ", plottopics.prevalence[[i_row,'AgeBin']])) +
+      emodplot.artcoverage(this.sim.data %>% mutate(Infected = if_else(Infected == 0, 1, Infected)), 2000, 2025,title = paste0("ART Coverage ", plottopics.prevalence[[i_row,'AgeBin']])) +
         geom_point(data = actuals, aes(x=Year, y=ARTCoverage)) +
         geom_errorbar(data = actuals, aes(x=Year, ymin=lb, ymax=ub), color="black", width=2, size=1)
 
