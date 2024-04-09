@@ -23,7 +23,8 @@ Imports:
     rsample,
     survey,
     haven,
-    slurmR
+    slurmR,
+    rjson
 RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)

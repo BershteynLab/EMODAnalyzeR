@@ -14,6 +14,7 @@
 # library(data.table)
 # library(tidyr)
 # library(stringr)
+# library(rjson)
 
 read.each_sim_by_age_and_gender <- function (filename, summarize_columns, stratify_columns, min_age_inclusive = 0, max_age_inclusive = Inf) {
   data.table::fread(filename, check.names = TRUE) %>%
@@ -96,7 +97,8 @@ read.simulation.results.bigpurple <- function(experiment_path,
     f <- paste(folder.list[i], "output/ReportHIVByAgeAndGender.csv", sep="/")
     data.list[[i]] <- read.each_sim_by_age_and_gender(f, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
     data.list[[i]]$sim.id <- paste0(f)
-    data.list[[i]]$sim.ix <- i
+    tags.json.filename <- paste0(folder.list[i], "/tags.json")
+    data.list[[i]]$sim.ix <- fromJSON(file = tags.json.filename)$parameterization_id
     data.list[[i]]$scenario_name <- scenario_name
     if (verbose) print(paste0("Done Reading File ", i))
   }
