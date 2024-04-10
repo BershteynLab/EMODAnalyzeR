@@ -132,7 +132,7 @@ emodplot.art <- function(data,
                          date.start,
                          date.end, 
                          plot.runs = TRUE) {
-  data <- data %>% mutate(On_ART_scaled = pop.scaling.factor * On_ART)
+  data <- data %>% mutate(On_ART_scaled = pop_scaling_factor * On_ART)
   p <- emodplot.by_gender(data,date.start,date.end,'On_ART_scaled',plot.runs = plot.runs) +
     ylab("Number on ART")
   return(p)
