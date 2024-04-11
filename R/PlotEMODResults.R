@@ -12,13 +12,15 @@ colors = c("#0072b2","#009e73","#cc79a7")
 #' @param col2plot string of column name you want to plot (i.e., "Infected")
 #' @param title string of plot title (i.e., "Infected Plot")
 #' @param unit string of the units for col2plot (i.e., "(Number of People)")
+#' @param plot.runs binary which controls whether the individual simulation runs are plotted alongside the mean. Defaults to TRUE.
 #' @return a ggplot with all data plotted
 emodplot.by_gender <- function(data,
-                         date.start,
-                         date.end,
-                         col2plot,
-                         title="",
-                         unit="") {
+                        date.start,
+                        date.end,
+                        col2plot,
+                        title="",
+                        unit="",
+                        plot.runs = TRUE) {
   nScenarios = length(unique(data$scenario_name))
   if (nScenarios == 1) {
     colors2plot <- c('blue3')
@@ -27,15 +29,20 @@ emodplot.by_gender <- function(data,
   }
   data <- data %>% mutate(Gender = case_when(Gender==0 ~ "Male", Gender==1 ~ "Female"))
   data['col2plot'] = data[col2plot]
-data.mean <- data %>%
+
+  data.mean <- data %>%
     dplyr::group_by(Year, Gender, scenario_name) %>%
     dplyr::summarise(mean.col2plot = mean(col2plot), .groups = 'keep')
-    ggplot(data=subset(data, (date.start <= Year) & (Year <= date.end))) +
-    geom_point(size=1.0, aes(x=Year, y=col2plot*1, group=sim.id, color=scenario_name), alpha=0.005) +
+
+  plt.data <- ggplot(data=subset(data, (date.start <= Year) & (Year <= date.end))) 
+  
+  if (plot.runs){
+    plt.data <- plt.data + geom_point(size=0.5, aes(x=Year, y=col2plot*1, group=sim.id, color=scenario_name), alpha=0.005)
+  }
+  
+  plt.data <- plt.data +
     geom_line(data=subset(data.mean, (date.start <= Year) & (Year <= date.end)),
               aes(x=Year, y=mean.col2plot*1, group=scenario_name, color=scenario_name), linewidth=1.5) +
-    # geom_point(data = prevalence.data, size=2, color = "black", aes(x=Year, y=Prevalence*1)) +
-    # geom_errorbar(data = prevalence.data, aes(x=Year, ymin=lb*1, ymax=ub*1), color="black", width=2, size=1) +
     facet_wrap(~ Gender, ncol=2) +
     xlab("Year")+
     #xlim(c(date.start, date.end)) +
@@ -49,6 +56,8 @@ data.mean <- data %>%
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_color_manual(values=colors2plot) +
     labs(title= title)
+
+  return(plt.data)
 }
 
 
@@ -58,29 +67,35 @@ data.mean <- data %>%
 #' More aggregate columns can be used, but more stratify columns will cause problems in the plot.
 #' @param date.start integer year to start the plotting (i.e., 2000)
 #' @param date.end integer year to end the plotting (i.e., 2030)
+#' @param plot.runs binary which controls whether the individual simulation runs are plotted alongside the mean. Defaults to TRUE.
 #' @return a ggplot with prevalence plotted
 #'
 emodplot.prevalence <- function(data,
-                           date.start,
-                           date.end,
-                           title = "HIV prevalence") {
+                          date.start,
+                          date.end,
+                          title = "HIV prevalence",
+                          plot.runs = TRUE) {
   data <- calculate.prevalence(data,
                            stratify_columns = c("Year", "Gender", "sim.id", "scenario_name"),
                            numerator = "Infected",
                            denominator = "Population")
   y.lim.max <- min(max(data$Prevalence) * 1.2, 1)
-  p <- emodplot.by_gender(data, date.start, date.end, 'Prevalence', title=title ) +
-    scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0, y.lim.max,0.25), limits=c(0,y.lim.max)) +
-    ylab("HIV Prevalence (%)")
-  return(p)
+  
+  p <- emodplot.by_gender(data, date.start, date.end, col2plot = 'Prevalence', title=title, plot.runs = plot.runs) +
+      scale_y_continuous(labels = scales::percent_format(accuracy = 1), 
+        breaks = seq(0, y.lim.max, max(ceiling(y.lim.max/5/.05)*.05, .05)), 
+        limits=c(0,y.lim.max)) +
+      ylab("HIV Prevalence (%)")
 
+  return(p)
 }
 
 emodplot.artcoverage <- function(data,
                                 date.start,
                                 date.end,
                                 title = "ART Coverage",
-                                node_id = "All") {
+                                node_id = "All",
+                                plot.runs = TRUE) {
   if (str_to_lower(node_id) != "all") {
     data <- data %>% filter(NodeId == node_id)
   }
@@ -89,19 +104,24 @@ emodplot.artcoverage <- function(data,
                          numerator = "On_ART",
                          denominator = "Infected")
   y.lim.max <- min(max(data$Prevalence) * 1.2, 1.0)
-  emodplot.by_gender(data, date.start, date.end, 'Prevalence', title=title ) +
-    scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0, y.lim.max,0.25), limits=c(0,y.lim.max)) +
-    ylab("ART Coverage\n (% of Infected)")
 
+  p <- emodplot.by_gender(data, date.start, date.end, col2plot = 'Prevalence', title=title, plot.runs = plot.runs) +
+      scale_y_continuous(labels = scales::percent_format(accuracy = 1), 
+        breaks = seq(0, y.lim.max, max(ceiling(y.lim.max/5/.05)*.05, .05)), 
+        limits=c(0,y.lim.max)) +
+      ylab("ART Coverage\n (% of Infected)")
+    
+  return(p)
 }
 
 
 emodplot.incidence <- function(data,
-                            date.start,
-                            date.end) {
+                               date.start,
+                               date.end, 
+                               plot.runs = TRUE) {
   data.incidence <- EMODAnalyzeR::calculate.incidence(data)
   y.lim.max <- min(max(data.incidence$incidence) * 1.2, 1)
-  p <- emodplot.by_gender(data.incidence,date.start,date.end,'incidence') +
+  p <- emodplot.by_gender(data.incidence,date.start,date.end,'incidence', plot.runs = plot.runs) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks = seq(0,y.lim.max,0.005),limits=c(0,y.lim.max)) +
     ylab("HIV Incidence (%)")
   return(p)
@@ -109,12 +129,12 @@ emodplot.incidence <- function(data,
 
 
 emodplot.art <- function(data,
-                     date.start,
-                     date.end) {
-
-  data$On_Art_scaled <- data$pop_scaling_factor * data$On_ART
-  p <- emodplot.by_gender(data,date.start,date.end,'On_Art_scaled') +
-    ylab("Number on Art")
+                         date.start,
+                         date.end, 
+                         plot.runs = TRUE) {
+  data <- data %>% mutate(On_ART_scaled = pop_scaling_factor * On_ART)
+  p <- emodplot.by_gender(data,date.start,date.end,'On_ART_scaled',plot.runs = plot.runs) +
+    ylab("Number on ART")
   return(p)
 }
 
