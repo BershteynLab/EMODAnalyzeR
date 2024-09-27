@@ -1,10 +1,10 @@
-library(devtools)
-install_github("BershteynLab/EMODAnalyzeR")
+#library(devtools)
+#install_github("BershteynLab/EMODAnalyzeR")
 
 library(EMODAnalyzeR)
 
 # insert path to your reportbyageandgender files
-path_to_report_by_age_and_gender <- "C:/Users/kaftad01/Code/EMODAnalysisInR/EMODAnalyzeR/tests/test_data/ReportHIVByAgeAndGender"
+path_to_report_by_age_and_gender <- "C:/Users/kaftad01/Documents/EMOD/RachelError"
 
 # insert path to ingest file. For Nyanza, you can download from https://www.dropbox.com/s/wkylqakjxkyzffb/calibration_ingest_form_Nyanza.xlsm?dl=0
 # ingest file contains data used for calibration (prevalence, etc)

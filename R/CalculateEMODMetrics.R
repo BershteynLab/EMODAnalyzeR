@@ -32,6 +32,7 @@ calculate.prevalence <- function(data, stratify_columns = c("Year", "Gender", "s
 #' @param debug - Boolean which controls whether function returns intermediate results. Defaults to TRUE.
 #' @return A tibble with columns incidence and Year
 calculate.incidence <- function(data,gender.breakdown = TRUE, debug = FALSE) {
+  data <- data %>% to_tibble()
   # Group rows together by year
   data$Year_Integer <- floor((data$Year-0.5))
 
@@ -75,6 +76,7 @@ calculate.incidence <- function(data,gender.breakdown = TRUE, debug = FALSE) {
 #' @param debug - Boolean which controls whether function returns intermediate results. Defaults to TRUE.
 #' @return A tibble with columns Year; Number of Negative Tests performed; Number of Positive Tests performed; Total Tests performed; Proportion of Positive Tests performed.
 calculate.tests.performed <- function(data, gender.breakdown = TRUE, debug = FALSE) {
+  data <- data %>% to_tibble()
   # Group rows together by year
   data$Year_Integer <- floor((data$Year-0.5))
 
@@ -106,6 +108,7 @@ calculate.tests.performed <- function(data, gender.breakdown = TRUE, debug = FAL
 #' @param reference_population the actual population of the area being studied at the time of "reference_year"
 #' @return A tibble with all original columns found in "data", plus a column for pop_scaling_factor
 calculate.pop_scaling_factor <- function(data, reference_year, reference_population, age_min_inclusive=0, age_max_inclusive = 200) {
+  data <- data %>% to_tibble()
   data.within.age <- data %>%
     filter((Age >= age_min_inclusive) & (Age <= age_max_inclusive))
   for_pop_scaling_factor <- aggregate(Population ~ Year + sim.id + scenario_name,
@@ -136,6 +139,7 @@ calculate.pop_scaling_factor <- function(data, reference_year, reference_populat
 #' @param discount_percent The compounding percent to reduce DALY each year in the future
 #' @return A tibble with columns year, daly, and daly_future_discounted
 calculate.DALY <- function(data,   infected_weight = 0.274, art_weight = 0.078, discount_start_year = 2023, discount_percent = 0.03, life_expectancy = 80) {
+  data <- data %>% to_tibble()
   data_by_age_year <- data %>%
                       dplyr::group_by(Year, Age, sim.id, scenario_name) %>%
                       dplyr::summarise(Died_from_HIV = sum(Died_from_HIV),

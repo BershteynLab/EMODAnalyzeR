@@ -16,14 +16,61 @@
 # library(stringr)
 # library(rjson)
 
-read.each_sim_by_age_and_gender <- function (filename, summarize_columns, stratify_columns, min_age_inclusive = 0, max_age_inclusive = Inf) {
-  data.table::fread(filename, check.names = TRUE) %>%
+EMODSim <- setClass("EMODSim",
+                    slots=c(path="character", scenario="character", load_fun="function", cached="logical"),
+                    )
+
+EMODSimList <- setClass("EMODSimList",
+                        contains=c("list"))
+
+
+
+read.each_sim_by_age_and_gender <- function (filename, event_count_columns, census_columns, stratify_columns, sim.id, scenario_name, min_age_inclusive = 0, max_age_inclusive = Inf) {
+  summarize_columns = c(event_count_columns, census_columns)
+  raw_tibble <- data.table::fread(filename, check.names = TRUE) %>%
     filter( (Age >= min_age_inclusive) & (Age <= max_age_inclusive) ) %>%
     group_by_at(stratify_columns) %>%
     summarise_at(summarize_columns, sum, na.rm=T) %>%
-    ungroup()
+    ungroup() %>%
+    mutate(scenario_name=scenario_name, sim.id=sim.id)
+  attr(raw_tibble, "event_count_columns") <- c(event_count_columns, "sim.id", "scenario_name")
+  attr(raw_tibble, "census_columns") <- census_columns
+  attr(raw_tibble, "stratify_columns") <- stratify_columns
+  raw_tibble
 }
 
+
+cached_load_factory <- function( f, 
+                                 event_count_columns, 
+                                 census_columns,
+                                 stratify_columns,
+                                 sim.id,
+                                 scenario_name,
+                                 min_age_inclusive, 
+                                 max_age_inclusive ) {
+  f;
+  event_count_columns;
+  census_columns;
+  stratify_columns;
+  sim.id;
+  scenario_name;
+  min_age_inclusive;
+  max_age_inclusive;
+  cache <- NULL
+  function() {
+    if (is.null(cache)) {
+      cache <<- read.each_sim_by_age_and_gender(f, 
+                                                event_count_columns, 
+                                                census_columns,
+                                                stratify_columns,
+                                                sim.id,
+                                                scenario_name,
+                                                min_age_inclusive, 
+                                                max_age_inclusive )
+    }
+    cache
+  }
+}
 
 #' Read results of an EMOD simulation
 #' @details The results of an EMOD simulation are stored in a series of csv files titled "ReportHIVByAgeAndGender.csv". One of these files exists for each
@@ -37,12 +84,12 @@ read.each_sim_by_age_and_gender <- function (filename, summarize_columns, strati
 #' @return A tibble with columns incidence and Year
 read.simulation.results <- function(results_path,
                                   scenario_name,
-                                  summarize_columns = c("Newly.Infected", "Newly.Tested.Positive",
-                                                        "Newly.Tested.Negative","Population",
-                                                        "Infected", "On_ART","Died", "Died_from_HIV",
-                                                        "Tested.Past.Year.or.On_ART", "Tested.Ever",
-                                                        "Diagnosed"),
-                                  stratify_columns = c("Year", "Gender"),
+                                  event_count_columns = c("Newly.Infected", "Newly.Tested.Positive",
+                                                          "Newly.Tested.Negative","Died", "Died_from_HIV"),
+                                  census_columns       = c("Population","Infected", "On_ART",
+                                                          "Tested.Past.Year.or.On_ART", "Tested.Ever",
+                                                          "Diagnosed"),
+                                  stratify_columns  = c("Year", "Gender"),
                                   min_age_inclusive = 15,
                                   max_age_inclusive = 49) {
   ### Read 250 simulation and aggregate by age 15+
@@ -50,17 +97,26 @@ read.simulation.results <- function(results_path,
 
   n_runs_to_analyze = length(file_list)
   print(paste('Found',as.character(n_runs_to_analyze),'output files for scenario',scenario_name))
-  data.list <- list()
+  sims = vector()
+  data.list = EMODSimList()
   for (i in seq(1,length(file_list),1)){
     f <- paste(results_path, file_list[i], sep="/")
-    data.list[[i]] <- read.each_sim_by_age_and_gender(f, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
-    data.list[[i]]$sim.id <- paste0(f)
-    data.list[[i]]$sim.ix <- i
-    data.list[[i]]$scenario_name <- scenario_name
-    print(paste0("Done Reading File ", i))
+    print(file_list[i])
+    sim <- EMODSim(
+      path=f, 
+      scenario=scenario_name, 
+      load_fun=cached_load_factory(f, 
+                                   event_count_columns, 
+                                   census_columns,
+                                   stratify_columns,
+                                   file_list[i],
+                                   scenario_name,
+                                   min_age_inclusive, 
+                                   max_age_inclusive ),
+      cached=F)
+    data.list[[i]] <- sim
   }
-
-  bind_rows(data.list)
+  data.list
 }
 
 #' Read results of an EMOD simulation from its original location off the BigPurple filesystem
