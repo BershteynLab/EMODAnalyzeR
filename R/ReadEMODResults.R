@@ -90,8 +90,8 @@ read.simulation.results <- function(results_path,
                                                           "Tested.Past.Year.or.On_ART", "Tested.Ever",
                                                           "Diagnosed"),
                                   stratify_columns  = c("Year", "Gender"),
-                                  min_age_inclusive = 15,
-                                  max_age_inclusive = 49) {
+                                  min_age_inclusive = 0,
+                                  max_age_inclusive = Inf) {
   ### Read 250 simulation and aggregate by age 15+
   file_list = list.files(results_path, full.names = F, recursive=F)
 
@@ -134,14 +134,14 @@ read.simulation.results <- function(results_path,
 #' @return A tibble with columns incidence and Year
 read.simulation.results.bigpurple <- function(experiment_path,
                                     scenario_name,
-                                    summarize_columns = c("Newly.Infected", "Newly.Tested.Positive",
-                                                          "Newly.Tested.Negative","Population",
-                                                          "Infected", "On_ART","Died", "Died_from_HIV",
-                                                          "Tested.Past.Year.or.On_ART", "Tested.Ever",
-                                                          "Diagnosed"),
+                                    event_count_columns = c("Newly.Infected", "Newly.Tested.Positive",
+                                                            "Newly.Tested.Negative","Died", "Died_from_HIV"),
+                                    census_columns       = c("Population","Infected", "On_ART",
+                                                             "Tested.Past.Year.or.On_ART", "Tested.Ever",
+                                                             "Diagnosed"),
                                     stratify_columns = c("Year", "Gender"),
-                                    min_age_inclusive = 15,
-                                    max_age_inclusive = 49,
+                                    min_age_inclusive = 0,
+                                    max_age_inclusive = Inf,
                                     verbose = FALSE) {
   ### Read 250 simulation and aggregate by age 15+
   folder.list = Sys.glob(paste0(experiment_path, "/Simulation_*"))
