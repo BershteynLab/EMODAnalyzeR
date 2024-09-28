@@ -1,9 +1,10 @@
-emodrun_by_sim.local <- function(proc_function, eMODSims) {
-  sims %>%
-    lapply(function(sim) {sim@load_fun() %>% proc_function}) %>%
-    bind_rows()
+emodrun_by_sim.local <- function(proc_function) {
+  eMODSims %>%
+    as_tibble %>%
+    proc_function
 }
 
+emod_data_wrapper <- function(eMODSims) {. %>% function(_) {eMODSims}}
 
 bigpurple.add_slurm_to_path <- function() {
   old_path <- Sys.getenv("PATH")
@@ -24,8 +25,17 @@ emodrun_by_sim.slurm <- function(proc_function,
   if (class(eMODSims) != "EMODSimList") {
     stop("ERROR: emodrun_by_sim.slurm expecting type EMODSimList. \n EMODSimList is returned by read.simulation.results, and will change classes if any dplyr functions are run on it.")
   }
+  class(eMODSims)<-"list"
+  class(proc_function)<-"function"
   if (!slurm_available()) {
     bigpurple.add_slurm_to_path()
   }
   Slurm_lapply(eMODSims, proc_function, sbatch_opt=bigpurple_opts, njobs=length(eMODSims), job_name=random_job_name())
 }
+
+sims %>%
+  emod_data_wrapper %>%
+   group_by(Gender, sim.id) %>%
+   summarize(sum(Infected)) %>% 
+   exec()
+
