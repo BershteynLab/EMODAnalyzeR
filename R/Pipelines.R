@@ -1,4 +1,4 @@
-emodrun_by_sim.local <- function(proc_function) {
+emodrun_by_sim.local <- function(proc_function, eMODSims) {
   eMODSims %>%
     as_tibble %>%
     proc_function
