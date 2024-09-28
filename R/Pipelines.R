@@ -29,7 +29,12 @@ emodrun_by_sim.slurm <- function(proc_function,
   if (!slurm_available()) {
     bigpurple.add_slurm_to_path()
   }
-  Slurm_lapply(eMODSims, proc_function, sbatch_opt=bigpurple_opts, njobs=length(eMODSims), job_name=random_job_name())
+  l_results = Slurm_lapply(eMODSims, proc_function, sbatch_opt=bigpurple_opts, njobs=length(eMODSims), job_name=random_job_name())
+  if (any(class(l_results[[1]]) == "data.frame")) {
+    return(bind_rows(l_results))
+  } else {
+    return (l_results)
+  }
 }
 
 
