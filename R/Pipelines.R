@@ -4,7 +4,6 @@ emodrun_by_sim.local <- function(proc_function) {
     proc_function
 }
 
-emod_data_wrapper <- function(eMODSims) {. %>% function(_) {eMODSims}}
 
 bigpurple.add_slurm_to_path <- function() {
   old_path <- Sys.getenv("PATH")
