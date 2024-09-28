@@ -32,9 +32,4 @@ emodrun_by_sim.slurm <- function(proc_function,
   Slurm_lapply(eMODSims, proc_function, sbatch_opt=bigpurple_opts, njobs=length(eMODSims), job_name=random_job_name())
 }
 
-sims %>%
-  emod_data_wrapper %>%
-   group_by(Gender, sim.id) %>%
-   summarize(sum(Infected)) %>% 
-   exec()
 
