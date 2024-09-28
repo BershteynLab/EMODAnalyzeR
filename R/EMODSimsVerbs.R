@@ -10,6 +10,20 @@ filter.EMODSim <- function(.data, ...) {
     filter(...)
 }
 
+c_EMODSimList <- function(l_) {
+  for (item in l_) {
+    class(item) <- "list"
+  }
+  list_output = c(l_)
+  class(list_output) <- "EMODSimList"
+  list_output
+}
+
+c.EMODSimList <- function(...) {
+  l_items = list(...)
+  suppressWarnings(c_EMODSimList(l_items))
+}
+
 
 as_tibble.EMODSimList <- function(sims){
   sims %>%
