@@ -11,12 +11,16 @@ filter.EMODSim <- function(.data, ...) {
 }
 
 c_EMODSimList <- function(l_) {
+  i = 1
+  outlist = list()
   for (item in l_) {
-    class(item) <- "list"
+    for (item_ in item) {
+      outlist[[i]] = item_
+      i = i + 1
+    }
   }
-  list_output = c(l_)
-  class(list_output) <- "EMODSimList"
-  list_output
+  class(outlist) <- "EMODSimList"
+  outlist
 }
 
 c.EMODSimList <- function(...) {
