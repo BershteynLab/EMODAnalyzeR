@@ -1,54 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/calculate.DALY.html</loc>
-  </url>
-  <url>
-    <loc>/reference/calculate.bounds.effective_count.html</loc>
-  </url>
-  <url>
-    <loc>/reference/calculate.bounds.two_sigma.html</loc>
-  </url>
-  <url>
-    <loc>/reference/calculate.incidence.html</loc>
-  </url>
-  <url>
-    <loc>/reference/calculate.pop_scaling_factor.html</loc>
-  </url>
-  <url>
-    <loc>/reference/calculate.prevalence.html</loc>
-  </url>
-  <url>
-    <loc>/reference/calculate.tests.performed.html</loc>
-  </url>
-  <url>
-    <loc>/reference/emodplot.age_prevalence.html</loc>
-  </url>
-  <url>
-    <loc>/reference/emodplot.prevalence.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.by_gender.html</loc>
-  </url>
-  <url>
-    <loc>/reference/read.simulation.results.bigpurple.html</loc>
-  </url>
-  <url>
-    <loc>/reference/read.simulation.results.html</loc>
-  </url>
-  <url>
-    <loc>/reference/report.calibration.results.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/calculate.DALY.html</loc></url>
+<url><loc>/reference/calculate.bounds.effective_count.html</loc></url>
+<url><loc>/reference/calculate.bounds.two_sigma.html</loc></url>
+<url><loc>/reference/calculate.incidence.html</loc></url>
+<url><loc>/reference/calculate.pop_scaling_factor.html</loc></url>
+<url><loc>/reference/calculate.prevalence.html</loc></url>
+<url><loc>/reference/calculate.tests.performed.html</loc></url>
+<url><loc>/reference/emodplot.age_prevalence.html</loc></url>
+<url><loc>/reference/emodplot.prevalence.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/plot.by_gender.html</loc></url>
+<url><loc>/reference/read.simulation.results.bigpurple.html</loc></url>
+<url><loc>/reference/read.simulation.results.html</loc></url>
+<url><loc>/reference/report.calibration.results.html</loc></url>
 </urlset>
+
