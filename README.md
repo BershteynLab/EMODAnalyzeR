@@ -3,7 +3,7 @@
 # EMODAnalyzeR
 
 EMODAnalyzeR seeks to **share**, **scale**, **document**, and **test** common research code.
-This package intends to help members of the Bershteyn Lab and anyone using EMOD analyze results of emod. This package was developed by members of the Bershteyn lab and Edinah Mudimu.
+This package intends to help members of the Bershteyn Lab and anyone using EMOD-HIV analyze results of emod. This package was developed by members of the Bershteyn lab and Edinah Mudimu.
 
 [View Documentation Here](https://bershteynlab.github.io/EMODAnalyzeR/)
 
