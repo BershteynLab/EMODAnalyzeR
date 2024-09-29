@@ -4,7 +4,13 @@
 \alias{emodplot.prevalence}
 \title{Plot prevalence of hiv stratified by gender}
 \usage{
-emodplot.prevalence(data, date.start, date.end, title = "HIV prevalence")
+emodplot.prevalence(
+  data,
+  date.start,
+  date.end,
+  title = "HIV prevalence",
+  plot.runs = TRUE
+)
 }
 \arguments{
 \item{data}{A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected")).
@@ -13,6 +19,8 @@ More aggregate columns can be used, but more stratify columns will cause problem
 \item{date.start}{integer year to start the plotting (i.e., 2000)}
 
 \item{date.end}{integer year to end the plotting (i.e., 2030)}
+
+\item{plot.runs}{binary which controls whether the individual simulation runs are plotted alongside the mean. Defaults to TRUE.}
 }
 \value{
 a ggplot with prevalence plotted
