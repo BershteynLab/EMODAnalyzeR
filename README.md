@@ -2,13 +2,14 @@
 
 # EMODAnalyzeR
 
+EMODAnalyzeR seeks to **share**, **scale**, **document**, and **test** common research code.
 This package intends to help members of the Bershteyn Lab and anyone using EMOD analyze results of emod. This package was developed by members of the Bershteyn lab and Edinah Mudimu.
 
 [View Documentation Here](https://bershteynlab.github.io/EMODAnalyzeR/)
 
 ## Installation
 
-1. Make sure you are running R 4.0 or greater
+1. Make sure you are running R 4.2 or greater
 2. Make sure you have devtools installed (if not, run `install.packages("devtools")` )
 3. Run `library(devtools)`
 4. Run `install_github("BershteynLab/EMODAnalyzeR")`
