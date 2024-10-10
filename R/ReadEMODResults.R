@@ -72,6 +72,42 @@ cached_load_factory <- function( f,
   }
 }
 
+
+read.simulation.results.filelist <- function(file_list,
+                                              scenario_name,
+                                              event_count_columns = c("Newly.Infected", "Newly.Tested.Positive",
+                                                                      "Newly.Tested.Negative","Died", "Died_from_HIV"),
+                                              census_columns       = c("Population","Infected", "On_ART",
+                                                                       "Tested.Past.Year.or.On_ART", "Tested.Ever",
+                                                                       "Diagnosed"),
+                                              stratify_columns  = c("Year", "Gender"),
+                                              min_age_inclusive = 0,
+                                              max_age_inclusive = Inf) {
+  
+  n_runs_to_analyze = length(file_list)
+  print(paste('Found',as.character(n_runs_to_analyze),'output files for scenario',scenario_name))
+  sims = vector()
+  data.list = EMODSimList()
+  for (i in seq(1,length(file_list),1)){
+    f <- file_list[i]
+    print(file_list[i])
+    sim <- EMODSim(
+      path=f, 
+      scenario=scenario_name, 
+      load_fun=cached_load_factory(f, 
+                                   event_count_columns, 
+                                   census_columns,
+                                   stratify_columns,
+                                   basename(f),
+                                   scenario_name,
+                                   min_age_inclusive, 
+                                   max_age_inclusive ),
+      cached=F)
+    data.list[[i]] <- sim
+  }
+  data.list
+}
+
 #' Read results of an EMOD simulation
 #' @details The results of an EMOD simulation are stored in a series of csv files titled "ReportHIVByAgeAndGender.csv". One of these files exists for each
 #' simulation run (typically 250 files). This function reads and aggregates those files into a single tibble
@@ -93,30 +129,14 @@ read.simulation.results <- function(results_path,
                                   min_age_inclusive = 0,
                                   max_age_inclusive = Inf) {
   ### Read 250 simulation and aggregate by age 15+
-  file_list = list.files(results_path, full.names = F, recursive=F)
-
-  n_runs_to_analyze = length(file_list)
-  print(paste('Found',as.character(n_runs_to_analyze),'output files for scenario',scenario_name))
-  sims = vector()
-  data.list = EMODSimList()
-  for (i in seq(1,length(file_list),1)){
-    f <- paste(results_path, file_list[i], sep="/")
-    print(file_list[i])
-    sim <- EMODSim(
-      path=f, 
-      scenario=scenario_name, 
-      load_fun=cached_load_factory(f, 
-                                   event_count_columns, 
-                                   census_columns,
-                                   stratify_columns,
-                                   file_list[i],
+  file_list = list.files(results_path, full.names = T, recursive=F)
+  read.simulation.results.filelist(file_list, 
                                    scenario_name,
-                                   min_age_inclusive, 
-                                   max_age_inclusive ),
-      cached=F)
-    data.list[[i]] <- sim
-  }
-  data.list
+                                   event_count_columns = event_count_columns,
+                                   census_columns      = census_columns,
+                                   stratify_columns    = stratify_columns,
+                                   min_age_inclusive   = min_age_inclusive,
+                                   max_age_inclusive   = max_age_inclusive)
 }
 
 #' Read results of an EMOD simulation from its original location off the BigPurple filesystem
@@ -151,7 +171,7 @@ read.simulation.results.bigpurple <- function(experiment_path,
   data.list = list()
   for (i in seq(1,length(folder.list),1)){
     f <- paste(folder.list[i], "output/ReportHIVByAgeAndGender.csv", sep="/")
-    data.list[[i]] <- read.each_sim_by_age_and_gender(f, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
+    data.list[[i]] <- read.each_sim_by_age_and_gender(f, event_count_columns, census_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
     data.list[[i]]$sim.id <- paste0(f)
     tags.json.filename <- paste0(folder.list[i], "/tags.json")
     data.list[[i]]$sim.ix <- fromJSON(file = tags.json.filename)$parameterization_id

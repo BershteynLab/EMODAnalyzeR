@@ -64,20 +64,70 @@ fortify.EMODSimList <- function(sims) {
 }
 
 `[.EMODSimList` <- function(.data,i,j) {
-  (.data %>% as_tibble)[i,j]
+  x = (.data %>% as_tibble)
+  if (missing(i)) {
+    return(x[j])
+  } else if(missing(j)) {
+    return(x[i])
+  } else {
+    return(x[i,j])
+  }
+}
+
+`[<-.EMODSimList` <- function(.data, i, j, value) {
+  x = (.data %>% as_tibble)
+  if (missing(i)) {
+    x[j] = value
+  } else if(missing(j)) {
+    x[i] = value
+  } else {
+    x[i,j] = value
+  }
+  x
 }
 
 `[.EMODSim` <- function(.data,i,j) {
-  (.data %>% as_tibble)[i,j]
+  x = (.data %>% as_tibble)
+  if (missing(i)) {
+    return(x[j])
+  } else if(missing(j)) {
+    return(x[i])
+  } else {
+    return(x[i,j])
+  }
+}
+
+`[<-.EMODSim` <- function(.data, i, j, value) {
+  x = (.data %>% as_tibble)
+  if (missing(i)) {
+    x[j] = value
+  } else if(missing(j)) {
+    x[i] = value
+  } else {
+    x[i,j] = value
+  }
+  x
 }
 
 `$.EMODSim` <- function(.data, column) {
   (.data %>% as_tibble)[,column]
-  } 
+} 
+
+`$<-.EMODSim` <- function(.data, name, value) {
+  x = (.data %>% as_tibble)
+  x[,name] = value
+  x
+}
 
 `$.EMODSimList` <- function(.data, column) {
   (.data %>% as_tibble)[,column]
 } 
+
+`$<-.EMODSimList` <- function(.data, name, value) {
+  x = (.data %>% as_tibble)
+  x[,name] = value
+  x
+}
 
 arrange.EMODSim <- function (.data, ...) {
   .data %>%

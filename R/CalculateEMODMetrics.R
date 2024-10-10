@@ -227,7 +227,6 @@ calculate.bounds.effective_count <- function (mean_vectors, effective_counts) {
   beta <- effective_counts - x + 1
   names(alpha) <- c('alpha')
   names(beta) <- c('beta')
-  print(tibble(alpha, beta))
   tibble(alpha, beta) %>%
     mutate(lb = qbeta(0.025, alpha, beta)) %>%
     mutate(ub = qbeta(0.975, alpha, beta)) %>%
