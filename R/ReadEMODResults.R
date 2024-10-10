@@ -25,14 +25,14 @@ EMODSimList <- setClass("EMODSimList",
 
 
 
-read.each_sim_by_age_and_gender <- function (filename, event_count_columns, census_columns, stratify_columns, sim.id, scenario_name, min_age_inclusive = 0, max_age_inclusive = Inf) {
+read.each_sim_by_age_and_gender <- function (filename, event_count_columns, census_columns, stratify_columns, sim.ix, scenario_name, min_age_inclusive = 0, max_age_inclusive = Inf) {
   summarize_columns = c(event_count_columns, census_columns)
   raw_tibble <- data.table::fread(filename, check.names = TRUE) %>%
     filter( (Age >= min_age_inclusive) & (Age <= max_age_inclusive) ) %>%
     group_by_at(stratify_columns) %>%
     summarise_at(summarize_columns, sum, na.rm=T) %>%
     ungroup() %>%
-    mutate(scenario_name=scenario_name, sim.id=sim.id)
+    mutate(scenario_name=scenario_name, sim.ix=sim.ix, sim.id=basename(filename))
   attr(raw_tibble, "event_count_columns") <- c(event_count_columns, "sim.id", "scenario_name")
   attr(raw_tibble, "census_columns") <- census_columns
   attr(raw_tibble, "stratify_columns") <- stratify_columns
@@ -168,18 +168,26 @@ read.simulation.results.bigpurple <- function(experiment_path,
 
   n_runs_to_analyze = length(folder.list)
   print(paste('Found',as.character(n_runs_to_analyze),'output files for scenario',scenario_name))
-  data.list = list()
+  data.list = EMODSimList()
   for (i in seq(1,length(folder.list),1)){
     f <- paste(folder.list[i], "output/ReportHIVByAgeAndGender.csv", sep="/")
-    data.list[[i]] <- read.each_sim_by_age_and_gender(f, event_count_columns, census_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
-    data.list[[i]]$sim.id <- paste0(f)
     tags.json.filename <- paste0(folder.list[i], "/tags.json")
-    data.list[[i]]$sim.ix <- fromJSON(file = tags.json.filename)$parameterization_id
-    data.list[[i]]$scenario_name <- scenario_name
+    sim <- EMODSim(
+      path=f, 
+      scenario=scenario_name, 
+      load_fun=cached_load_factory(f, 
+                                   event_count_columns, 
+                                   census_columns,
+                                   stratify_columns,
+                                   fromJSON(file = tags.json.filename)$parameterization_id,
+                                   scenario_name,
+                                   min_age_inclusive, 
+                                   max_age_inclusive ),
+      cached=F)
+    data.list[[i]] <- sim
     if (verbose) print(paste0("Done Reading File ", i))
   }
-
-  bind_rows(data.list)
+  data.list
 }
 
 
