@@ -113,11 +113,12 @@ read.simulation.results.filelist <- function(file_list,
 #' simulation run (typically 250 files). This function reads and aggregates those files into a single tibble
 #' @param results_path string pointing to the folder which contains the ReportHIVByAgeAndGender.csv files
 #' @param scenario_name Provide a string label for the scenario being read in. For example, you might use "baseline" for the baseline scenario.
-#' @param summarize_columns a vector of strings containing names of columns to be aggregated via summation. Note that spaces in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".
+#' @param event_count_columns a vector of strings containing names of count columns to be aggregated via summation. A count column represents the count of a statistic during a timestep (i.e., Newly.Infected) Note that spaces and : in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".
+#' @param census_columns a vector of strings containing names of census columns to be aggregated via summation. Census columns are measured at the start of the timestep (i.e., Population). Note that spaces and : in column names are replaced by a period (".").
 #' @param stratify_columns a vector of strings containing names of columns by which we will stratify the data. For example, we might want to have a separate row in the dataset for each year, so we would set stratify_columns = c("Year")
 #' @param min_age_inclusive an integer representing the minimum age to keep while reading the data (all ages below will be filtered out)
 #' @param max_age_inclusive an integer representing the maximum age to keep while reading the data (all ages above will be filtered out)
-#' @return A tibble with columns incidence and Year
+#' @return A EMODSimList, which can behave like a tibble, or can be made a tibble with as_tibble
 read.simulation.results <- function(results_path,
                                   scenario_name,
                                   event_count_columns = c("Newly.Infected", "Newly.Tested.Positive",
@@ -147,11 +148,12 @@ read.simulation.results <- function(results_path,
 #' simulation run (typically 250 files). This function reads and aggregates those files into a single tibble.
 #' @param experiment_path string pointing to the folder which contains the Simulation_XXXXXXXX folders. For example, /gpfs/scratch/kaftad01/experiments/Baseline-campaign_Nyanza_baseline_03112021_NoPrEP-Baseline___2022_02_17_21_34_51_660565
 #' @param scenario_name string for the name of the scenario being read. For example, you might use "baseline" for the baseline scenario.
-#' @param summarize_columns a vector of strings containing names of columns to be aggregated via summation. Note that spaces in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".
+#' @param event_count_columns a vector of strings containing names of count columns to be aggregated via summation. A count column represents the count of a statistic during a timestep (i.e., Newly.Infected) Note that spaces and : in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".
+#' @param census_columns a vector of strings containing names of census columns to be aggregated via summation. Census columns are measured at the start of the timestep (i.e., Population). Note that spaces and : in column names are replaced by a period (".").
 #' @param stratify_columns a vector of strings containing names of columns by which we will stratify the data. For example, we might want to have a separate row in the dataset for each year, so we would set stratify_columns = c("Year")
 #' @param min_age_inclusive an integer representing the minimum age to keep while reading the data (all ages below will be filtered out)
 #' @param max_age_inclusive an integer representing the maximum age to keep while reading the data (all ages above will be filtered out)
-#' @return A tibble with columns incidence and Year
+#' @return A EMODSimList, which can behave like a tibble, or can be made a tibble with as_tibble
 read.simulation.results.bigpurple <- function(experiment_path,
                                     scenario_name,
                                     event_count_columns = c("Newly.Infected", "Newly.Tested.Positive",

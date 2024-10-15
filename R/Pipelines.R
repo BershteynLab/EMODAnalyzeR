@@ -1,3 +1,14 @@
+#' Run a function on an EMODSimList or EMODSim 
+#' @details This function allows you to use the same pattern for local or slurm processing.
+#' @param proc_function a function that will be applied to the EMODSimList 
+#' @param eMODSims EMODSimList or EMODSim on which to run proc_function
+#' @return returns the same type that proc_function returns
+#' @examples
+#' . %>%
+#' group_by(Year) %>% # any 
+#' summarize(sum(Newly.Infected)) |>
+#' emodrun_by_sim.local(eMODSims[[1]]) # run on one sim locally
+#' 
 emodrun_by_sim.local <- function(proc_function, eMODSims) {
   eMODSims %>%
     as_tibble %>%
@@ -15,7 +26,18 @@ bigpurple.add_slurm_to_path <- function() {
   T
 }
 
-
+#' Run a function on an EMODSimList or EMODSim parallelized by each simulation file
+#' @details This function allows you to use the same pattern for local or slurm processing.
+#' @param proc_function a function that will be applied to the EMODSimList 
+#' @param eMODSims EMODSimList or EMODSim on which to run proc_function
+#' @param bigpurple_opts EMODSimList or EMODSim on which to run proc_function
+#' @return returns the same type that proc_function returns
+#' @examples
+#' . %>%
+#' group_by(Year) %>% # any 
+#' summarize(sum(Newly.Infected)) |>
+#' emodrun_by_sim.local(eMODSims[[1]]) # run on all sims on slurm
+#' 
 emodrun_by_sim.slurm <- function(proc_function, 
                                  eMODSims, 
                                  bigpurple_opts=list(
