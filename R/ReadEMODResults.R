@@ -104,7 +104,13 @@ read.simulation.results.filelist <- function(file_list,
                                    max_age_inclusive ),
       cached=F)
     data.list[[i]] <- sim
+    attr(sim, "event_count_columns") <- c(event_count_columns, "sim.id", "scenario_name")
+    attr(sim, "census_columns") <- census_columns
+    attr(sim, "stratify_columns") <- stratify_columns
   }
+  attr(data.list, "event_count_columns") <- c(event_count_columns, "sim.id", "scenario_name")
+  attr(data.list, "census_columns") <- census_columns
+  attr(data.list, "stratify_columns") <- stratify_columns
   data.list
 }
 
@@ -186,9 +192,15 @@ read.simulation.results.bigpurple <- function(experiment_path,
                                    min_age_inclusive, 
                                    max_age_inclusive ),
       cached=F)
+    attr(sim, "event_count_columns") <- c(event_count_columns, "sim.id", "scenario_name")
+    attr(sim, "census_columns") <- census_columns
+    attr(sim, "stratify_columns") <- stratify_columns
     data.list[[i]] <- sim
     if (verbose) print(paste0("Done Reading File ", i))
   }
+  attr(data.list, "event_count_columns") <- c(event_count_columns, "sim.id", "scenario_name")
+  attr(data.list, "census_columns") <- census_columns
+  attr(data.list, "stratify_columns") <- stratify_columns
   data.list
 }
 
