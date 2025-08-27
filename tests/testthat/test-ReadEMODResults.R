@@ -9,6 +9,6 @@ test_that("read.ingest.file works", {
 })
 
 test_that("read.simulation.results.bigpurple works", {
-  df = read.simulation.results.bigpurple("../test_data/BigPurpleFS", "Test Scenario")
-  expect_true(length(unique(df$sim.id)) == 2)
+  df = read.simulation.results.bigpurple("../test_data/BigPurpleFS", "Test Scenario" )
+  expect_true(nrow(unique(df$sim.ix)) == 2)
 })

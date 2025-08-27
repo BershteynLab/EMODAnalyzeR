@@ -16,51 +16,134 @@
 # library(stringr)
 # library(rjson)
 
-read.each_sim_by_age_and_gender <- function (filename, summarize_columns, stratify_columns, min_age_inclusive = 0, max_age_inclusive = Inf) {
-  data.table::fread(filename, check.names = TRUE) %>%
+EMODSim <- setClass("EMODSim",
+                    slots=c(path="character", scenario="character", load_fun="function", cached="logical"),
+                    )
+
+EMODSimList <- setClass("EMODSimList",
+                        contains=c("list"))
+
+
+
+read.each_sim_by_age_and_gender <- function (filename, event_count_columns, census_columns, stratify_columns, sim.ix, scenario_name, min_age_inclusive = 0, max_age_inclusive = Inf) {
+  summarize_columns = c(event_count_columns, census_columns)
+  raw_tibble <- data.table::fread(filename, check.names = TRUE) %>%
     filter( (Age >= min_age_inclusive) & (Age <= max_age_inclusive) ) %>%
     group_by_at(stratify_columns) %>%
     summarise_at(summarize_columns, sum, na.rm=T) %>%
-    ungroup()
+    ungroup() %>%
+    mutate(scenario_name=scenario_name, sim.ix=sim.ix, sim.id=basename(filename))
+  attr(raw_tibble, "event_count_columns") <- c(event_count_columns, "sim.id", "scenario_name")
+  attr(raw_tibble, "census_columns") <- census_columns
+  attr(raw_tibble, "stratify_columns") <- stratify_columns
+  raw_tibble
 }
 
+
+cached_load_factory <- function( f, 
+                                 event_count_columns, 
+                                 census_columns,
+                                 stratify_columns,
+                                 sim.id,
+                                 scenario_name,
+                                 min_age_inclusive, 
+                                 max_age_inclusive ) {
+  f;
+  event_count_columns;
+  census_columns;
+  stratify_columns;
+  sim.id;
+  scenario_name;
+  min_age_inclusive;
+  max_age_inclusive;
+  cache <- NULL
+  function() {
+    if (is.null(cache)) {
+      cache <<- read.each_sim_by_age_and_gender(f, 
+                                                event_count_columns, 
+                                                census_columns,
+                                                stratify_columns,
+                                                sim.id,
+                                                scenario_name,
+                                                min_age_inclusive, 
+                                                max_age_inclusive )
+    }
+    cache
+  }
+}
+
+
+read.simulation.results.filelist <- function(file_list,
+                                              scenario_name,
+                                              event_count_columns = c("Newly.Infected", "Newly.Tested.Positive",
+                                                                      "Newly.Tested.Negative","Died", "Died_from_HIV"),
+                                              census_columns       = c("Population","Infected", "On_ART",
+                                                                       "Tested.Past.Year.or.On_ART", "Tested.Ever",
+                                                                       "Diagnosed"),
+                                              stratify_columns  = c("Year", "Gender"),
+                                              min_age_inclusive = 0,
+                                              max_age_inclusive = Inf) {
+  
+  n_runs_to_analyze = length(file_list)
+  print(paste('Found',as.character(n_runs_to_analyze),'output files for scenario',scenario_name))
+  sims = vector()
+  data.list = EMODSimList()
+  for (i in seq(1,length(file_list),1)){
+    f <- file_list[i]
+    print(file_list[i])
+    sim <- EMODSim(
+      path=f, 
+      scenario=scenario_name, 
+      load_fun=cached_load_factory(f, 
+                                   event_count_columns, 
+                                   census_columns,
+                                   stratify_columns,
+                                   basename(f),
+                                   scenario_name,
+                                   min_age_inclusive, 
+                                   max_age_inclusive ),
+      cached=F)
+    data.list[[i]] <- sim
+    attr(sim, "event_count_columns") <- c(event_count_columns, "sim.id", "scenario_name")
+    attr(sim, "census_columns") <- census_columns
+    attr(sim, "stratify_columns") <- stratify_columns
+  }
+  attr(data.list, "event_count_columns") <- c(event_count_columns, "sim.id", "scenario_name")
+  attr(data.list, "census_columns") <- census_columns
+  attr(data.list, "stratify_columns") <- stratify_columns
+  data.list
+}
 
 #' Read results of an EMOD simulation
 #' @details The results of an EMOD simulation are stored in a series of csv files titled "ReportHIVByAgeAndGender.csv". One of these files exists for each
 #' simulation run (typically 250 files). This function reads and aggregates those files into a single tibble
 #' @param results_path string pointing to the folder which contains the ReportHIVByAgeAndGender.csv files
 #' @param scenario_name Provide a string label for the scenario being read in. For example, you might use "baseline" for the baseline scenario.
-#' @param summarize_columns a vector of strings containing names of columns to be aggregated via summation. Note that spaces in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".
+#' @param event_count_columns a vector of strings containing names of count columns to be aggregated via summation. A count column represents the count of a statistic during a timestep (i.e., Newly.Infected) Note that spaces and : in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".
+#' @param census_columns a vector of strings containing names of census columns to be aggregated via summation. Census columns are measured at the start of the timestep (i.e., Population). Note that spaces and : in column names are replaced by a period (".").
 #' @param stratify_columns a vector of strings containing names of columns by which we will stratify the data. For example, we might want to have a separate row in the dataset for each year, so we would set stratify_columns = c("Year")
 #' @param min_age_inclusive an integer representing the minimum age to keep while reading the data (all ages below will be filtered out)
 #' @param max_age_inclusive an integer representing the maximum age to keep while reading the data (all ages above will be filtered out)
-#' @return A tibble with columns incidence and Year
+#' @return A EMODSimList, which can behave like a tibble, or can be made a tibble with as_tibble
 read.simulation.results <- function(results_path,
                                   scenario_name,
-                                  summarize_columns = c("Newly.Infected", "Newly.Tested.Positive",
-                                                        "Newly.Tested.Negative","Population",
-                                                        "Infected", "On_ART","Died", "Died_from_HIV",
-                                                        "Tested.Past.Year.or.On_ART", "Tested.Ever",
-                                                        "Diagnosed"),
-                                  stratify_columns = c("Year", "Gender"),
-                                  min_age_inclusive = 15,
-                                  max_age_inclusive = 49) {
+                                  event_count_columns = c("Newly.Infected", "Newly.Tested.Positive",
+                                                          "Newly.Tested.Negative","Died", "Died_from_HIV"),
+                                  census_columns       = c("Population","Infected", "On_ART",
+                                                          "Tested.Past.Year.or.On_ART", "Tested.Ever",
+                                                          "Diagnosed"),
+                                  stratify_columns  = c("Year", "Gender"),
+                                  min_age_inclusive = 0,
+                                  max_age_inclusive = Inf) {
   ### Read 250 simulation and aggregate by age 15+
-  file_list = list.files(results_path, full.names = F, recursive=F)
-
-  n_runs_to_analyze = length(file_list)
-  print(paste('Found',as.character(n_runs_to_analyze),'output files for scenario',scenario_name))
-  data.list <- list()
-  for (i in seq(1,length(file_list),1)){
-    f <- paste(results_path, file_list[i], sep="/")
-    data.list[[i]] <- read.each_sim_by_age_and_gender(f, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
-    data.list[[i]]$sim.id <- paste0(f)
-    data.list[[i]]$sim.ix <- i
-    data.list[[i]]$scenario_name <- scenario_name
-    print(paste0("Done Reading File ", i))
-  }
-
-  bind_rows(data.list)
+  file_list = list.files(results_path, full.names = T, recursive=F)
+  read.simulation.results.filelist(file_list, 
+                                   scenario_name,
+                                   event_count_columns = event_count_columns,
+                                   census_columns      = census_columns,
+                                   stratify_columns    = stratify_columns,
+                                   min_age_inclusive   = min_age_inclusive,
+                                   max_age_inclusive   = max_age_inclusive)
 }
 
 #' Read results of an EMOD simulation from its original location off the BigPurple filesystem
@@ -71,39 +154,54 @@ read.simulation.results <- function(results_path,
 #' simulation run (typically 250 files). This function reads and aggregates those files into a single tibble.
 #' @param experiment_path string pointing to the folder which contains the Simulation_XXXXXXXX folders. For example, /gpfs/scratch/kaftad01/experiments/Baseline-campaign_Nyanza_baseline_03112021_NoPrEP-Baseline___2022_02_17_21_34_51_660565
 #' @param scenario_name string for the name of the scenario being read. For example, you might use "baseline" for the baseline scenario.
-#' @param summarize_columns a vector of strings containing names of columns to be aggregated via summation. Note that spaces in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".
+#' @param event_count_columns a vector of strings containing names of count columns to be aggregated via summation. A count column represents the count of a statistic during a timestep (i.e., Newly.Infected) Note that spaces and : in column names are replaced by a period ("."). For example, "Newly Infected" becomes "Newly.Infected".
+#' @param census_columns a vector of strings containing names of census columns to be aggregated via summation. Census columns are measured at the start of the timestep (i.e., Population). Note that spaces and : in column names are replaced by a period (".").
 #' @param stratify_columns a vector of strings containing names of columns by which we will stratify the data. For example, we might want to have a separate row in the dataset for each year, so we would set stratify_columns = c("Year")
 #' @param min_age_inclusive an integer representing the minimum age to keep while reading the data (all ages below will be filtered out)
 #' @param max_age_inclusive an integer representing the maximum age to keep while reading the data (all ages above will be filtered out)
-#' @return A tibble with columns incidence and Year
+#' @return A EMODSimList, which can behave like a tibble, or can be made a tibble with as_tibble
 read.simulation.results.bigpurple <- function(experiment_path,
                                     scenario_name,
-                                    summarize_columns = c("Newly.Infected", "Newly.Tested.Positive",
-                                                          "Newly.Tested.Negative","Population",
-                                                          "Infected", "On_ART","Died", "Died_from_HIV",
-                                                          "Tested.Past.Year.or.On_ART", "Tested.Ever",
-                                                          "Diagnosed"),
+                                    event_count_columns = c("Newly.Infected", "Newly.Tested.Positive",
+                                                            "Newly.Tested.Negative","Died", "Died_from_HIV"),
+                                    census_columns       = c("Population","Infected", "On_ART",
+                                                             "Tested.Past.Year.or.On_ART", "Tested.Ever",
+                                                             "Diagnosed"),
                                     stratify_columns = c("Year", "Gender"),
-                                    min_age_inclusive = 15,
-                                    max_age_inclusive = 49,
+                                    min_age_inclusive = 0,
+                                    max_age_inclusive = Inf,
                                     verbose = FALSE) {
   ### Read 250 simulation and aggregate by age 15+
   folder.list = Sys.glob(paste0(experiment_path, "/Simulation_*"))
 
   n_runs_to_analyze = length(folder.list)
   print(paste('Found',as.character(n_runs_to_analyze),'output files for scenario',scenario_name))
-  data.list = list()
+  data.list = EMODSimList()
   for (i in seq(1,length(folder.list),1)){
     f <- paste(folder.list[i], "output/ReportHIVByAgeAndGender.csv", sep="/")
-    data.list[[i]] <- read.each_sim_by_age_and_gender(f, summarize_columns, stratify_columns, min_age_inclusive, max_age_inclusive )
-    data.list[[i]]$sim.id <- paste0(f)
     tags.json.filename <- paste0(folder.list[i], "/tags.json")
-    data.list[[i]]$sim.ix <- fromJSON(file = tags.json.filename)$parameterization_id
-    data.list[[i]]$scenario_name <- scenario_name
+    sim <- EMODSim(
+      path=f, 
+      scenario=scenario_name, 
+      load_fun=cached_load_factory(f, 
+                                   event_count_columns, 
+                                   census_columns,
+                                   stratify_columns,
+                                   fromJSON(file = tags.json.filename)$parameterization_id,
+                                   scenario_name,
+                                   min_age_inclusive, 
+                                   max_age_inclusive ),
+      cached=F)
+    attr(sim, "event_count_columns") <- c(event_count_columns, "sim.id", "scenario_name")
+    attr(sim, "census_columns") <- census_columns
+    attr(sim, "stratify_columns") <- stratify_columns
+    data.list[[i]] <- sim
     if (verbose) print(paste0("Done Reading File ", i))
   }
-
-  bind_rows(data.list)
+  attr(data.list, "event_count_columns") <- c(event_count_columns, "sim.id", "scenario_name")
+  attr(data.list, "census_columns") <- census_columns
+  attr(data.list, "stratify_columns") <- stratify_columns
+  data.list
 }
 
 

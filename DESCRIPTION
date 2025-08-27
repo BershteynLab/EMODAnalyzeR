@@ -1,7 +1,7 @@
 Package: EMODAnalyzeR
 Type: Package
 Title: Assists in analyzing EMOD results
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: person("David", "J.", "Kaftan", role = c("aut", "cre"), email = "david.kaftan@nyulangone.com")
 Maintainer: David Kaftan <david.kaftan@nyulangone.org>
 Description: Load, process, and visualize EMOD data

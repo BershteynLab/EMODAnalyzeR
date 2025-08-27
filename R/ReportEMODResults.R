@@ -28,14 +28,16 @@ report.calibration.results <- function(experiment_path, ingest_file_path, pop_sc
       min_age_inclusive = -1,
       max_age_inclusive = 200,
       stratify_columns = c("Year","NodeId", "Gender", "Age"),
-      summarize_columns = c("Population","Infected", "On_ART", "Newly.Infected"))
+      event_count_columns = c("Newly.Infected"),
+      census_columns = c("Population","Infected", "On_ART"))
   } else {
     data <- read.simulation.results.bigpurple(
       experiment_path, "calibration",
       min_age_inclusive = -1,
       max_age_inclusive = 200,
       stratify_columns = c("Year","NodeId", "Gender", "Age"),
-      summarize_columns = c("Population","Infected", "On_ART", "Newly.Infected"))
+      event_count_columns = c("Newly.Infected"),
+      census_columns = c("Population","Infected", "On_ART"))
   }
 
   if (is.numeric(pop_scaling_factor)) {
