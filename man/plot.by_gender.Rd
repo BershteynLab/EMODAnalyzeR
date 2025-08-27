@@ -4,7 +4,15 @@
 \alias{emodplot.by_gender}
 \title{Plot by gender}
 \usage{
-emodplot.by_gender(data, date.start, date.end, col2plot, title = "", unit = "")
+emodplot.by_gender(
+  data,
+  date.start,
+  date.end,
+  col2plot,
+  title = "",
+  unit = "",
+  plot.runs = TRUE
+)
 }
 \arguments{
 \item{data}{A tibble returned from read.simulation.results(..., stratify_columns = c("Year", "Gender"), aggregate_columns = c("Population","Newly.Infected", "Infected"))
@@ -19,6 +27,8 @@ More aggregate columns can be used, but more stratify columns will cause problem
 \item{title}{string of plot title (i.e., "Infected Plot")}
 
 \item{unit}{string of the units for col2plot (i.e., "(Number of People)")}
+
+\item{plot.runs}{binary which controls whether the individual simulation runs are plotted alongside the mean. Defaults to TRUE.}
 }
 \value{
 a ggplot with all data plotted
