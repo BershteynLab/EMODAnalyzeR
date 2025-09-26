@@ -78,7 +78,7 @@ for (county. in county_list) {
   print(county.)
   results[[i]] = just_nyanza %>%
         filter(county.==county) %>%
-        calculate.phia_survey.prevalence(age_min_inclusive = 15, age_max_inclusive = 24) %>%
+        calculate.phia_survey.prevalence(age_min_inclusive = 15, age_max_inclusive = 49) %>%
         calculate.phia_survey.effective_count()
   results[[i]]$county = county.
   results[[i]]$age = "[15:50)"
@@ -91,7 +91,7 @@ for (county. in all_counties_list) {
   print(county.)
   results_all_counties[[i_all_counties]] = all_county_phia %>%
     filter(county.==county) %>%
-    calculate.phia_survey.prevalence(age_min_inclusive = 15, age_max_inclusive = 24) %>%
+    calculate.phia_survey.prevalence(age_min_inclusive = 15, age_max_inclusive = 49) %>%
     calculate.phia_survey.effective_count()
   results_all_counties[[i_all_counties]]$county = county.
   results_all_counties[[i_all_counties]]$age = "[15:50)"
